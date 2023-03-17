@@ -5,8 +5,28 @@ class ProductManager {
   }
   
   addProduct({title, description, price, thumbnail, code, stock}) {
-    if (!title || !description || !price || !thumbnail || !code || !stock) {
-      throw new Error('Todos los campos son obligatorios');
+    if (typeof title !== 'string' || title.trim().length === 0) {
+      throw new Error('Title field is required and must be a non-empty string');
+    }
+    
+    if (typeof description !== 'string' || description.trim().length === 0) {
+      throw new Error('Description field is required and must be a non-empty string');
+    }
+    
+    if (typeof price !== 'number' || isNaN(price) || price <= 0) {
+      throw new Error('Price field is required and must be a positive number');
+    }
+    
+    if (typeof thumbnail !== 'string' || thumbnail.trim().length === 0) {
+      throw new Error('Thumbnail field is required and must be a non-empty string');
+    }
+    
+    if (typeof code !== 'string' || code.trim().length === 0) {
+      throw new Error('Code field is required and must be a non-empty string');
+    }
+    
+    if (typeof stock !== 'number' || isNaN(stock) || stock < 0) {
+      throw new Error('Stock field is required and must be a non-negative number');
     }
     
     const product = {
