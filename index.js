@@ -5,6 +5,7 @@ class ProductManager {
   }
   
   addProduct({title, description, price, thumbnail, code, stock}) {
+    
     if (typeof title !== 'string' || title.trim().length === 0) {
       return "Campo obligatorio";
     }
@@ -39,8 +40,8 @@ class ProductManager {
       stock: stock
     };
 
-    const duplicateProduct = this.products.find(p => p.code === product.code);
-    if (duplicateProduct) {
+    const validateCode = this.products.find(p => p.code === product.code);
+    if (validateCode) {
       return 'Producto duplicado';
     }
 
@@ -48,6 +49,10 @@ class ProductManager {
     this.id++;
   }
   
+  getProducts() {
+    return this.products;
+  }
+
   getProductById(id) {
     const product = this.products.find(p => p.id === id);
     if (!product) {
@@ -55,10 +60,6 @@ class ProductManager {
     }
     
     return product;
-  }
-  
-  getProducts() {
-    return this.products;
   }
 }
 
