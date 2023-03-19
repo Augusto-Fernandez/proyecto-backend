@@ -94,5 +94,7 @@ console.log(manager.getProducts());
 console.log(manager.addProduct(item2))
 console.log(manager.addProduct(item3))
 console.log(manager.getProducts());
+console.log(manager.getProductById(1));
+console.log(manager.getProductById(2));
 
 
