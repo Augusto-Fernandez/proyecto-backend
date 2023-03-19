@@ -6,27 +6,27 @@ class ProductManager {
   
   addProduct({title, description, price, thumbnail, code, stock}) {
     if (typeof title !== 'string' || title.trim().length === 0) {
-      throw new Error('Title field is required and must be a non-empty string');
+      return "Campo obligatorio";
     }
     
     if (typeof description !== 'string' || description.trim().length === 0) {
-      throw new Error('Description field is required and must be a non-empty string');
+      return "Campo obligatorio";
     }
     
     if (typeof price !== 'number' || isNaN(price) || price <= 0) {
-      throw new Error('Price field is required and must be a positive number');
+      return "Campo obligatorio";
     }
     
     if (typeof thumbnail !== 'string' || thumbnail.trim().length === 0) {
-      throw new Error('Thumbnail field is required and must be a non-empty string');
+      return "Campo obligatorio";
     }
     
     if (typeof code !== 'string' || code.trim().length === 0) {
-      throw new Error('Code field is required and must be a non-empty string');
+      return "Campo obligatorio";
     }
     
     if (typeof stock !== 'number' || isNaN(stock) || stock < 0) {
-      throw new Error('Stock field is required and must be a non-negative number');
+      return "Campo obligatorio";
     }
     
     const product = {
@@ -41,7 +41,7 @@ class ProductManager {
 
     const duplicateProduct = this.products.find(p => p.code === product.code);
     if (duplicateProduct) {
-      throw new Error('Producto duplicado');
+      return 'Producto duplicado';
     }
 
     this.products.push(product);
@@ -51,7 +51,7 @@ class ProductManager {
   getProductById(id) {
     const product = this.products.find(p => p.id === id);
     if (!product) {
-      throw new Error('Not Found');
+      return "Not Found";
     }
     
     return product;
@@ -90,8 +90,8 @@ const item3 = {
 console.log(manager.getProducts());
 manager.addProduct(item1);
 console.log(manager.getProducts());
-manager.addProduct(item2);
-manager.addProduct(item3);
+console.log(manager.addProduct(item2))
+console.log(manager.addProduct(item3))
 console.log(manager.getProducts());
 
 
