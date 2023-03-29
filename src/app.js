@@ -60,7 +60,7 @@ app.get("/products", async (req, res) => {
 app.get("/products/:pid", async (req, res) => {
     const { productId } = req.params;
     
-    if(typeof limit !== 'number' && limit === 0){
+    if(typeof productById !== 'number' || productById === 0){
         res.send(null);
     }
     const productById = await manager.getProductById(productId);
