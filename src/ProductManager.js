@@ -21,7 +21,7 @@ class ProductManager {
       return "Campo obligatorio";
     }
     
-    if (typeof price !== 'number' || isNaN(price) || price <= 0) {
+    if (typeof price !== 'number' || price <= 0) {
       return "Campo obligatorio";
     }
     
@@ -33,7 +33,7 @@ class ProductManager {
       return "Campo obligatorio";
     }
     
-    if (typeof stock !== 'number' || isNaN(stock) || stock < 0) {
+    if (typeof stock !== 'number' || stock < 0) {
       return "Campo obligatorio";
     }
     
@@ -139,28 +139,7 @@ class ProductManager {
   }
 }
 
-const manager = new ProductManager();
-const item1 = {
-    title: "producto prueba",
-    description: "Este es un producto prueba",
-    price:200,
-    thumbnail: "Sin imagen",
-    code: "abc123",
-    stock:25
-}
-
-const main = async () => {
-  console.log(await manager.getProducts());
-  console.log(await manager.addProduct(item1));
-  console.log(await manager.getProducts());
-  console.log(await manager.getProductById(1));
-  console.log(await manager.updateProduct(1, {...item1, title: "nuevo producto"}));
-  console.log(await manager.getProducts());
-  console.log(await manager.deleteProduct(1));
-  console.log(await manager.getProducts());
-}
-
-main();
+export default ProductManager;
 
 
 
