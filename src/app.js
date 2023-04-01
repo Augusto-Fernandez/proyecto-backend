@@ -35,6 +35,7 @@ const item3 = {
 }
 
 const main = async () => {
+    await manager.getProducts();
     await manager.addProduct(item1);
     await manager.addProduct(item2);
     await manager.addProduct(item3);
@@ -44,27 +45,27 @@ main();
 
 app.get("/products", async (req, res) => {
     const productsArray = await manager.getProducts();
-    const limit = req.query.limit;
+    let {limit} = req.query;
+    let limitInt = parseInt(limit)
     
-    if(typeof limit === 'number' && limit > 0){
-        const limitedProducts = productsArray.splice(0,limit);
+    if(typeof limitInt === "number" && limitInt > 0 && limitInt <= productsArray.length){
+        const limitedProducts = productsArray.splice(0,limitInt);
         res.send(limitedProducts);
-    }
-    if(limit === 0){
-        res.send(null);
-    }
-
-    res.send(productsArray);
+    }else{
+        res.send(productsArray);
+    }    
 });
 
 app.get("/products/:pid", async (req, res) => {
-    const { productId } = req.params;
-    
-    if(typeof productById !== 'number' || productById === 0){
-        res.send(null);
+    const productId = +req.params.pid;
+    const productsArray = await manager.getProducts()
+
+    if(typeof productId !== 'number' || productId === 0 || isNaN(productId) || productId>productsArray.length){
+        res.send({error: "Id not found"});
+    }else{
+        const productById = await manager.getProductById(parseInt(productId));
+        res.send(productById);
     }
-    const productById = await manager.getProductById(productId);
-    res.send(productById);
 });
 
 app.listen(8080, () => {
