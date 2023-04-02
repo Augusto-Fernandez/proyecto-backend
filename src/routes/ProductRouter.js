@@ -95,4 +95,16 @@ productRouter.put("/:pid", async (req, res) =>{
     }
 })
 
+productRouter.delete("/:pid", async (req, res) => {
+    const productId = +req.params.pid;
+    const productsArray = await manager.getProducts()
+
+    if(typeof productId !== 'number' || productId === 0 || isNaN(productId) || productId>productsArray.length){
+        res.send({error: "Id not found"});
+    }else{
+        manager.deleteProduct(productId);
+        return res.status(200).send({status: "sucess", message: "Item deleted"});
+    }
+});
+
 export default productRouter;
