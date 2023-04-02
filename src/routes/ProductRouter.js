@@ -11,7 +11,8 @@ const item1 = {
     price:200,
     thumbnail: "Sin imagen",
     code: "abc123",
-    stock:25
+    stock:25,
+    status: true
 }
 
 const item2 = {
@@ -20,7 +21,8 @@ const item2 = {
     price:200,
     thumbnail: "Sin imagen",
     code: "abc124",
-    stock:25
+    stock:25,
+    status: true
 }
 
 const item3 = {
@@ -29,7 +31,8 @@ const item3 = {
     price:200,
     thumbnail: "Sin imagen",
     code: "abc125",
-    stock:25
+    stock:25,
+    status: true
 }
 
 const main = async () => {
@@ -65,5 +68,16 @@ productRouter.get("/:pid", async (req, res) => {
         res.send(productById);
     }
 });
+
+productRouter.post("/", async (req, res) =>{
+    let product = req.body;
+
+    if(!product.title || !product.description || !product.code || !product.price || !product.status || !product.stock || !product.thumbnail){
+        return res.status(400).send({status: "error", error: "Campos obligatorios"});
+    }else{
+        manager.addProduct(product);
+        return res.status(201).send({status: "sucess", message: "Item created"});
+    }
+})
 
 export default productRouter;

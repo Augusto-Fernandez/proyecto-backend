@@ -11,7 +11,7 @@ class ProductManager {
     this.path = `../src/db/products.json`
   }
   
-  async addProduct({title, description, price, thumbnail, code, stock}) {
+  async addProduct({title, description, price, thumbnail, code, stock, status}) {
     
     if (typeof title !== 'string' || title.trim().length === 0) {
       return "Campo obligatorio";
@@ -36,6 +36,10 @@ class ProductManager {
     if (typeof stock !== 'number' || stock < 0) {
       return "Campo obligatorio";
     }
+
+    if (typeof status !== 'boolean'){
+      return "Campo obligatorio"; 
+    }
     
     const product = {
       id: this.id,
@@ -44,7 +48,8 @@ class ProductManager {
       price: price,
       thumbnail: thumbnail,
       code: code,
-      stock: stock
+      stock: stock,
+      status: status
     };
 
     try {
