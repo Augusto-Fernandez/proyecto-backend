@@ -48,7 +48,7 @@ app.get("/products", async (req, res) => {
     let {limit} = req.query;
     let limitInt = parseInt(limit)
     
-    if(typeof limitInt === "number" && limitInt > 0 && limitInt <= productsArray.length){
+    if(limitInt > 0 && limitInt <= productsArray.length){
         const limitedProducts = productsArray.splice(0,limitInt);
         res.send(limitedProducts);
     }else{
