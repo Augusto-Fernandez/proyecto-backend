@@ -73,10 +73,25 @@ productRouter.post("/", async (req, res) =>{
     let product = req.body;
 
     if(!product.title || !product.description || !product.code || !product.price || !product.status || !product.stock || !product.thumbnail){
-        return res.status(400).send({status: "error", error: "Campos obligatorios"});
+        return res.status(400).send({status: "error", error: "Todos los campos son obligatorios"});
     }else{
         manager.addProduct(product);
         return res.status(201).send({status: "sucess", message: "Item created"});
+    }
+})
+
+productRouter.put("/:pid", async (req, res) =>{
+    let product = req.body;
+    let productId = +req.params.pid;
+    const productsArray = await manager.getProducts()
+
+    if(!product.title || !product.description || !product.code || !product.price || !product.status || !product.stock || !product.thumbnail){
+        return res.status(400).send({status: "error", error: "Todos los campos son obligatorios"});
+    }else if(typeof productId !== 'number' || productId === 0 || isNaN(productId) || productId>productsArray.length){
+        res.send({error: "Id not found"});
+    }else{
+        manager.updateProduct(productId, product)
+        return res.status(200).send({status: "sucess", message: "Item modified"});
     }
 })
 
