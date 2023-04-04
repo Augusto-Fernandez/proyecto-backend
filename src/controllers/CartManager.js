@@ -29,7 +29,6 @@ class CartManager {
       newCart.push({id: this.id++, products: []});
 
       await fs.writeFile(this.path, JSON.stringify(newCart, null, 2));
-      console.log('nuevo')
       return "El carrito se ha creado correctamente";
 
     }catch(e){
@@ -39,8 +38,33 @@ class CartManager {
       newCart.push({id: this.id++, products: []});
 
       await fs.writeFile(this.path, JSON.stringify(newCart, null, 2));
-      console.log("creado")
       return "El carrito se ha creado correctamente";
+    }
+  }
+
+  async getCart(){
+    try{
+      const cartFile = await fs.readFile(this.path, "utf-8");
+      return JSON.parse(cartFile);
+    }catch(e){
+      await fs.writeFile(this.path, "[]");
+      return "No existe el archivo. Se creo uno con un array vacio";
+    }
+  }
+
+  async getCartById(id) {
+    try {
+      const cartFile = await fs.readFile(this.path, "utf-8");
+      let idCarts = JSON.parse(cartFile);
+
+      const cart = idCarts.find(p => p.id === id);
+
+      if (!cart) {
+        throw new Error("Not Found");
+      }
+      return cart;
+    } catch (e) {
+      throw new Error(e);
     }
   }
 }
