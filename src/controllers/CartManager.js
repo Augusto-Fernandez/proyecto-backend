@@ -67,6 +67,38 @@ class CartManager {
       throw new Error(e);
     }
   }
+
+  async addProductToCart(cartId, prodId){
+    const cart = {
+      id: prodId,
+      quantity: 1
+    }
+
+    if (typeof cartId !== 'number' || cartId < 0) {
+      return "Campo obligatorio";
+    }
+
+    if (typeof prodId !== 'number' || prodId < 0) {
+      return "Campo obligatorio";
+    }
+
+    try{
+      const cartFile = await fs.readFile(this.path, "utf-8");
+      const newCart = JSON.parse(cartFile);
+      const cartById = newCart.find(p => p.id === cartId)
+
+      if(!cartById){
+        return "Id not found"
+      }
+
+      cartById.products.push({id: prodId, ...cart});
+
+      await fs.writeFile(this.path, JSON.stringify(newCart, null, 2));
+      return "Se agregó el producto al carrito";
+    }catch(e){
+      return "Carrito no encontrado";
+    }
+  }
 }
 
 export default CartManager;
