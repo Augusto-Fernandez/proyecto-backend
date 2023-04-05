@@ -91,9 +91,13 @@ class CartManager {
         return "Id not found"
       }
 
+      const existingProductIndex = cartById.products.findIndex(p => p.id === prodId);
       
-
-      cartById.products.push({id: prodId, ...cart});
+      if (existingProductIndex !== -1) {
+        cartById.products[existingProductIndex].quantity++;
+      } else {
+        cartById.products.push({id: prodId, quantity: 1});
+      }
 
       await fs.writeFile(this.path, JSON.stringify(newCart, null, 2));
       return "Se agregó el producto al carrito";
