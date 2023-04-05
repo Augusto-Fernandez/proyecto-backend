@@ -91,6 +91,8 @@ class CartManager {
         return "Id not found"
       }
 
+      
+
       cartById.products.push({id: prodId, ...cart});
 
       await fs.writeFile(this.path, JSON.stringify(newCart, null, 2));
