@@ -17,7 +17,7 @@ cartRouter.get("/:cid", async (req, res) =>{
     const cartsArray = await manager.getCart();
 
     if(typeof cartId !== 'number' || cartId === 0 || isNaN(cartId) || cartId>cartsArray.length){
-        res.send({error: "Cart Id not found"});
+        res.send({error: "Id not found"});
     }else{
         const cartById = await manager.getCartById(parseInt(cartId));
         res.send(cartById);
@@ -27,19 +27,9 @@ cartRouter.get("/:cid", async (req, res) =>{
 cartRouter.post("/:cid/products/:pid", async (req,res) =>{
     let cartProductId = +req.params.pid;
     let cartId = +req.params.cid;
-    const productId = await productManager.getProductById(cartProductId)
-    const cartValidation = await manager.getCartById(cartId)
+    const productId = productManager.getProductById(cartProductId)
 
-    if (typeof cartId !== 'number' || cartId <= 0) {
-        res.send({error: "Campo Obligatorio"});
-    }
-    if (typeof cartProductId !== 'number' || cartProductId <= 0) {
-        res.send({error: "Campo Obligatorio"});
-    }
-
-    if(!cartValidation){
-        res.send({error: "Cart Id not found"});
-    }else if(!productId){
+    if(!productId){
         res.send({error: "Id not found"});
     }else{
         const cartById = await manager.addProductToCart(cartId, cartProductId);
