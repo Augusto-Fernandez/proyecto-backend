@@ -59,12 +59,9 @@ class CartManager {
 
       const cart = idCarts.find(p => p.id === id);
 
-      if (!cart) {
-        throw new Error("Not Found");
-      }
       return cart;
     } catch (e) {
-      throw new Error(e);
+      return null;
     }
   }
 
@@ -74,22 +71,10 @@ class CartManager {
       quantity: 1
     }
 
-    if (typeof cartId !== 'number' || cartId < 0) {
-      return "Campo obligatorio";
-    }
-
-    if (typeof prodId !== 'number' || prodId < 0) {
-      return "Campo obligatorio";
-    }
-
     try{
       const cartFile = await fs.readFile(this.path, "utf-8");
       const newCart = JSON.parse(cartFile);
       const cartById = newCart.find(p => p.id === cartId)
-
-      if(!cartById){
-        return "Id not found"
-      }
 
       const existingProductIndex = cartById.products.findIndex(p => p.id === prodId);
       
@@ -102,7 +87,18 @@ class CartManager {
       await fs.writeFile(this.path, JSON.stringify(newCart, null, 2));
       return "Se agregó el producto al carrito";
     }catch(e){
-      return "Carrito no encontrado";
+      await fs.writeFile(this.path, "[]");
+      const cartFile = await fs.readFile(this.path, "utf-8");
+      const newCart = JSON.parse(cartFile);
+
+      newCart.push({id: this.id++, products: []});
+
+      const cartById = newCart.find(p => p.id === cartId)
+
+      cartById.products.push({id: prodId, quantity: 1});
+
+      await fs.writeFile(this.path, JSON.stringify(newCart, null, 2));
+      return "El carrito se ha creado correctamente";
     }
   }
 }
