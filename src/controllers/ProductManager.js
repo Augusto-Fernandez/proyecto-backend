@@ -56,17 +56,6 @@ class ProductManager {
       const productFile = await fs.readFile(this.path, "utf-8");
       let newProduct = JSON.parse(productFile);
 
-      const validateId = newProduct.find((p) => p.id === product.id);
-      const validateCode = newProduct.find((p) => p.code === product.code)
-
-      if (validateId) {
-        throw new Error("Id repetido");
-      }
-
-      if (validateCode) {
-        throw new Error("Code repetido");
-      }
-
       if (newProduct.length > 0) {
         const lastProduct = newProduct[newProduct.length - 1];
         this.id = lastProduct.id + 1;
@@ -77,7 +66,13 @@ class ProductManager {
       await fs.writeFile(this.path, JSON.stringify(newProduct, null, 2));
       return "El objeto se ha creado correctamente";
     } catch(e) {
-      throw new Error(e);
+      await fs.writeFile(this.path, "[]");
+      const productFile = await fs.readFile(this.path, "utf-8");
+      const newProduct = JSON.parse(productFile);
+      newProduct.push({id: this.id++, ...product});
+
+      await fs.writeFile(this.path, JSON.stringify(newProduct, null, 2));
+      return "El objeto se ha creado correctamente";
     }
   }
   
@@ -98,12 +93,9 @@ class ProductManager {
 
       const product = idProducts.find(p => p.id === id);
 
-      if (!product) {
-        throw new Error("Not Found");
-      }
       return product;
     } catch (e) {
-      throw new Error(e);
+      return null;
     }
   }
 

@@ -59,18 +59,30 @@ productRouter.get("/", async (req, res) => {
 
 productRouter.get("/:pid", async (req, res) => {
     const productId = +req.params.pid;
-    const productsArray = await manager.getProducts()
+    const productById = await manager.getProductById(parseInt(productId));
 
-    if(typeof productId !== 'number' || productId === 0 || isNaN(productId) || productId>productsArray.length){
+    if(typeof productId !== 'number' || productId === 0 || isNaN(productId)){
+        res.send({error: "Id not valid"});
+    }else if(!productById){
         res.send({error: "Id not found"});
     }else{
-        const productById = await manager.getProductById(parseInt(productId));
         res.send(productById);
     }
 });
 
 productRouter.post("/", async (req, res) =>{
     let product = req.body;
+    const productsArray = await manager.getProducts();
+
+    const validateId = productsArray.find((p) => p.id === product.id);
+    const validateCode = productsArray.find((p) => p.code === product.code)
+
+    if (validateId){
+        return res.status(400).send({status: "error", error: "Id Repetido"})
+    }
+    if (validateCode){
+        return res.status(400).send({status: "error", error: "Code Repetido"})
+    }
 
     if(!product.title || !product.description || !product.code || !product.price || !product.status || !product.stock || !product.thumbnail){
         return res.status(400).send({status: "error", error: "Todos los campos son obligatorios"});
@@ -83,11 +95,13 @@ productRouter.post("/", async (req, res) =>{
 productRouter.put("/:pid", async (req, res) =>{
     let product = req.body;
     let productId = +req.params.pid;
-    const productsArray = await manager.getProducts()
+    const productById = await manager.getProductById(productId)
 
     if(!product.title || !product.description || !product.code || !product.price || !product.status || !product.stock || !product.thumbnail){
         return res.status(400).send({status: "error", error: "Todos los campos son obligatorios"});
-    }else if(typeof productId !== 'number' || productId === 0 || isNaN(productId) || productId>productsArray.length){
+    }else if(typeof productId !== 'number' || productId === 0 || isNaN(productId)){
+        res.send({error: "Id not valid"});
+    }else if(!productById){
         res.send({error: "Id not found"});
     }else{
         manager.updateProduct(productId, product)
@@ -97,9 +111,11 @@ productRouter.put("/:pid", async (req, res) =>{
 
 productRouter.delete("/:pid", async (req, res) => {
     const productId = +req.params.pid;
-    const productsArray = await manager.getProducts()
+    const productById = await manager.getProductById(productId)
 
-    if(typeof productId !== 'number' || productId === 0 || isNaN(productId) || productId>productsArray.length){
+    if(typeof productId !== 'number' || productId === 0 || isNaN(productId)){
+        res.send({error: "Id not valid"});
+    }else if(!productById){
         res.send({error: "Id not found"});
     }else{
         manager.deleteProduct(productId);
