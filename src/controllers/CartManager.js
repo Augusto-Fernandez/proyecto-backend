@@ -53,15 +53,16 @@ class CartManager {
   }
 
   async getCartById(id) {
-    const cartFile = await fs.readFile(this.path, "utf-8");
-    let idCarts = JSON.parse(cartFile);
+    try {
+      const cartFile = await fs.readFile(this.path, "utf-8");
+      let idCarts = JSON.parse(cartFile);
 
-    const cart = idCarts.find(p => p.id === id);
+      const cart = idCarts.find(p => p.id === id);
 
-    if (!cart) {
+      return cart;
+    } catch (e) {
       return null;
     }
-    return cart;
   }
 
   async addProductToCart(cartId, prodId){
@@ -70,25 +71,36 @@ class CartManager {
       quantity: 1
     }
 
-    const cartFile = await fs.readFile(this.path, "utf-8");
-    const newCart = JSON.parse(cartFile);
-    const cartById = newCart.find(p => p.id === cartId)
+    try{
+      const cartFile = await fs.readFile(this.path, "utf-8");
+      const newCart = JSON.parse(cartFile);
+      const cartById = newCart.find(p => p.id === cartId)
 
-    const existingProductIndex = cartById.products.findIndex(p => p.id === prodId);
-    
-    if (existingProductIndex !== -1) {
-      cartById.products[existingProductIndex].quantity++;
-    } else {
+      const existingProductIndex = cartById.products.findIndex(p => p.id === prodId);
+      
+      if (existingProductIndex !== -1) {
+        cartById.products[existingProductIndex].quantity++;
+      } else {
+        cartById.products.push({id: prodId, quantity: 1});
+      }
+
+      await fs.writeFile(this.path, JSON.stringify(newCart, null, 2));
+      return "Se agregó el producto al carrito";
+    }catch(e){
+      await fs.writeFile(this.path, "[]");
+      const cartFile = await fs.readFile(this.path, "utf-8");
+      const newCart = JSON.parse(cartFile);
+
+      newCart.push({id: this.id++, products: []});
+
+      const cartById = newCart.find(p => p.id === cartId)
+
       cartById.products.push({id: prodId, quantity: 1});
-    }
 
-    await fs.writeFile(this.path, JSON.stringify(newCart, null, 2));
-    return "Se agregó el producto al carrito";
+      await fs.writeFile(this.path, JSON.stringify(newCart, null, 2));
+      return "El carrito se ha creado correctamente";
+    }
   }
 }
 
 export default CartManager;
-
-
-
-
