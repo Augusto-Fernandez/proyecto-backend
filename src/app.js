@@ -22,7 +22,7 @@ app.set('views', viewPath);
 app.get('/',  async (req, res) => {
     const manager = new ProductManager();
     const productsArray = await manager.getProducts();
-    res.render('products', {title: 'Products', productsArray})
+    res.render('index', {title: 'Products', productsArray})
 })
 
 app.use('/api/products', productRouter);
