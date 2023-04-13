@@ -2,6 +2,7 @@
     <h1>Products</h1>
     {{#each productsArray}}
         <div>
+            <p>{{this.id}}</p>
             <p>{{this.title}}</p>
             <p>{{this.thumbnail}}</p>
             <p>{{this.description}}</p>
@@ -10,4 +11,20 @@
             <p>{{this.stock}}</p>
         </div>
     {{/each}}
+    <form id="deleteProduct">
+        <label>Ingresar id de producto a eliminar: </label>
+        <input type="text" id="id"/>
+        <button type="submit">Enviar</button>
+    </form>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    const deleteForm = document.getElementById('deleteProduct');
+    deleteForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const deleteInput = document.getElementById("id").value;
+      socket.emit('delete_event', deleteInput);
+    });
+</script>

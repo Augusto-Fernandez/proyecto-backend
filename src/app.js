@@ -5,10 +5,13 @@ import viewsRouter from "./routes/ViewsRouter.js";
 import {engine} from "express-handlebars";
 import {resolve} from "path";
 import ProductManager from "./controllers/ProductManager.js";
+import { Server } from "socket.io";
 
 const app = express();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
+
+const manager = new ProductManager();
 
 const viewPath = resolve('views');
 
@@ -20,8 +23,7 @@ app.engine('handlebars', engine({
 app.set('view engine', 'handlebars');
 app.set('views', viewPath);
 
-app.get('/',  async (req, res) => {
-    const manager = new ProductManager();
+app.get('/',  async (req, res) => {    
     const productsArray = await manager.getProducts();
     res.render('index', {title: 'Products', productsArray})
 })
@@ -30,6 +32,15 @@ app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/realtimeproducts', viewsRouter);
 
-app.listen(8080, () => {
+const httpServer = app.listen(8080, () => {
     console.log('Servidor escuchando en el puerto 8080');
 });
+
+const socketServer = new Server(httpServer);
+
+socketServer.on('connection', async socket => {
+    
+    socket.on('delete_event', async data =>{
+        await manager.deleteProduct(parseInt(data))
+    })
+})
