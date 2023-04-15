@@ -46,4 +46,11 @@ socketServer.on('connection', async socket => {
         await manager.deleteProduct(parseInt(data))
         socket.emit('listProducts', await manager.getProducts());
     })
+
+    socket.on('add_event', async data =>{
+        console.log(data)
+        await manager.getProducts()
+        await manager.addProduct(data)
+        socket.emit('listProducts', await manager.getProducts());
+    })
 })

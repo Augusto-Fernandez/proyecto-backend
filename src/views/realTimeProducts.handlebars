@@ -6,6 +6,22 @@
         <input type="text" id="id"/>
         <button type="submit">Enviar</button>
     </form>
+    <form id="addProduct">
+        <label><h3>Ingresar producto a agregar: </h3></label>
+        <label>Ingresar Nombre</label>
+        <input type="text" id="title"/>
+        <label>Ingresar descripción</label>
+        <input type="text" id="description"/>
+        <label>Ingresar precio</label>
+        <input type="text" id="price"/>
+        <label>Ingresar thumbnail</label> 
+        <input type="text" id="thumbnail"/>
+        <label>Ingresar codigo</label>
+        <input type="text" id="code"/>
+        <label>Ingresar numero de stock</label>
+        <input type="text" id="stock"/>
+        <button type="submit">Enviar</button>
+    </form>
 </div>
 <script src='/socket.io/socket.io.js'></script>
 <script>
@@ -13,6 +29,7 @@
 
     const productsHtml = document.getElementById('products');
     const deleteForm = document.getElementById('deleteProduct');
+    const addForm = document.getElementById('addProduct');
 
     const makeHtmlProductList = (products) => {
         if(products.length === 0){
@@ -38,4 +55,16 @@
         const deleteInput = document.getElementById("id").value;
         socket.emit('delete_event', deleteInput);
     });
+
+    addForm.addEventListener('submit', function (e){
+        e.preventDefault();
+        const addTitle = document.getElementById('title');
+        const addDescription = document.getElementById('description');
+        const addPrice = document.getElementById('price');
+        const addThumbnail = document.getElementById('thumbnail');
+        const addCode = document.getElementById('code');
+        const addStock = document.getElementById('stock');
+
+        socket.emit('add_event', {title: addTitle.value ,description: addDescription.value ,price: parseInt(addPrice.value) , thumbnail: addThumbnail.value ,code: addCode.value, stock: parseInt(addStock.value), status: true});
+    })
 </script>
