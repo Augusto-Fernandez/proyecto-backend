@@ -40,7 +40,10 @@ const socketServer = new Server(httpServer);
 
 socketServer.on('connection', async socket => {
     
+    socket.emit('listProducts', await manager.getProducts());
+
     socket.on('delete_event', async data =>{
         await manager.deleteProduct(parseInt(data))
+        socket.emit('listProducts', await manager.getProducts());
     })
 })
