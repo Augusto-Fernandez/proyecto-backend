@@ -48,7 +48,6 @@ socketServer.on('connection', async socket => {
     })
 
     socket.on('add_event', async data =>{
-        console.log(data)
         await manager.getProducts()
         await manager.addProduct(data)
         socket.emit('listProducts', await manager.getProducts());

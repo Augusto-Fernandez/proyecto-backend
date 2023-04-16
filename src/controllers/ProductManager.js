@@ -1,7 +1,6 @@
 import fs from "fs/promises"
 
 class ProductManager {
-  id=1;
   #products = [];
   path = ``;
 
@@ -12,7 +11,13 @@ class ProductManager {
   }
   
   async addProduct({title, description, price, thumbnail, code, stock, status}) {
-    
+    const productFile = await fs.readFile(this.path, "utf-8");
+    let newProduct = JSON.parse(productFile);
+    if (newProduct.length !== 0) {
+      const lastProduct = newProduct[newProduct.length - 1];
+      this.id = lastProduct.id + 1;
+    }
+
     if (typeof title !== 'string' || title.trim().length === 0) {
       return "Campo obligatorio";
     }
@@ -52,28 +57,10 @@ class ProductManager {
       status: status
     };
 
-    try {
-      const productFile = await fs.readFile(this.path, "utf-8");
-      let newProduct = JSON.parse(productFile);
+    newProduct.push({id: this.id, ...product});
 
-      if (newProduct.length > 0) {
-        const lastProduct = newProduct[newProduct.length - 1];
-        this.id = lastProduct.id + 1;
-      }
-
-      newProduct.push({id: this.id++, ...product});
-
-      await fs.writeFile(this.path, JSON.stringify(newProduct, null, 2));
-      return "El objeto se ha creado correctamente";
-    } catch(e) {
-      await fs.writeFile(this.path, "[]");
-      const productFile = await fs.readFile(this.path, "utf-8");
-      const newProduct = JSON.parse(productFile);
-      newProduct.push({id: this.id++, ...product});
-
-      await fs.writeFile(this.path, JSON.stringify(newProduct, null, 2));
-      return "El objeto se ha creado correctamente";
-    }
+    await fs.writeFile(this.path, JSON.stringify(newProduct, null, 2));
+    return "El objeto se ha creado correctamente";
   }
   
   async getProducts(){
@@ -112,7 +99,7 @@ class ProductManager {
 
       return `Se ha modificado el producto`;
     } catch (e) {
-      throw new Error(e);
+      return null
     }
   }
   async deleteProduct(id) {
@@ -123,7 +110,7 @@ class ProductManager {
       const idProduct = products.find((p) => p.id === id);
 
       if (!idProduct) {
-        throw new Error("Id no encontrado");
+        return "Id no encontrado"
       }
       const deletedProducts = products.filter((p) => p.id !== id);
 
@@ -131,7 +118,7 @@ class ProductManager {
 
       return `Se ha eliminado el producto`;
     } catch (e) {
-      throw new Error(e);
+      return null
     }
   }
 }
