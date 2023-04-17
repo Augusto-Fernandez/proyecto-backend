@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const manager = new ProductManager();
 
-const viewPath = resolve('src/views');
+const viewPath = resolve('src/views'); /* resolve('views') para node */
 
 app.engine('handlebars', engine({
     layoutsDir: `${viewPath}/layouts`,
