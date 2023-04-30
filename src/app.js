@@ -11,10 +11,10 @@ import ProductManager from "./controllers/ProductManager.js";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
 
-
-await mongoose.connect(process.env.MONGO_DB_URI, {
-    useNameUrlParser: true,
-    usedUndefinedTopology: true
+/* connect(process.env.MONGO_DB_URI */
+await mongoose.connect("mongodb+srv://admin:OYKKFTDQ5aujjOgs@proyectobackend1.lp9tncf.mongodb.net/test", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 })
 
 const app = express();
