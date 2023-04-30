@@ -1,3 +1,6 @@
+import dotenv from "dotenv"
+dotenv.config()
+
 import express from "express";
 import productRouter from "./routes/ProductRouter.js";
 import cartRouter from "./routes/CartRouter.js";
@@ -6,6 +9,13 @@ import {engine} from "express-handlebars";
 import {resolve} from "path";
 import ProductManager from "./controllers/ProductManager.js";
 import { Server } from "socket.io";
+import mongoose from "mongoose";
+
+
+await mongoose.connect(process.env.MONGO_DB_URI, {
+    useNameUrlParser: true,
+    usedUndefinedTopology: true
+})
 
 const app = express();
 app.use(express.json())
