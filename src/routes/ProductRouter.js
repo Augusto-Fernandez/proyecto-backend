@@ -150,7 +150,7 @@ productRouter.delete("/:pid", async (req, res) => {
     */
 
     const productId = req.params.pid;
-    const deleteProduct = await productsSchema.deleteOne({_id: parseInt(productId)})
+    const deleteProduct = await productsSchema.deleteOne({_id: productId})
     return res.status(200).send({status: "sucess", deleteProduct, message: "Item deleted"});
 });
 
