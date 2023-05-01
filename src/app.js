@@ -1,5 +1,5 @@
-import dotenv from "dotenv"
-dotenv.config()
+import dotenv from "dotenv";
+dotenv.config();
 
 import express from "express";
 import productRouter from "./routes/ProductRouter.js";
@@ -11,8 +11,7 @@ import ProductManager from "./controllers/ProductManager.js";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
 
-/* connect(process.env.MONGO_DB_URI */
-await mongoose.connect("mongodb+srv://admin:OYKKFTDQ5aujjOgs@proyectobackend1.lp9tncf.mongodb.net/test", {
+await mongoose.connect(process.env.MONGO_DB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
