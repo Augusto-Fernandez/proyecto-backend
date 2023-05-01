@@ -4,6 +4,7 @@ import productsSchema from "../models/productsSchema.js";
 
 const productRouter = Router();
 
+/*
 const manager = new ProductManager();
 
 const item1 = {
@@ -37,17 +38,17 @@ const item3 = {
 }
 
 const main = async () => {
-    /*
     await manager.addProduct(item1);
     await manager.addProduct(item2);
     await manager.addProduct(item3);
-    */
+    
     const createProduct1 = await productsSchema.create(item1)
     const createProduct2 = await productsSchema.create(item2)
     const createProduct3 = await productsSchema.create(item3)
 }
-
 main();
+*/
+
 
 productRouter.get("/", async (req, res) => {
     /* 
