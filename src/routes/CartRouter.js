@@ -1,6 +1,8 @@
 import { Router} from "express";
 import CartManager from "../controllers/CartManager.js";
 import ProductManager from "../controllers/ProductManager.js";
+import cartsSchema from "../models/cartsSchema.js";
+import productsSchema from "../models/productsSchema.js";
 
 const manager = new CartManager();
 const productManager = new ProductManager();
@@ -8,11 +10,16 @@ const productManager = new ProductManager();
 const cartRouter = Router();
 
 cartRouter.post("/", async (req,res) =>{
+    /*
     manager.createCart()
     return res.status(201).send({status: "sucess", message: "Cart created"});
+    */
+    const createCart = await cartsSchema.create();
+    res.status(201).send({status: "sucess", createCart, message: "Cart created"});
 })
 
 cartRouter.get("/:cid", async (req, res) =>{
+    /*
     const cartId = +req.params.cid;
     const cartById = await manager.getCartById(cartId);
 
@@ -23,9 +30,14 @@ cartRouter.get("/:cid", async (req, res) =>{
     }else{
         return res.send(cartById);
     }
+    */
+    const cartId = req.params.cid;
+    const cartById = await cartsSchema.findOne({_id: cartId});
+    res.send({status: 'success', cartById});
 })
 
 cartRouter.post("/:cid/products/:pid", async (req,res) =>{
+    /*
     let cartProductId = +req.params.pid;
     let cartId = +req.params.cid;
     const productId = await productManager.getProductById(cartProductId)
@@ -46,6 +58,16 @@ cartRouter.post("/:cid/products/:pid", async (req,res) =>{
         const cartById = await manager.addProductToCart(cartId, cartProductId);
         return res.send(cartById);
     }
+    */
+    
+    let cartId = req.params.cid;
+    let cartProductId = req.params.pid;
+
+    const cartsById = await cartsSchema.findOne({_id: cartId});
+    const productId = await productsSchema.findOne({_id: cartProductId})
+
+    const addProductToCart = await cartsSchema.insertOne({_id: cartId, productId})
+    res.status(201).send({status: "sucess", addProductToCart, message: "Cart created"});
 })
 
 export default cartRouter;
