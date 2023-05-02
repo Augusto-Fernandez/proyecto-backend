@@ -3,10 +3,7 @@ import mongoose,{Schema} from "mongoose";
 const cartCollection = 'carts'
 
 const cartModel = new Schema ({
-    products: {
-        type:Array,
-        default: []
-    },
+    products: {type: Schema.Types.Array, default: []},
     enable: {type: Schema.Types.Boolean, default: true}
 })
 

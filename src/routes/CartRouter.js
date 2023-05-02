@@ -14,7 +14,7 @@ cartRouter.post("/", async (req,res) =>{
     manager.createCart()
     return res.status(201).send({status: "sucess", message: "Cart created"});
     */
-    const createCart = await cartsSchema.create();
+    const createCart = await cartsSchema.create({});
     res.status(201).send({status: "sucess", createCart, message: "Cart created"});
 })
 
