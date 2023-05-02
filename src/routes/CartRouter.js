@@ -59,15 +59,29 @@ cartRouter.post("/:cid/products/:pid", async (req,res) =>{
         return res.send(cartById);
     }
     */
-    
+
+    /*
+    const cartsById = await cartsSchema.findOne({_id: cartId});
+    const productId = await productsSchema.findOne({_id: cartProductId})
+    */
+
     let cartId = req.params.cid;
     let cartProductId = req.params.pid;
 
-    const cartsById = await cartsSchema.findOne({_id: cartId});
-    const productId = await productsSchema.findOne({_id: cartProductId})
+    const cartById = await cartsSchema.findById(cartId);
+    const productExist = cartById.products.findIndex(product => product.id === cartProductId);
 
-    const addProductToCart = await cartsSchema.insertOne({_id: cartId, productId})
-    res.status(201).send({status: "sucess", addProductToCart, message: "Cart created"});
+    if (productExist !== -1) {
+        cartById.products[productExist].quantity+=1;
+        console.log(cartById.products);
+    }else{
+        const addProductToCart = await cartsSchema.findByIdAndUpdate(
+            cartId,
+            {$push:{products:{id: cartProductId, quantity: 1}}},
+            {new: true}
+        )
+        res.status(201).send({status: "sucess", addProductToCart, message: "Product added"});
+    }
 })
 
 export default cartRouter;
