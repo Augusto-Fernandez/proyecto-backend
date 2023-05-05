@@ -71,9 +71,15 @@ cartRouter.post("/:cid/products/:pid", async (req,res) =>{
     const cartById = await cartsSchema.findById(cartId);
     const productExist = cartById.products.findIndex(product => product.id === cartProductId);
 
-    if (productExist !== -1) {
-        cartById.products[productExist].quantity++;
-        await cartById.save();
+    if(productExist!==-1){
+        const update=cartById.products[productExist].quantity+1;
+        await cartsSchema.findOneAndUpdate(
+            {_id:cartId, "products.id":cartProductId},
+            {$set:{"products.$.quantity":update}}
+        );
+        const newCart=await cartsSchema.findById(cartId);
+        res.status(200).send({status:"sucess", newCart, message:"Product added",
+        });
     }else{
         const addProductToCart = await cartsSchema.findByIdAndUpdate(
             cartId,
