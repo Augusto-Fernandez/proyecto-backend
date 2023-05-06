@@ -7,7 +7,7 @@ import cartRouter from "./routes/CartRouter.js";
 import viewsRouter from "./routes/ViewsRouter.js";
 import {engine} from "express-handlebars";
 import {resolve} from "path";
-import ProductManager from "./controllers/ProductManager.js";
+import ProductManager from "./managers/ProductManager.js";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
 
