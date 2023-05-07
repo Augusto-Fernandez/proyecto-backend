@@ -69,9 +69,23 @@ class CartManager {
       }else{
         return {status: "error", error: "Product is not in Cart"};
       }
-  }catch{
+    }catch{
       return {status: "error", error: "Id not found"};
+    }
   }
+
+  async deleteAll(id){
+    try{
+      const cartById = await this.dao.getOne(id);
+      if(cartById === null){
+          return {status: "error", error: "Cart id not found"};
+      }
+      
+      const deleteAllProducts = await this.dao.deleteAll(id)
+      return deleteAllProducts
+    }catch{
+      return {status: "error", error: "Id not found"};
+    }
   }
 }
 
