@@ -26,12 +26,12 @@ class CartManager {
       try{
         const cartById = await this.dao.getOne(cartId);
         if(cartById === null){
-            return {status: "error", error: "Id not found"};
+            return {status: "error", error: "Cart id not found"};
         }
         const productDao = new ProductMongooseDao()
         const productById = await productDao.getOne(cartProductId);
         if(productById === null){
-            return {status: "error", error: "Id not found"};
+            return {status: "error", error: "Product id not found"};
         }
         const productExist = cartById.products.findIndex(product => product.id === cartProductId);
 
@@ -47,6 +47,31 @@ class CartManager {
     }catch{
         return {status: "error", error: "Id not found"};
     }
+  }
+
+  async deleteOne(cartId, cartProductId){
+    try{
+      const cartById = await this.dao.getOne(cartId);
+      if(cartById === null){
+          return {status: "error", error: "Cart id not found"};
+      }
+      const productDao = new ProductMongooseDao()
+      const productById = await productDao.getOne(cartProductId);
+      if(productById === null){
+          return {status: "error", error: "Product id not found"};
+      }
+      const productExist = cartById.products.findIndex(product => product.id === cartProductId);
+
+      if(productExist!==-1){
+          const deleteOne = await this.dao.deleteOne(cartId, cartProductId)
+          const newCart=await this.dao.getOne(cartId);
+          return newCart;
+      }else{
+        return {status: "error", error: "Product is not in Cart"};
+      }
+  }catch{
+      return {status: "error", error: "Id not found"};
+  }
   }
 }
 

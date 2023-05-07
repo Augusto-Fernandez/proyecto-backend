@@ -38,6 +38,19 @@ class CartMongooseDao {
       products: cartDocument.products
     }
   }
+
+  async deleteOne(cartId, cartProductId){
+    const cartDocument = await cartsSchema.findOneAndUpdate(
+      { _id: cartId },
+      { $pull: { products: { id: cartProductId } } },
+      { returnOriginal: false }
+    );
+
+    return{
+      id: cartDocument._id,
+      products: cartDocument.products
+    }
+  }
 }
 
 export default CartMongooseDao;
