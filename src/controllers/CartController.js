@@ -1,28 +1,26 @@
-import cartsSchema from "../models/cartsSchema.js";
-import productsSchema from "../models/productsSchema.js";
+import CartManager from "../managers/CartManager.js";
 
 export const save = async (req,res) =>{
-    const createCart = await cartsSchema.create({});
+    const manager = new CartManager();
+    const createCart = await manager.create();
     res.status(201).send({status: "sucess", createCart, message: "Cart created"});
 };
 
 export const getOne = async (req, res) =>{
     const cartId = req.params.cid;
-    try{
-        const cartById = await cartsSchema.findOne({_id: cartId});
-        if(cartById === null){
-            return res.status(401).send({status: "error", error: "Id not found"});
-        }
-        res.send({status: 'success', cartById});
-    }catch{
-        return res.status(401).send({status: "error", error: "Id not found"});
-    }
+    const manager = new CartManager();
+    const cartById = await manager.getOne(cartId)
+    res.send({status: 'success', cartById});
 };
 
 export const addToCart = async (req,res) =>{
     let cartId = req.params.cid;
     let cartProductId = req.params.pid;
+    const manager = new CartManager();
+    const addProductToCart = manager.addToCart(cartId, cartProductId)
+    res.status(201).send({status: "sucess", addProductToCart, message: "Product added"});
 
+    /*
     try{
         const cartById = await cartsSchema.findById(cartId);
         if(cartById === null){
@@ -54,4 +52,5 @@ export const addToCart = async (req,res) =>{
     }catch{
         return res.status(401).send({status: "error", error: "Id not found"});
     }
+    */
 };

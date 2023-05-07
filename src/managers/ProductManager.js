@@ -1,5 +1,4 @@
 import ProductMongooseDao from "../daos/ProductMongooseDao.js";
-import productsSchema from "../models/productsSchema.js";
 
 class ProductManager {
   constructor(){
