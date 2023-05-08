@@ -16,6 +16,36 @@ class ProductMongooseDao {
     }))
   }
 
+  async getAsc(){
+    const productDocument = await productsSchema.find().sort({price:1});
+
+    return productDocument.map(product => ({
+      id: product._id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      thumbnail: product.thumbnail,
+      code: product.code,
+      stock: product.stock,
+      status: product.status
+    }))
+  }
+
+  async getDesc(){
+    const productDocument = await productsSchema.find().sort({price:-1});
+
+    return productDocument.map(product => ({
+      id: product._id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      thumbnail: product.thumbnail,
+      code: product.code,
+      stock: product.stock,
+      status: product.status
+    }))
+  }
+
   async getLimited(limit){
     const productDocument = await productsSchema.find().limit(limit)
 
