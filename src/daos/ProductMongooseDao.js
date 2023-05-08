@@ -16,6 +16,21 @@ class ProductMongooseDao {
     }))
   }
 
+  async getLimited(limit){
+    const productDocument = await productsSchema.find().limit(limit)
+
+    return productDocument.map(product => ({
+      id: product._id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      thumbnail: product.thumbnail,
+      code: product.code,
+      stock: product.stock,
+      status: product.status
+    }))
+  }
+
   async getOne(id){
     const productDocument = await productsSchema.findOne({_id: id})
 

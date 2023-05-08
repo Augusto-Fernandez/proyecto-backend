@@ -1,8 +1,9 @@
 import ProductManager from "../managers/ProductManager.js";
 
 export const list = async (req, res) => {
+    let {limit} = req.query;
     const manager = new ProductManager();
-    const productsArray = await manager.getAll()
+    const productsArray = await manager.getAll(limit)
     res.send({status: 'success', productsArray});
 };
 

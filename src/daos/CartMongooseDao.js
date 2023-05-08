@@ -54,8 +54,8 @@ class CartMongooseDao {
 
   async deleteAll(id){
     const cartDocument = await cartsSchema.findOneAndUpdate(
-      { _id: id },
-      { $set: { products: [] } }
+      {_id: id},
+      {$set: {products: []}}
     )
 
     return{

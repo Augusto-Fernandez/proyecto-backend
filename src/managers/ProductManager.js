@@ -5,8 +5,16 @@ class ProductManager {
     this.dao = new ProductMongooseDao()
   }
 
-  async getAll(){
-    return this.dao.getAll()
+  async getAll(limit){
+    try{
+      let limitInt = parseInt(limit)
+      if(isNaN(limitInt)){
+        return this.dao.getAll()
+      }
+      return this.dao.getLimited(limitInt)
+    }catch{
+      return this.dao.getAll()
+    }
   }
 
   async getOne(id){
