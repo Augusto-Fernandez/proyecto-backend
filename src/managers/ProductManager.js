@@ -14,7 +14,7 @@ class ProductManager {
       }
       
       let limitInt = parseInt(limit)
-      if(isNaN(limitInt)){
+      if(isNaN(limitInt) || limit > 10){
         return this.dao.getAll()
       }else{
         return this.dao.getLimited(limitInt)

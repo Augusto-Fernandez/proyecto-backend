@@ -2,18 +2,21 @@ import productsSchema from "../models/productsSchema.js";
 
 class ProductMongooseDao {
   async getAll(){
-    const productDocument = await productsSchema.find()
+    const productDocument = await productsSchema.find().sort({stock:1})
 
-    return productDocument.map(product => ({
-      id: product._id,
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      thumbnail: product.thumbnail,
-      code: product.code,
-      stock: product.stock,
-      status: product.status
-    }))
+    return {
+      status: "success",
+      payload: productDocument.map(product => ({
+        id: product._id,
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        thumbnail: product.thumbnail,
+        code: product.code,
+        stock: product.stock,
+        status: product.status
+      }))
+    }
   }
 
   async getAsc(){
