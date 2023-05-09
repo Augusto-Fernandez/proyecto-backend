@@ -74,6 +74,15 @@ class CartMongooseDao {
       products: cartDocument.products
     }
   }
+
+  async updateOne(id, data){
+    const cartDocument = await cartsSchema.updateOne({_id: id}, data, {new:true})
+
+    return cartDocument.map(cart => ({
+      id: cart._id,
+      products: cart.products
+    }))
+  }
 }
 
 export default CartMongooseDao;

@@ -35,3 +35,11 @@ export const deleteAll = async (req, res) =>{
     const deleteAllProducts = manager.deleteAll(cartId);
     res.status(200).send({status: "sucess", deleteAllProducts, message: "Cart Item deleted"});
 }
+
+export const updateOne = async (req,res) =>{
+    let cartId = req.params.cid;
+    let cartUpdate = req.body;
+    const manager = new CartManager();
+    const updateCart = manager.updateOne(cartId, cartUpdate);
+    res.status(200).send({status: "sucess", updateCart, message: "Cart updated"});
+}

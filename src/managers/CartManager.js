@@ -87,6 +87,23 @@ class CartManager {
       return {status: "error", error: "Id not found"};
     }
   }
+
+  async updateOne(id, data){
+    try{
+      const cartById = await this.dao.getOne(id);
+      if(cartById === null){
+          return {status: "error", error: "Cart id not found"};
+      }
+
+      if(!data.id || !data.quantity){
+        return {status: "error", error: "Todos los campos son obligatorios"};
+      }
+
+      return this.dao.updateOne(id, data)
+    }catch{
+      return {status: "error", error: "Id not found"};
+    }
+  }
 }
 
 export default CartManager;
