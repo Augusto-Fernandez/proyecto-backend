@@ -6,23 +6,7 @@ class CartMongooseDao {
   }
 
   async getOne(id){
-    const cartDocument = await cartsSchema
-      .findOne({_id: id})
-      /* .populate(['products']) */
-
-      return{
-        id: cartDocument._id,
-        products: cartDocument.products.map(product => ({
-          id: product._id,
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          thumbnail: product.thumbnail,
-          code: product.code,
-          stock: product.stock,
-          status: product.status,
-        }))
-      }
+    return await cartsSchema.findOne({_id: id}).populate("products.id")
   }
 
   async addToCart(cartId, cartProductId){

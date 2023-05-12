@@ -7,8 +7,10 @@ const cartModel = new Schema ({
     enable: {type: Schema.Types.Boolean, default: true}
 })
 
+/**
 cartModel.pre('findOne', function (){
     this.populate(['products'])
 })
+ */
 
 export default mongoose.model(cartCollection, cartModel)
