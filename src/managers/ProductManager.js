@@ -5,7 +5,7 @@ class ProductManager {
     this.dao = new ProductMongooseDao()
   }
 
-  async getAll(limit, sort){
+  async getAll(limited, sort, criteria){
     try{
       if(sort==="asc"){
         return this.dao.getAsc()
@@ -13,14 +13,14 @@ class ProductManager {
         return this.dao.getDesc()
       }
       
-      let limitInt = parseInt(limit)
-      if(isNaN(limitInt) || limit > 10){
-        return this.dao.getAll()
+      let limitInt = parseInt(limited)
+      if(isNaN(limitInt) || limited > 10){
+        return this.dao.getAll(criteria)
       }else{
         return this.dao.getLimited(limitInt)
       }
     }catch{
-      return this.dao.getAll()
+      return this.dao.getAll(criteria)
     }
   }
 

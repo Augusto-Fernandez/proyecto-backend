@@ -1,12 +1,13 @@
 import productsSchema from "../models/productsSchema.js";
 
 class ProductMongooseDao {
-  async getAll(){
-    const productDocument = await productsSchema.find().sort({stock:1})
+  async getAll(criteria){
+    const {name, limit, page} = criteria
+    const productDocument = await productsSchema.paginate({name},{limit, page})
 
     return {
       status: "success",
-      payload: productDocument.map(product => ({
+      payload: productDocument.docs.map(product => ({
         id: product._id,
         title: product.title,
         description: product.description,
@@ -49,8 +50,8 @@ class ProductMongooseDao {
     }))
   }
 
-  async getLimited(limit){
-    const productDocument = await productsSchema.find().limit(limit)
+  async getLimited(limited){
+    const productDocument = await productsSchema.find().limit(limited)
 
     return productDocument.map(product => ({
       id: product._id,
