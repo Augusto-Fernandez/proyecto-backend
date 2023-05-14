@@ -5,7 +5,7 @@ export const list = async (req, res) => {
     let {name, limit, page} = req.query;
     const manager = new ProductManager();
     const productsArray = await manager.getAll(sort, {name, limit, page})
-    res.send({status: 'success', productsArray:productsArray.docs, ...productsArray, docs: undefined});
+    res.send({status: 'success', productsArray});
 };
 
 export const getOne = async (req, res) => {

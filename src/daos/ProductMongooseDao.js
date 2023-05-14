@@ -5,18 +5,20 @@ class ProductMongooseDao {
     const {name, limit, page} = criteria
     const productDocument = await productsSchema.paginate({name},{page})
 
-    return {
+    productDocument.docs.map(product => ({
+      id: product._id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      thumbnail: product.thumbnail,
+      code: product.code,
+      stock: product.stock,
+      status: product.status
+    }))
+
+    return{
       status: "success",
-      payload: productDocument.docs.map(product => ({
-        id: product._id,
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        thumbnail: product.thumbnail,
-        code: product.code,
-        stock: product.stock,
-        status: product.status
-      }))
+      payload: productDocument
     }
   }
 
