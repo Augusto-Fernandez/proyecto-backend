@@ -1,11 +1,10 @@
 import ProductManager from "../managers/ProductManager.js";
 
 export const list = async (req, res) => {
-    let {limited} = req.query;
     let {sort} = req.query;
     let {name, limit, page} = req.query;
     const manager = new ProductManager();
-    const productsArray = await manager.getAll(limited, sort, {name, limit, page})
+    const productsArray = await manager.getAll(sort, {name, limit, page})
     res.send({status: 'success', productsArray:productsArray.docs, ...productsArray, docs: undefined});
 };
 

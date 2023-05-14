@@ -3,7 +3,7 @@ import productsSchema from "../models/productsSchema.js";
 class ProductMongooseDao {
   async getAll(criteria){
     const {name, limit, page} = criteria
-    const productDocument = await productsSchema.paginate({name},{limit, page})
+    const productDocument = await productsSchema.paginate({name},{page})
 
     return {
       status: "success",
@@ -37,21 +37,6 @@ class ProductMongooseDao {
 
   async getDesc(){
     const productDocument = await productsSchema.find().sort({price:-1});
-
-    return productDocument.map(product => ({
-      id: product._id,
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      thumbnail: product.thumbnail,
-      code: product.code,
-      stock: product.stock,
-      status: product.status
-    }))
-  }
-
-  async getLimited(limited){
-    const productDocument = await productsSchema.find().limit(limited)
 
     return productDocument.map(product => ({
       id: product._id,
