@@ -2,14 +2,20 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
+import {engine} from "express-handlebars";
+import {resolve} from "path";
+import { Server } from "socket.io";
+import mongoose from "mongoose";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import MongoStore from "connect-mongo";
+
+import ProductManager from "./managers/ProductManager.js";
 import productRouter from "./routes/ProductRouter.js";
 import cartRouter from "./routes/CartRouter.js";
 import viewsRouter from "./routes/ViewsRouter.js";
-import {engine} from "express-handlebars";
-import {resolve} from "path";
-import ProductManager from "./managers/ProductManager.js";
-import { Server } from "socket.io";
-import mongoose from "mongoose";
+import sessionRouter from "./routes/SessionRouter.js";
+import userRouter from "./routes/UserRouter.js";
 
 await mongoose.connect(process.env.MONGO_DB_URI, {
     useNewUrlParser: true,
@@ -19,6 +25,16 @@ await mongoose.connect(process.env.MONGO_DB_URI, {
 const app = express();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_DB_URI,
+        ttl: 300
+    }),
+    secret: 'S3cR3tC0D3',
+    resave: false,
+    saveUninitialized: false
+}))
 
 const manager = new ProductManager();
 
@@ -40,6 +56,8 @@ app.get('/',  async (req, res) => {
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/realtimeproducts', viewsRouter);
+app.use('/api/sessions', sessionRouter);
+app.use('/api/users', userRouter);
 
 const httpServer = app.listen(8080, () => {
     console.log('Servidor escuchando en el puerto 8080');

@@ -3,7 +3,7 @@ import productsSchema from "../models/productsSchema.js";
 class ProductMongooseDao {
   async getAll(criteria){
     const {name, limit, page} = criteria
-    const productDocument = await productsSchema.paginate({name},{page})
+    const productDocument = await productsSchema.paginate({name},{page})/* saqué el limit porque no dejaba ver todos los productos si no se pasaba query */
 
     productDocument.docs.map(product => ({
       id: product._id,
