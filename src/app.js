@@ -16,6 +16,7 @@ import cartRouter from "./routes/CartRouter.js";
 import viewsRouter from "./routes/ViewsRouter.js";
 import sessionRouter from "./routes/SessionRouter.js";
 import userRouter from "./routes/UserRouter.js";
+import errorHandler from "./middlewares/errorHandler.js";
 
 await mongoose.connect(process.env.MONGO_DB_URI, {
     useNewUrlParser: true,
@@ -58,6 +59,7 @@ app.use('/api/carts', cartRouter);
 app.use('/api/realtimeproducts', viewsRouter);
 app.use('/api/sessions', sessionRouter);
 app.use('/api/users', userRouter);
+/* app.use(errorHandler); */
 
 const httpServer = app.listen(8080, () => {
     console.log('Servidor escuchando en el puerto 8080');

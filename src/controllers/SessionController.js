@@ -1,21 +1,11 @@
 import UserManager from "../managers/UserManager.js";
-import bcrypt from 'bcrypt';
+import SessionManager from "../managers/SessionManager.js";
+import { createHash, isValidPassword } from "../utils/index.js";
 
 export const login = async  (req, res) =>{
     const {email, password} = req.body;
-
-    if(!email && !password){
-        return 'Email and Password invalid format.';
-    }
-
-    const manager = new UserManager();
-    const user = await manager.getOneByEmail(email);
-    const isHashedPassword = await bcrypt.compare(password, user.password)
-
-    if(!isHashedPassword){
-        return res.status(401).send({ message: 'Login failed, invalid password.'})
-    }
-
+    const manager = new SessionManager();
+    const sessionLogin = await manager.login({email, password})
     req.session.user = {email};
     res.send({message: 'Login success!'});
 };
@@ -31,14 +21,15 @@ export const logout = async (req, res) =>{
 };
 
 export const signup = async (req, res) =>{
-    const manager = new UserManager();
+    let data = req.body
+    const manager = new SessionManager()
+    const signup = await manager.signup(data)
+    res.status(201).send({ status: 'success', signup, message: 'User created.' });
+};
 
-    /* esto se debería hacer en un sessionManager */
-    const payload = {
-      ...req.body,
-      password: await bcrypt.hash(req.body.password, 10)
-    }
-
-    const user = await manager.create(payload);
-    res.status(201).send({ status: 'success', user, message: 'User created.' });
+export const forgetPassword = async (req, res) =>{
+    const { email, password } = req.body;
+    const manager = new SessionManager();
+    const forgetPassword = await manager.forgetPassword({email, password})
+    res.status(200).send({ status: 'success', forgetPassword, message: 'User change password.' });
 };
