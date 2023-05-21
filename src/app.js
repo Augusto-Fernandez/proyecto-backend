@@ -59,7 +59,7 @@ app.use('/api/carts', cartRouter);
 app.use('/api/realtimeproducts', viewsRouter);
 app.use('/api/sessions', sessionRouter);
 app.use('/api/users', userRouter);
-/* app.use(errorHandler); */
+app.use(errorHandler);
 
 const httpServer = app.listen(8080, () => {
     console.log('Servidor escuchando en el puerto 8080');

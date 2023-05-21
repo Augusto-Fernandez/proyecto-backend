@@ -1,10 +1,14 @@
 import SessionManager from "../managers/SessionManager.js";
 
 export const login = async  (req, res) =>{
-  const {email, password} = req.body;
-  const manager = new SessionManager();
-  const sessionLogin = await manager.login({email, password})
-  res.send({sessionLogin, message: 'Login success!'});
+  try{
+    const {email, password} = req.body;
+    const manager = new SessionManager();
+    const sessionLogin = await manager.login({email, password})
+    res.send({sessionLogin, message: 'Login success!'});
+  }catch(e){
+    next(e)
+  }
 };
 
 export const logout = async (req, res) =>{
@@ -21,15 +25,23 @@ export const current = async  (req, res) =>{
 };
 
 export const signup = async (req, res) =>{
-  let data = req.body
-  const manager = new SessionManager()
-  const signup = await manager.signup(data)
-  res.status(201).send({ status: 'success', signup, message: 'User created.' });
+  try{
+    let data = req.body
+    const manager = new SessionManager()
+    const signup = await manager.signup(data)
+    res.status(201).send({ status: 'success', signup, message: 'User created.' });
+  }catch(e){
+    next(e)
+  }
 };
 
 export const forgetPassword = async (req, res) =>{
-  const { email, password } = req.body;
-  const manager = new SessionManager();
-  const forgetPassword = await manager.forgetPassword({email, password})
-  res.status(200).send({ status: 'success', forgetPassword, message: 'User change password.' });
+  try{
+    const { email, password } = req.body;
+    const manager = new SessionManager();
+    const forgetPassword = await manager.forgetPassword({email, password})
+    res.status(200).send({ status: 'success', forgetPassword, message: 'User change password.' });
+  }catch(e){
+    next(e)
+  }
 };

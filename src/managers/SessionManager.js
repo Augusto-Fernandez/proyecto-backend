@@ -4,19 +4,19 @@ import { createHash, isValidPassword, generateToken } from "../utils/index.js";
 class SessionManager{
     async login(data){
         if(!data.email && !data.password){
-            return 'Email and Password invalid format.';
+            throw new Error('Email and Password invalid format.')
         }
 
         const manager = new UserManager();
         const user = await manager.getOneByEmail(data.email);
 
         if(user.password === undefined){
-            return 'Not Found User Email'
+            throw new Error('Not Found User Email')
         }
         const isHashedPassword = await isValidPassword(data.password, user.password);
 
         if(!isHashedPassword){
-            return'Login failed, invalid password.'
+            return'Login failed, invalid password.' /* creo que este iba con zod */
         }
 
         const accessToken = await generateToken(user);
