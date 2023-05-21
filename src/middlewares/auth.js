@@ -1,11 +1,21 @@
-const auth = (req, res, next) =>
-{
-   if (req.session?.admin) /* if (req.session?.user?.email) */
-   {
-     return next()
-   }
+import jwt from "jsonwebtoken";
 
-   return res.status(401).send({ message: 'Error de autorización!'})
+const auth = (req, res, next) =>{
+    const authHeader = req.headers.authorization;
+
+    if(!authHeader){
+        return res.status(401).send({message: 'Empty authentication header!'})
+    }
+
+    /* se puede hacer un if para validar bearer */
+
+    const token = authHeader.split(' ')[1];
+
+    jwt.verify(token, process.env.PRIVATE_KEY, (error, credentials) =>{
+       if(error) return res.status(403).send({error: 'Authentication error'});
+       req.user = credentials.user;
+       next();
+    });
 }
 
 export default auth;

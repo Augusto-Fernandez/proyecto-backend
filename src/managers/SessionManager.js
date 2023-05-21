@@ -1,5 +1,5 @@
 import UserManager from "./UserManager.js";
-import { createHash, isValidPassword } from "../utils/index.js";
+import { createHash, isValidPassword, generateToken } from "../utils/index.js";
 
 class SessionManager{
     async login(data){
@@ -15,13 +15,16 @@ class SessionManager{
         if(!isHashedPassword){
             return'Login failed, invalid password.'
         }
+
+        const accessToken = await generateToken(user);
+        return accessToken
     }
     async signup(data){
         const manager = new UserManager();
 
         const dto = {
-        ...data,
-        password: await createHash(data.password, 10)
+            ...data,
+            password: await createHash(data.password, 10)
         }
 
         const user = await manager.create(dto);
@@ -31,8 +34,8 @@ class SessionManager{
         const manager = new UserManager();
 
         const dto = {
-        email: data.email,
-        password: await createHash(data.password, 10)
+            email: data.email,
+            password: await createHash(data.password, 10)
         };
 
         const user = await manager.forgetPassword(dto);
