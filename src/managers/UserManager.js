@@ -12,7 +12,7 @@ class UserManager{
   async getOneByEmail(email){
     const validate = this.userDao.validateEmail(email);
     if(!validate){
-      return 'User dont exist.';
+      throw new Error('Not Found User');
     }
     return this.userDao.getOneByEmail(email);
   }
@@ -20,7 +20,7 @@ class UserManager{
   async getOne(id){
     const validate = this.userDao.validateId(id);
     if(!validate){
-      return 'User dont exist.';
+      throw new Error('Not Found User');
     }
     return this.userDao.getOne(id);
   }
@@ -33,7 +33,7 @@ class UserManager{
   async updateOne(id, data){
     const validate = this.userDao.validateId(id);
     if(!validate){
-      return 'User dont exist.';
+      throw new Error('Not Found User');
     }
     return this.userDao.updateOne(id, data);
   }
@@ -41,7 +41,7 @@ class UserManager{
   async deleteOne(id){
     const validate = this.userDao.validateId(id);
     if(!validate){
-      return 'User dont exist.';
+      throw new Error('Not Found User');
     }
     return this.userDao.deleteOne(id);
   }
