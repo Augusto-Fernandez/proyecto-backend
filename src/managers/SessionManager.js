@@ -3,13 +3,16 @@ import { createHash, isValidPassword, generateToken } from "../utils/index.js";
 
 class SessionManager{
     async login(data){
-        /* falta que valide que exita el email, la validacion esta del lado de user */
         if(!data.email && !data.password){
             return 'Email and Password invalid format.';
         }
 
         const manager = new UserManager();
         const user = await manager.getOneByEmail(data.email);
+
+        if(user.password === undefined){
+            return 'Not Found User Email'
+        }
         const isHashedPassword = await isValidPassword(data.password, user.password);
 
         if(!isHashedPassword){
