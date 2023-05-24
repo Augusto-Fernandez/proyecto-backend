@@ -1,6 +1,6 @@
 import SessionManager from "../managers/SessionManager.js";
 
-export const login = async  (req, res) =>{
+export const login = async  (req, res, next) =>{
   try{
     const {email, password} = req.body;
     const manager = new SessionManager();
@@ -24,7 +24,7 @@ export const current = async  (req, res) =>{
   res.status(200).send({status: 'Success',payload: req.user });
 };
 
-export const signup = async (req, res) =>{
+export const signup = async (req, res, next) =>{
   try{
     let data = req.body
     const manager = new SessionManager()
@@ -35,7 +35,7 @@ export const signup = async (req, res) =>{
   }
 };
 
-export const forgetPassword = async (req, res) =>{
+export const forgetPassword = async (req, res, next) =>{
   try{
     const { email, password } = req.body;
     const manager = new SessionManager();

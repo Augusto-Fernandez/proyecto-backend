@@ -4,7 +4,7 @@ import { createHash, isValidPassword, generateToken } from "../utils/index.js";
 class SessionManager{
     async login(data){
         if(!data.email && !data.password){
-            throw new Error('Email and Password invalid format.')
+            return 'Email and Password invalid format.' /* cambiar */
         }
 
         const manager = new UserManager();
@@ -16,7 +16,7 @@ class SessionManager{
         const isHashedPassword = await isValidPassword(data.password, user.password);
 
         if(!isHashedPassword){
-            return'Login failed, invalid password.' /* creo que este iba con zod */
+            return'Login failed, invalid password.' /* cambiar */
         }
 
         const accessToken = await generateToken(user);
