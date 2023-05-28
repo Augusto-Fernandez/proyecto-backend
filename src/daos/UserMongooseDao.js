@@ -2,11 +2,11 @@ import userSchema from "../models/userSchema.js";
 
 class UserMongooseDao{
   async validateId(id){
-    return await userSchema.findOne({_id: id});
+    return userSchema.findOne({_id: id});
   }
 
   async validateEmail(email){
-    return await userSchema.findOne({email})
+    return userSchema.findOne({email})
   }
 
   async paginate(criteria){

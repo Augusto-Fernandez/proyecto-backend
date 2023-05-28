@@ -10,7 +10,7 @@ class UserManager{
   }
 
   async getOneByEmail(email){
-    const validate = this.userDao.validateEmail(email);
+    const validate = await this.userDao.validateEmail(email);
     if(!validate){
       throw new Error('Not Found User');
     }
@@ -18,8 +18,8 @@ class UserManager{
   }
 
   async getOne(id){
-    const validate = this.userDao.validateId(id);
-    if(!validate){
+    const validate = await this.userDao.validateId(id);
+    if(!validate || validate===null || validate===undefined){
       throw new Error('Not Found User');
     }
     return this.userDao.getOne(id);
@@ -31,7 +31,7 @@ class UserManager{
   }
 
   async updateOne(id, data){
-    const validate = this.userDao.validateId(id);
+    const validate = await this.userDao.validateId(id);
     if(!validate){
       throw new Error('Not Found User');
     }
@@ -39,7 +39,7 @@ class UserManager{
   }
 
   async deleteOne(id){
-    const validate = this.userDao.validateId(id);
+    const validate = await this.userDao.validateId(id);
     if(!validate){
       throw new Error('Not Found User');
     }

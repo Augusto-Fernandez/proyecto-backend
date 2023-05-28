@@ -1,7 +1,10 @@
 import SessionManager from "../managers/SessionManager.js";
+import loginValidation from "../validations/loginValidation.js";
+import userValidation from "../validations/userValidation.js";
 
 export const login = async  (req, res, next) =>{
   try{
+    await loginValidation.parseAsync(req.body)
     const {email, password} = req.body;
     const manager = new SessionManager();
     const sessionLogin = await manager.login({email, password})
@@ -26,6 +29,7 @@ export const current = async  (req, res) =>{
 
 export const signup = async (req, res, next) =>{
   try{
+    await userValidation.parseAsync(req.body)
     let data = req.body
     const manager = new SessionManager()
     const signup = await manager.signup(data)
@@ -37,6 +41,7 @@ export const signup = async (req, res, next) =>{
 
 export const forgetPassword = async (req, res, next) =>{
   try{
+    await loginValidation.parseAsync(req.body)
     const { email, password } = req.body;
     const manager = new SessionManager();
     const forgetPassword = await manager.forgetPassword({email, password})

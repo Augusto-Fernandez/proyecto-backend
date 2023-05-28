@@ -3,10 +3,6 @@ import { createHash, isValidPassword, generateToken } from "../utils/index.js";
 
 class SessionManager{
     async login(data){
-        if(!data.email && !data.password){
-            return 'Email and Password invalid format.' /* cambiar */
-        }
-
         const manager = new UserManager();
         const user = await manager.getOneByEmail(data.email);
 
@@ -16,7 +12,7 @@ class SessionManager{
         const isHashedPassword = await isValidPassword(data.password, user.password);
 
         if(!isHashedPassword){
-            return'Login failed, invalid password.' /* cambiar */
+            throw new Error('Login failed, invalid password.')
         }
 
         const accessToken = await generateToken(user);

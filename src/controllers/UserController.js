@@ -1,6 +1,6 @@
 import UserManager from "../managers/UserManager.js";
 import idValidation from "../validations/idValidation.js";
-import userUpdateValidation from "../validations/userUpdateValidation.js";
+import userValidation from "../validations/userValidation.js";
 
 export const list = async  (req, res, next) =>{
   try{
@@ -27,7 +27,7 @@ export const getOne = async (req, res, next) =>{
 
 export const save = async (req, res, next) =>{
   try{
-    await userUpdateValidation.parseAsync(req.body)
+    await userValidation.parseAsync(req.body)
     const manager = new UserManager();
     const user = await manager.create(req.body);
     res.send({status: 'success', user, message: 'User created.'})
@@ -38,7 +38,7 @@ export const save = async (req, res, next) =>{
 
 export const update = async (req, res, next) =>{
   try{
-    await userUpdateValidation.parseAsync(req.body)
+    await userValidation.parseAsync(req.body)
     await idValidation.parseAsync(req.params);
     const {id} = req.params;
     const manager = new UserManager();
