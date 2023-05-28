@@ -12,7 +12,7 @@ class UserManager{
   async getOneByEmail(email){
     const validate = await this.userDao.validateEmail(email);
     if(!validate){
-      throw new Error('Not Found User');
+      throw new Error('Not Found User Email');
     }
     return this.userDao.getOneByEmail(email);
   }
@@ -48,9 +48,13 @@ class UserManager{
 
   async forgetPassword(dto)
   {
+    const validate = await this.userDao.validateEmail(dto.email);
+    if(!validate){
+      throw new Error('Not Found User Email');
+    } 
+
     const user = await this.userDao.getOneByEmail(dto.email);
     user.password = dto.password;
-
     return this.userDao.updateOne(user.id, user);
   }
 }
