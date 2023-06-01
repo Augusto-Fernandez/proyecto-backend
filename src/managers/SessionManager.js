@@ -1,5 +1,5 @@
 import UserManager from "./UserManager.js";
-import { createHash, isValidPassword, generateToken } from "../utils/index.js";
+import { createHash, isValidPassword, generateToken } from "../shared/index.js";
 
 class SessionManager{
     async login(data){

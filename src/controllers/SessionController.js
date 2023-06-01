@@ -8,7 +8,10 @@ export const login = async  (req, res, next) =>{
     const {email, password} = req.body;
     const manager = new SessionManager();
     const sessionLogin = await manager.login({email, password})
-    res.send({sessionLogin, message: 'Login success!'});
+    res.cookie('accessToken', sessionLogin, {
+      maxAge: 60*60*1000,
+      httpOnly: true
+    }).send({ message: 'Login success!' })
   }catch(e){
     next(e)
   }
