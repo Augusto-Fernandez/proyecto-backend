@@ -60,3 +60,16 @@ export const deleteOne = async (req, res, next) =>{
     next(e);
   }
 };
+
+export const idParam = async (req, res, next) =>{
+  try{
+    await idValidation.parseAsync(req.params);
+    const {id: userId} = req.params;
+    const manager = new UserManager();
+    const user = await manager.getOne(userId);
+    req.id = user
+    next()
+  }catch(e){
+    next(e)
+  }
+}
