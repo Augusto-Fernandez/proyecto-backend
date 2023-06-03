@@ -82,3 +82,5 @@ socketServer.on('connection', async socket => {
         socket.emit('listProducts', await manager.getProducts());
     })
 })
+
+/* PRUEBA */
