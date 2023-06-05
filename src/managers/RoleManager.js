@@ -12,7 +12,7 @@ class RoleManager{
     async getOne(id){
         const validate = await this.roleDao.validateId(id);
         if(!validate){
-            throw new Error('Not Found Role');
+            throw new Error('Role dont exist');
         }
         return this.roleDao.getOne(id);
     }
@@ -24,7 +24,7 @@ class RoleManager{
     async updateOne(id,data){
         const validate = await this.roleDao.validateId(id);
         if (!validate){
-            throw new Error('Not Found Role');
+            throw new Error('Role dont exist');
         }
         return this.roleDao.updateOne(id,data);
     }
@@ -32,7 +32,7 @@ class RoleManager{
     async deleteOne(id){
         const validate = await this.roleDao.validateId(id);
         if (!validate){
-            throw new Error('Not Found Role');
+            throw new Error('Role dont exist');
         }
         return this.roleDao.deleteOne(id);
     }

@@ -21,10 +21,6 @@ class RoleMongooseDao {
     async getOne(id){
         const roleDocument = await roleSchema.findOne({_id: id});
 
-        if (!roleDocument){
-            throw new Error('Role dont exist.');
-        }
-
         return{
             id: roleDocument?._id,
             name: roleDocument?.name,
@@ -44,10 +40,6 @@ class RoleMongooseDao {
 
     async updateOne(id, data){
         const roleDocument = await roleSchema.findOneAndUpdate({_id: id}, data, {new: true});
-
-        if (!roleDocument){
-            throw new Error('Role dont exist.');
-        }
 
         return{
             id: roleDocument._id,
