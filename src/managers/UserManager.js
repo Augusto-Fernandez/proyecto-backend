@@ -1,4 +1,5 @@
 import UserMongooseDao from "../daos/UserMongooseDao.js";
+import CartMongooseDao from "../daos/CartMongooseDao.js";
 
 class UserManager {
     constructor() {
@@ -55,6 +56,32 @@ class UserManager {
         const user = await this.userDao.getOneByEmail(dto.email);
         user.password = dto.password;
         return this.userDao.updateOne(user.id, user);
+    }
+
+    async addCart(id, cartId){
+        const validateUser = await this.userDao.validateId(id);
+        if (!validateUser) {
+            throw new Error('Not Found User');
+        }
+
+        const CartDao = new CartMongooseDao();
+        const validateCart = await CartDao.getOne(cartId);
+        if (!validateCart) {
+            throw new Error('Cart Not Found');
+        }
+
+        /* hacer una validación para que tenga un solo carrito */
+
+        return this.userDao.addCart(id, cartId)
+    }
+
+    async deleteCart(id){
+        const validateUser = await this.userDao.validateId(id);
+        if (!validateUser) {
+            throw new Error('Not Found User');
+        }
+
+        return this.userDao.deleteCart(id);
     }
 }
 

@@ -18,6 +18,7 @@ class UserMongooseDao {
             lastName: user.lastName,
             email: user.email,
             age: user.age,
+            cart: user.cart,
             isAdmin: user.isAdmin
         }));
 
@@ -33,6 +34,7 @@ class UserMongooseDao {
             lastName: userDocument?.lastName,
             email: userDocument?.email,
             age: userDocument?.age,
+            cart: userDocument?.cart,
             password: userDocument?.password,
             isAdmin: userDocument.isAdmin,
             role: userDocument.role
@@ -48,6 +50,7 @@ class UserMongooseDao {
             lastName: userDocument?.lastName,
             email: userDocument?.email,
             age: userDocument?.age,
+            cart: userDocument?.cart,
             password: userDocument?.password,
             isAdmin: userDocument?.isAdmin,
             role: userDocument.role
@@ -63,6 +66,7 @@ class UserMongooseDao {
             lastName: userDocument.lastName,
             email: userDocument.email,
             age: userDocument.age,
+            cart: userDocument.cart,
             password: userDocument.password,
             isAdmin: userDocument?.isAdmin
         }
@@ -77,12 +81,52 @@ class UserMongooseDao {
             lastName: userDocument.lastName,
             email: userDocument.email,
             age: userDocument.age,
+            cart: userDocument.cart,
             isAdmin: userDocument?.isAdmin
         }
     }
 
     async deleteOne(id) {
         return userSchema.deleteOne({ _id: id });
+    }
+
+    async addCart(id, cartId){
+        const userDocument = await userSchema.findByIdAndUpdate(
+            id,
+            {$push:{cart:{id: cartId}}},
+            {new: true}
+        )
+
+        return {
+            id: userDocument?._id,
+            firstName: userDocument?.firstName,
+            lastName: userDocument?.lastName,
+            email: userDocument?.email,
+            age: userDocument?.age,
+            cart: userDocument?.cart,
+            password: userDocument?.password,
+            isAdmin: userDocument.isAdmin,
+            role: userDocument.role
+        }
+    }
+
+    async deleteCart(id){
+        const userDocument = await userSchema.findOneAndUpdate(
+            {_id: id},
+            {$set: {cart: []}}
+        )
+
+        return {
+            id: userDocument?._id,
+            firstName: userDocument?.firstName,
+            lastName: userDocument?.lastName,
+            email: userDocument?.email,
+            age: userDocument?.age,
+            cart: userDocument?.cart,
+            password: userDocument?.password,
+            isAdmin: userDocument.isAdmin,
+            role: userDocument.role
+        }
     }
 }
 

@@ -61,6 +61,31 @@ export const deleteOne = async (req, res, next) => {
     }
 };
 
+export const addCart = async (req, res, next) =>{
+    try{
+        await idValidation.parseAsync(req.params);
+        const userId = req.params.id
+        const cartId = req.params.cid
+        const manager = new UserManager();
+        await manager.addCart(userId, cartId);
+        res.send({ status: 'success', message: 'Cart added' })
+    }catch(e){
+        next(e);
+    }
+}
+
+export const deleteCart = async (req, res, next) =>{
+    try{
+        await idValidation.parseAsync(req.params);
+        const { id } = req.params;
+        const manager = new UserManager();
+        await manager.deleteCart(id);
+        res.send({ status: 'success', message: 'Cart deleted' })
+    }catch(e){
+        next(e);
+    }
+}
+
 export const idParam = async (req, res, next) => {
     try{
         await idValidation.parseAsync(req.params);
