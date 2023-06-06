@@ -67,10 +67,13 @@ class UserManager {
         const CartDao = new CartMongooseDao();
         const validateCart = await CartDao.getOne(cartId);
         if (!validateCart) {
-            throw new Error('Cart Not Found');
+            throw new Error('Not Found Cart');
         }
 
-        /* hacer una validación para que tenga un solo carrito */
+        const cartLength = validateUser.cart.length
+        if(cartLength>0){
+            throw new Error('User Has Cart Already');
+        }
 
         return this.userDao.addCart(id, cartId)
     }
@@ -79,6 +82,11 @@ class UserManager {
         const validateUser = await this.userDao.validateId(id);
         if (!validateUser) {
             throw new Error('Not Found User');
+        }
+
+        const cartLength = validateUser.cart.length
+        if(cartLength===0){
+            throw new Error('Not Found Cart');
         }
 
         return this.userDao.deleteCart(id);
