@@ -132,6 +132,20 @@ class UserManager {
 
         return this.userDao.deleteRole(id, validateRole._id)
     }
+
+    async deleteAllRoles(id){
+        const validate = await this.userDao.validateId(id);
+        if (!validate) {
+            throw new Error('Not Found User');
+        }
+
+        const rolesLength = validate.role.length
+        if(rolesLength===0){
+            throw new Error('Not Found Roles');
+        }
+
+        return this.userDao.deleteAllRoles(id);
+    }
 }
 
 export default UserManager;

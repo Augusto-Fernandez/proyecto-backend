@@ -168,6 +168,25 @@ class UserMongooseDao {
             role: userDocument.role
         }
     }
+
+    async deleteAllRoles(id){
+        const userDocument = await userSchema.findOneAndUpdate(
+            {_id: id},
+            {$set: {role: []}}
+        )
+      
+        return {
+            id: userDocument?._id,
+            firstName: userDocument?.firstName,
+            lastName: userDocument?.lastName,
+            email: userDocument?.email,
+            age: userDocument?.age,
+            cart: userDocument?.cart,
+            password: userDocument?.password,
+            isAdmin: userDocument.isAdmin,
+            role: userDocument.role
+        }
+    }
 }
 
 export default UserMongooseDao;

@@ -112,6 +112,18 @@ export const deleteRole = async (req, res, next) =>{
     }
 }
 
+export const deleteAllRoles = async (req, res, next) =>{
+    try{
+        await idValidation.parseAsync(req.params);
+        const { id } = req.params;
+        const manager = new UserManager();
+        await manager.deleteAllRoles(id);
+        res.send({ status: 'success', message: 'All Roles Deleted' });
+    }catch(e){
+        next(e)
+    }
+}
+
 export const idParam = async (req, res, next) => {
     try{
         await idValidation.parseAsync(req.params);
