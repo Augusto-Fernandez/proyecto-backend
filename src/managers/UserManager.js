@@ -1,5 +1,6 @@
 import UserMongooseDao from "../daos/UserMongooseDao.js";
 import CartMongooseDao from "../daos/CartMongooseDao.js";
+import RoleMongooseDao from "../daos/RoleMongooseDao.js";
 
 class UserManager {
     constructor() {
@@ -90,6 +91,46 @@ class UserManager {
         }
 
         return this.userDao.deleteCart(id);
+    }
+
+    async addRole(id, roleId){
+        const validateUser = await this.userDao.validateId(id);
+        if (!validateUser) {
+            throw new Error('Not Found User');
+        }
+
+        const roleDao = new RoleMongooseDao();
+        const validateRole = await roleDao.validateId(roleId);
+        if (!validateRole) {
+            throw new Error('Not Found Role');
+        }
+
+        const existingRoles = validateUser.role.map(role => role.toString());
+        if (existingRoles.includes(roleId.toString())) {
+            throw new Error('Role Already Added');
+        }
+
+        return this.userDao.addRole(id, validateRole)
+    }
+
+    async deleteRole(id, roleId){
+        const validateUser = await this.userDao.validateId(id);
+        if (!validateUser) {
+            throw new Error('Not Found User');
+        }
+
+        const roleDao = new RoleMongooseDao();
+        const validateRole = await roleDao.validateId(roleId);
+        if (!validateRole) {
+            throw new Error('Not Found Role');
+        }
+
+        const existingRoles = validateUser.role.map(role => role.toString());
+        if (!existingRoles.includes(roleId.toString())) {
+            throw new Error("Not Found User's Role");
+        }
+
+        return this.userDao.deleteRole(id, validateRole._id)
     }
 }
 

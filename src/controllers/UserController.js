@@ -86,6 +86,32 @@ export const deleteCart = async (req, res, next) =>{
     }
 }
 
+export const addRole = async (req, res, next) =>{
+    try{
+        await idValidation.parseAsync(req.params);
+        const userId = req.params.id
+        const roleId = req.params.rid
+        const manager = new UserManager();
+        await manager.addRole(userId, roleId)
+        res.send({ status: 'success', message: 'Role added' })
+    }catch(e){
+        next(e)
+    }
+}
+
+export const deleteRole = async (req, res, next) =>{
+    try{
+        await idValidation.parseAsync(req.params);
+        const userId = req.params.id
+        const roleId = req.params.rid
+        const manager = new UserManager();
+        await manager.deleteRole(userId, roleId)
+        res.send({ status: 'success', message: 'Role deleted' })
+    }catch(e){
+        next(e)
+    }
+}
+
 export const idParam = async (req, res, next) => {
     try{
         await idValidation.parseAsync(req.params);

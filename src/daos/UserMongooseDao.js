@@ -128,6 +128,46 @@ class UserMongooseDao {
             role: userDocument.role
         }
     }
+
+    async addRole(id, data){
+        const userDocument = await userSchema.findByIdAndUpdate(
+            id,
+            {$push:{role:data}},
+            {new: true}
+        )
+
+        return {
+            id: userDocument?._id,
+            firstName: userDocument?.firstName,
+            lastName: userDocument?.lastName,
+            email: userDocument?.email,
+            age: userDocument?.age,
+            cart: userDocument?.cart,
+            password: userDocument?.password,
+            isAdmin: userDocument.isAdmin,
+            role: userDocument.role
+        }
+    }
+
+    async deleteRole(id, data){
+        const userDocument = await userSchema.findOneAndUpdate(
+            {_id: id},
+            {$pull: {role: data}},
+            {returnOriginal: false}
+        );
+
+        return {
+            id: userDocument?._id,
+            firstName: userDocument?.firstName,
+            lastName: userDocument?.lastName,
+            email: userDocument?.email,
+            age: userDocument?.age,
+            cart: userDocument?.cart,
+            password: userDocument?.password,
+            isAdmin: userDocument.isAdmin,
+            role: userDocument.role
+        }
+    }
 }
 
 export default UserMongooseDao;
