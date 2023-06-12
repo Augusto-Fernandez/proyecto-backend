@@ -1,4 +1,4 @@
-import ProductManager from "../managers/ProductManager.js";
+import ProductManager from "../../domain/managers/ProductManager.js";
 
 export const list = async (req, res) => {
     let {sort} = req.query;

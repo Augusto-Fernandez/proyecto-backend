@@ -1,6 +1,6 @@
-import UserMongooseDao from "../daos/UserMongooseDao.js";
-import CartMongooseDao from "../daos/CartMongooseDao.js";
-import RoleMongooseDao from "../daos/RoleMongooseDao.js";
+import UserMongooseDao from "../../data//daos/UserMongooseDao.js";
+import CartMongooseDao from "../../data//daos/CartMongooseDao.js";
+import RoleMongooseDao from "../../data//daos/RoleMongooseDao.js";
 
 class UserManager {
     constructor() {

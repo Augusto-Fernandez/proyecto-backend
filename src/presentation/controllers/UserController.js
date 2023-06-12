@@ -1,7 +1,7 @@
-import UserManager from "../managers/UserManager.js";
-import idValidation from "../validations/shared/idValidation.js";
-import userCreateValidation from "../validations/user/userCreateValidation.js"
-import userUpdateValidation from "../validations/user/userUpdateValidation.js"
+import UserManager from "../../domain/managers/UserManager.js";
+import idValidation from "../../domain/validations/shared/idValidation.js";
+import userCreateValidation from "../../domain/validations/user/userCreateValidation.js"
+import userUpdateValidation from "../../domain/validations/user/userUpdateValidation.js"
 
 export const list = async (req, res, next) => {
     try{

@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config(); // Need before get config
 
 import mongoose from "mongoose";
-import addUser from "./commands/addUser.js";
+import addUser from "./presentation/commands/addUser.js";
 
 void (async () => {
     try {

@@ -1,4 +1,4 @@
-import idValidation from "../validations/shared/idValidation.js";
+import idValidation from "../../domain/validations/shared/idValidation.js";
 
 const validateUserId = async (req, res, next) =>{
     await idValidation.parseAsync(req.params);

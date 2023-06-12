@@ -10,14 +10,14 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
 
-import ProductManager from "./managers/ProductManager.js";
-import productRouter from "./routes/ProductRouter.js";
-import cartRouter from "./routes/CartRouter.js";
-import viewsRouter from "./routes/ViewsRouter.js";
-import sessionRouter from "./routes/SessionRouter.js";
-import userRouter from "./routes/UserRouter.js";
-import errorHandler from "./middlewares/errorHandler.js";
-import roleRouter from "./routes/RoleRouter.js";
+import ProductManager from "./domain/managers/ProductManager.js";
+import productRouter from "./presentation/routes/ProductRouter.js";
+import cartRouter from "./presentation/routes/CartRouter.js";
+import viewsRouter from "./presentation/routes/ViewsRouter.js";
+import sessionRouter from "./presentation/routes/SessionRouter.js";
+import userRouter from "./presentation/routes/UserRouter.js";
+import roleRouter from "./presentation/routes/RoleRouter.js";
+import errorHandler from "./presentation/middlewares/errorHandler.js";
 
 await mongoose.connect(process.env.MONGO_DB_URI, {
     useNewUrlParser: true,

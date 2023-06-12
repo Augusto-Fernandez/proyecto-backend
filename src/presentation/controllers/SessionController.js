@@ -1,6 +1,6 @@
-import SessionManager from "../managers/SessionManager.js";
-import loginValidation from "../validations/session/loginValidation.js";
-import userCreateValidation from "../validations/user/userCreateValidation.js";
+import SessionManager from "../../domain/managers/SessionManager.js";
+import loginValidation from "../../domain/validations/session/loginValidation.js";
+import userCreateValidation from "../../domain/validations/user/userCreateValidation.js";
 
 export const login = async (req, res, next) => {
     try{

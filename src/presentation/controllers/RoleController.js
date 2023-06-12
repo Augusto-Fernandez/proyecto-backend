@@ -1,7 +1,7 @@
-import RoleManager from "../managers/RoleManager.js";
-import idValidation from "../validations/shared/idValidation.js";
-import roleCreateValidation from "../validations/role/roleCreateValidation.js";
-import roleUpdateValidation from "../validations/role/roleUpdateValidation.js";
+import RoleManager from "../../domain/managers/RoleManager.js";
+import idValidation from "../../domain/validations/shared/idValidation.js";
+import roleCreateValidation from "../../domain/validations/role/roleCreateValidation.js";
+import roleUpdateValidation from "../../domain/validations/role/roleUpdateValidation.js";
 
 export const list = async (req, res, next) => {
     try{

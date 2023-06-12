@@ -1,4 +1,4 @@
-import CartManager from "../managers/CartManager.js";
+import CartManager from "../../domain/managers/CartManager.js";
 
 export const save = async (req,res) =>{
     const manager = new CartManager();
