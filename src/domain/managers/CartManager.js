@@ -18,29 +18,8 @@ class CartManager {
         return cartById;
     }
 
-    async addToCart(cartId, cartProductId) {
+    async addToCart(cartId, productId) {
 
-        const cartById = await this.dao.getOne(cartId);
-        if(cartById === null){
-            return {status: "error", error: "Cart id not found"};
-        }
-        const productDao = new ProductMongooseDao()
-        const productById = await productDao.getOne(cartProductId);
-        if(productById === null){
-            return {status: "error", error: "Product id not found"};
-        }
-        const productExist = cartById.products.findIndex(product => product.id === cartProductId);
-
-        if(productExist!==-1){
-            const update=cartById.products[productExist].quantity+1;
-            const updatedCart = await this.dao.updatedCart(cartId, cartProductId, update);
-            const newCart=await this.dao.getOne(cartId);
-            return newCart;
-        }else{
-          const addProductToCart = await this.dao.addToCart(cartId, cartProductId);
-          return addProductToCart;
-        }
-        /* 
         const cart = await this.dao.getOne(cartId);
         if (cart === null) {
             return { status: "error", error: "Not Found Id" };
@@ -59,7 +38,6 @@ class CartManager {
         }
 
         return this.dao.addToCart(cartId, productId);
-        */
     }
 
     async deleteOne(cartId, productId) {
