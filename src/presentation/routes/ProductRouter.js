@@ -7,10 +7,10 @@ import { deleteOne, getOne, idParam, list, save, update } from "../controllers/P
 const productRouter = Router();
 
 productRouter.get("/", auth, authorization('getProducts'), list);
-productRouter.get("/:id",  getOne);
-productRouter.post("/", save)
+productRouter.get("/:id", auth, validateProductId, authorization('getProduct'),  getOne);
+productRouter.post("/", auth, authorization('saveProduct'), save)
 productRouter.put("/:id", auth, validateProductId, authorization('updateProduct'), update);
-productRouter.delete("/:id",  deleteOne);
+productRouter.delete("/:id", auth, validateProductId, authorization('deleteProduct'),  deleteOne);
 
 productRouter.param('id', idParam)
 
