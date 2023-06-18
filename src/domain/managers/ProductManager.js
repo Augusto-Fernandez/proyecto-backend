@@ -1,70 +1,48 @@
 import ProductMongooseDao from "../../data/daos/ProductMongooseDao.js";
 
 class ProductManager {
-  constructor(){
-    this.dao = new ProductMongooseDao()
-  }
-
-  async getAll(sort, criteria){
-    try{
-      if(sort==="asc"){
-        return this.dao.getAsc()
-      }else if(sort==="desc"){
-        return this.dao.getDesc()
-      }
-      return this.dao.getAll(criteria)
-    }catch{
-      return this.dao.getAll(criteria)
+    constructor() {
+        this.dao = new ProductMongooseDao()
     }
-  }
 
-  async getOne(id){
-    try{
-      const productById = await this.dao.getOne(id)
-      if(productById === null){
-          return{status: "error", error: "Id not found"};
-      }
-      return productById
-    }catch{
-      return {status: "error", error: "Id not found"};
+    async getAll(sort, criteria) {
+        if (sort === "asc") {
+            return this.dao.getAsc()
+        } else if (sort === "desc") {
+            return this.dao.getDesc()
+        }
+        return this.dao.getAll(criteria)
     }
-  }
 
-  async create(data){
-    if(!data.title || !data.description || !data.code || !data.price || !data.status || !data.stock || !data.thumbnail){
-      return {status: "error", error: "Todos los campos son obligatorios"};
+    async getOne(id) {
+        const validate = await this.dao.validateId(id)
+        if (validate === null) {
+            throw new Error('Not Found Id');
+        }
+
+        return this.dao.getOne(id)
     }
-    return this.dao.create(data)
-  }
 
-  async updatOne(id, data){
-    try{
-      const productById = await this.dao.getOne(id)
-      if(productById===null){
-        return {status: "error", error: "Id not found1"};
-      }
-
-      if(!data.title || !data.description || !data.code || !data.price || !data.status || !data.stock || !data.thumbnail){
-        return {status: "error", error: "Todos los campos son obligatorios"};
-      }
-
-      return this.dao.updateOne(id, data)
-    }catch{
-      return {status: "error", error: "Id not found2"};
+    async create(data) {
+        return this.dao.create(data)
     }
-  }
 
-  async delete(id){
-    try{
-      const productById = await this.dao.getOne(id)
-      if(productById===null){
-          return {status: "error", error: "Id not found1"};
-      }
-      return this.dao.delete(id) 
-    }catch{
-      return {status: "error", error: "Id not found2"};
+    async updatOne(id, data) {
+        const validate = await this.dao.validateId(id)
+        if (validate === null) {
+            throw new Error('Not Found Id');
+        }
+
+        return this.dao.updateOne(id, data)
     }
-  }
+
+    async delete(id) {
+        const validate = await this.dao.validateId(id)
+        if (validate === null) {
+            throw new Error('Not Found Id');
+        }
+        return this.dao.delete(id)
+    }
 }
 
 export default ProductManager;

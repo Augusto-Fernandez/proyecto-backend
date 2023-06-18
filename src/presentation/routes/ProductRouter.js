@@ -1,16 +1,17 @@
 import { Router} from "express";
-import { deleteOne, getOne, list, save, update } from "../controllers/ProductController.js";
+import auth from "../middlewares/auth.js";
+import authorization from "../middlewares/authorization.js";
+import validateProductId from "../middlewares/validateProductId.js";
+import { deleteOne, getOne, idParam, list, save, update } from "../controllers/ProductController.js";
 
 const productRouter = Router();
 
-productRouter.get("/", list);
-
-productRouter.get("/:pid", getOne);
-
+productRouter.get("/", auth, authorization('getProducts'), list);
+productRouter.get("/:id",  getOne);
 productRouter.post("/", save)
+productRouter.put("/:id", auth, validateProductId, authorization('updateProduct'), update);
+productRouter.delete("/:id",  deleteOne);
 
-productRouter.put("/:pid", update)
-
-productRouter.delete("/:pid", deleteOne);
+productRouter.param('id', idParam)
 
 export default productRouter;

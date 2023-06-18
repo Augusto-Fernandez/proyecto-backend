@@ -1,38 +1,76 @@
 import ProductManager from "../../domain/managers/ProductManager.js";
+import idValidation from "../../domain/validations/shared/idValidation.js";
+import productCreateValidation from "../../domain/validations/products/productCreateValidation.js";
+import productUpdateValidation from "../../domain/validations/products/productUpdateValidation.js";
 
-export const list = async (req, res) => {
-    let {sort} = req.query;
-    let {name, limit, page} = req.query;
-    const manager = new ProductManager();
-    const productsArray = await manager.getAll(sort, {name, limit, page})
-    res.send({status: 'success', productsArray});
+export const list = async (req, res, next) => {
+    try{
+        let {sort} = req.query;
+        let {name, limit, page} = req.query;
+        const manager = new ProductManager();
+        const products = await manager.getAll(sort, {name, limit, page})
+        res.send({status: 'success', products});
+    }catch(e){
+        next(e)
+    }
 };
 
-export const getOne = async (req, res) => {
-    const productId = req.params.pid;
-    const manager = new ProductManager();
-    const productById = await manager.getOne(productId)
-    res.send({status: 'success', productById});
+export const getOne = async (req, res, next) => {
+    try{
+        await idValidation.parseAsync(req.params);
+        const { id } = req.params;
+        const manager = new ProductManager();
+        const product = await manager.getOne(id)
+        res.send({status: 'success', product});
+    }catch(e){
+        next(e)
+    }
 };
 
-export const save = async (req, res) =>{
-    let product = req.body;
-    const manager = new ProductManager();
-    const addProduct = await manager.create(product)
-    res.status(201).send({status: "sucess", addProduct, message: "Item created"});
+export const save = async (req, res, next) =>{
+    try{
+        await productCreateValidation.parseAsync(req.body);
+        const manager = new ProductManager();
+        const product = await manager.create(req.body)
+        res.status(201).send({status: "sucess", product, message: "Item created"});
+    }catch(e){
+        next(e)
+    }
 };
 
-export const update = async (req, res) =>{
-    let product = req.body;
-    let productId = req.params.pid;
-    const manager = new ProductManager();
-    const productModified = await manager.updatOne(productId, product)
-    res.status(200).send({status: "sucess", productModified, message: "Item modified"});
+export const update = async (req, res, next) =>{
+    try{
+        await productUpdateValidation.parseAsync({ ...req.body, id: req.params })
+        const { id } = req.params;
+        const manager = new ProductManager();
+        const product= await manager.updatOne(id, req.body)
+        res.status(200).send({status: "sucess", product, message: "Item modified"});
+    }catch(e){
+        next(e)
+    }
 };
 
-export const deleteOne = async (req, res) => {
-    const productId = req.params.pid;
-    const manager = new ProductManager();
-    const deleteProduct = await manager.delete(productId)
-    res.status(200).send({status: "sucess", deleteProduct, message: "Item deleted"});
+export const deleteOne = async (req, res, next) => {
+    try{
+        await idValidation.parseAsync(req.params);
+        const { id } = req.params;
+        const manager = new ProductManager();
+        const product = await manager.delete(id)
+        res.status(200).send({status: "sucess", product, message: "Item deleted"});
+    }catch(e){
+        next(e)
+    }
 };
+
+export const idParam = async (req, res, next) => {
+    try{
+        await idValidation.parseAsync(req.params);
+        const { id } = req.params;
+        const manager = new ProductManager();
+        const user = await manager.getOne(id);
+        req.id = user
+        next()
+    }catch(e){
+        next(e)
+    }
+}
