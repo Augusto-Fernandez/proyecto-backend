@@ -5,14 +5,14 @@ const cartRouter = Router();
 
 cartRouter.post("/", save)
 
-cartRouter.get("/:cid", getOne)
+cartRouter.get("/:id", getOne)
 
-cartRouter.post("/:cid/products/:pid", addToCart)
+cartRouter.post("/:id/products/:pid", addToCart)
 
-cartRouter.delete("/:cid/products/:pid", deleteOne)
+cartRouter.delete("/:id/products/:pid", deleteOne)
 
-cartRouter.delete("/:cid", deleteAll)
+cartRouter.delete("/:id", deleteAll)
 
-cartRouter.put("/:cid", updateOne)
+cartRouter.put("/:id", updateOne)
 
 export default cartRouter;
