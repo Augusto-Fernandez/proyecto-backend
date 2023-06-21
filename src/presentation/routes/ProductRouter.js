@@ -6,11 +6,13 @@ import { deleteOne, getOne, idParam, list, save, update } from "../controllers/P
 
 const productRouter = Router();
 
-productRouter.get("/", auth, authorization('getProducts'), list);
-productRouter.get("/:id", auth, validateIdParam, authorization('getProduct'),  getOne);
-productRouter.post("/", auth, authorization('saveProduct'), save)
-productRouter.put("/:id", auth, validateIdParam, authorization('updateProduct'), update);
-productRouter.delete("/:id", auth, validateIdParam, authorization('deleteProduct'),  deleteOne);
+productRouter.use(auth);
+
+productRouter.get("/", authorization('getProducts'), list);
+productRouter.get("/:id", validateIdParam, authorization('getProduct'),  getOne);
+productRouter.post("/", authorization('saveProduct'), save)
+productRouter.put("/:id", validateIdParam, authorization('updateProduct'), update);
+productRouter.delete("/:id", validateIdParam, authorization('deleteProduct'),  deleteOne);
 
 productRouter.param('id', idParam)
 

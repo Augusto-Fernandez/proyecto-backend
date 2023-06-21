@@ -1,40 +1,40 @@
-import RoleMongooseDao from "../../data/daos/RoleMongooseDao.js";
+import container from "../../container.js";
 
 class RoleManager{
     constructor(){
-        this.roleDao = new RoleMongooseDao();
+        this.roleRepository = container.resolve('RoleRepository')
     }
 
     async paginate(criteria){
-        return this.roleDao.paginate(criteria);
+        return this.roleRepository.paginate(criteria);
     }
 
     async getOne(id){
-        const validate = await this.roleDao.validateId(id);
+        const validate = await this.roleRepository.validateId(id);
         if(!validate){
             throw new Error('Role dont exist');
         }
-        return this.roleDao.getOne(id);
+        return this.roleRepository.getOne(id);
     }
 
     async create(data){
-        return await this.roleDao.create(data);
+        return await this.roleRepository.create(data);
     }
 
     async updateOne(id,data){
-        const validate = await this.roleDao.validateId(id);
+        const validate = await this.roleRepository.validateId(id);
         if (!validate){
             throw new Error('Role dont exist');
         }
-        return this.roleDao.updateOne(id,data);
+        return this.roleRepository.updateOne(id,data);
     }
 
     async deleteOne(id){
-        const validate = await this.roleDao.validateId(id);
+        const validate = await this.roleRepository.validateId(id);
         if (!validate){
             throw new Error('Role dont exist');
         }
-        return this.roleDao.deleteOne(id);
+        return this.roleRepository.deleteOne(id);
     }
 }
 

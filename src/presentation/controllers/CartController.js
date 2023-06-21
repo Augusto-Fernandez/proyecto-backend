@@ -26,7 +26,6 @@ export const getOne = async (req, res, next) => {
 
 export const addToCart = async (req, res, next) => {
     try {
-        await idValidation.parseAsync(req.params);
         const { id } = req.params;
         const { pid } = req.params;
         const manager = new CartManager();
@@ -39,11 +38,10 @@ export const addToCart = async (req, res, next) => {
 
 export const deleteOne = async (req, res, next) => {
     try {
-        await idValidation.parseAsync(req.params);
-        let cartId = req.params.id;
-        let cartProductId = req.params.pid;
+        const { id } = req.params;
+        const { pid } = req.params;
         const manager = new CartManager();
-        const cart = manager.deleteOne(cartId, cartProductId);
+        const cart = manager.deleteOne(id, pid);
         res.status(200).send({ status: "sucess", cart, message: "Cart Item deleted" });
     } catch (e) {
         next(e)
@@ -71,19 +69,6 @@ export const updateOne = async (req, res, next) => {
         const cart = manager.updateOne(id, req.body);
         res.status(200).send({ status: "sucess", cart, message: "Cart updated" });
     } catch (e) {
-        next(e)
-    }
-}
-
-export const idParam = async (req, res, next) => {
-    try{
-        await idValidation.parseAsync(req.params);
-        const { id } = req.params;
-        const manager = new CartManager();
-        const role = await manager.getOne(id);
-        req.id = role;
-        next()
-    }catch(e){
         next(e)
     }
 }

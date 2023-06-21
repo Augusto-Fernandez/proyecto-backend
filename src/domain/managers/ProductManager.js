@@ -1,47 +1,47 @@
-import ProductMongooseDao from "../../data/daos/ProductMongooseDao.js";
+import container from "../../container.js"
 
 class ProductManager {
     constructor() {
-        this.dao = new ProductMongooseDao()
+        this.productRepository = container.resolve('ProductRepository')
     }
 
     async getAll(sort, criteria) {
         if (sort === "asc") {
-            return this.dao.getAsc()
+            return this.productRepository.getAsc()
         } else if (sort === "desc") {
-            return this.dao.getDesc()
+            return this.productRepository.getDesc()
         }
-        return this.dao.getAll(criteria)
+        return this.productRepository.getAll(criteria)
     }
 
     async getOne(id) {
-        const validate = await this.dao.validateId(id)
+        const validate = await this.productRepository.validateId(id)
         if (validate === null) {
             throw new Error('Not Found Id');
         }
 
-        return this.dao.getOne(id)
+        return this.productRepository.getOne(id)
     }
 
     async create(data) {
-        return this.dao.create(data)
+        return this.productRepository.create(data)
     }
 
     async updatOne(id, data) {
-        const validate = await this.dao.validateId(id)
+        const validate = await this.productRepository.validateId(id)
         if (validate === null) {
             throw new Error('Not Found Id');
         }
 
-        return this.dao.updateOne(id, data)
+        return this.productRepository.updateOne(id, data)
     }
 
     async delete(id) {
-        const validate = await this.dao.validateId(id)
+        const validate = await this.productRepository.validateId(id)
         if (validate === null) {
             throw new Error('Not Found Id');
         }
-        return this.dao.delete(id)
+        return this.productRepository.delete(id)
     }
 }
 

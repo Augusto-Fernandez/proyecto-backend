@@ -63,11 +63,10 @@ export const deleteOne = async (req, res, next) => {
 
 export const addCart = async (req, res, next) =>{
     try{
-        await idValidation.parseAsync(req.params);
-        const userId = req.params.id
-        const cartId = req.params.cid
+        const { id } = req.params;
+        const { cid } = req.params;
         const manager = new UserManager();
-        await manager.addCart(userId, cartId);
+        await manager.addCart(id, cid);
         res.send({ status: 'success', message: 'Cart added' })
     }catch(e){
         next(e);
@@ -88,11 +87,10 @@ export const deleteCart = async (req, res, next) =>{
 
 export const addRole = async (req, res, next) =>{
     try{
-        await idValidation.parseAsync(req.params);
-        const userId = req.params.id
-        const roleId = req.params.rid
+        const { id } = req.params;
+        const { pid } = req.params;
         const manager = new UserManager();
-        await manager.addRole(userId, roleId)
+        await manager.addRole(id, pid)
         res.send({ status: 'success', message: 'Role added' })
     }catch(e){
         next(e)
@@ -101,11 +99,10 @@ export const addRole = async (req, res, next) =>{
 
 export const deleteRole = async (req, res, next) =>{
     try{
-        await idValidation.parseAsync(req.params);
-        const userId = req.params.id
-        const roleId = req.params.rid
+        const { id } = req.params;
+        const { pid } = req.params;
         const manager = new UserManager();
-        await manager.deleteRole(userId, roleId)
+        await manager.deleteRole(id, pid)
         res.send({ status: 'success', message: 'Role deleted' })
     }catch(e){
         next(e)
@@ -119,19 +116,6 @@ export const deleteAllRoles = async (req, res, next) =>{
         const manager = new UserManager();
         await manager.deleteAllRoles(id);
         res.send({ status: 'success', message: 'All Roles Deleted' });
-    }catch(e){
-        next(e)
-    }
-}
-
-export const idParam = async (req, res, next) => {
-    try{
-        await idValidation.parseAsync(req.params);
-        const { id } = req.params;
-        const manager = new UserManager();
-        const user = await manager.getOne(id);
-        req.id = user
-        next()
     }catch(e){
         next(e)
     }

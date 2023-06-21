@@ -1,72 +1,75 @@
-import UserMongooseDao from "../../data//daos/UserMongooseDao.js";
-import CartMongooseDao from "../../data//daos/CartMongooseDao.js";
-import RoleMongooseDao from "../../data//daos/RoleMongooseDao.js";
+import container from "../../container.js";
+import idStringValidation from "../validations/shared/idStringValidation.js";
 
 class UserManager {
     constructor() {
-        this.userDao = new UserMongooseDao();
+        this.userRepository = container.resolve('UserRepository');
+        this.cartRepository = container.resolve('CartRepository');
+        this.roleRepository = container.resolve('RoleRepository');
     }
 
     async paginate(criteria) {
-        return this.userDao.paginate(criteria);
+        return this.userRepository.paginate(criteria);
     }
 
     async getOneByEmail(email) {
-        const validate = await this.userDao.validateEmail(email);
+        const validate = await this.userRepository.validateEmail(email);
         if (!validate) {
             throw new Error('Not Found User Email');
         }
-        return this.userDao.getOneByEmail(email);
+        return this.userRepository.getOneByEmail(email);
     }
 
     async getOne(id) {
-        const validate = await this.userDao.validateId(id);
+        const validate = await this.userRepository.validateId(id);
         if (!validate || validate === null || validate === undefined) {
             throw new Error('Not Found User');
         }
-        return this.userDao.getOne(id);
+        return this.userRepository.getOne(id);
     }
 
     async create(data) {
-        const user = await this.userDao.create(data);
+        const user = await this.userRepository.create(data);
         return { ...user, password: undefined };
     }
 
     async updateOne(id, data) {
-        const validate = await this.userDao.validateId(id);
+        const validate = await this.userRepository.validateId(id);
         if (!validate) {
             throw new Error('Not Found User');
         }
-        return this.userDao.updateOne(id, data);
+        return this.userRepository.updateOne(id, data);
     }
 
     async deleteOne(id) {
-        const validate = await this.userDao.validateId(id);
+        const validate = await this.userRepository.validateId(id);
         if (!validate) {
             throw new Error('Not Found User');
         }
-        return this.userDao.deleteOne(id);
+        return this.userRepository.deleteOne(id);
     }
 
     async forgetPassword(dto) {
-        const validate = await this.userDao.validateEmail(dto.email);
+        const validate = await this.userRepository.validateEmail(dto.email);
         if (!validate) {
             throw new Error('Not Found User Email');
         }
 
-        const user = await this.userDao.getOneByEmail(dto.email);
+        const user = await this.userRepository.getOneByEmail(dto.email);
         user.password = dto.password;
-        return this.userDao.updateOne(user.id, user);
+        return this.userRepository.updateOne(user.id, user);
     }
 
     async addCart(id, cartId){
-        const validateUser = await this.userDao.validateId(id);
+        await idStringValidation.parseAsync(id);
+        await idStringValidation.parseAsync(cartId);
+
+        const validateUser = await this.userRepository.validateId(id);
         if (!validateUser) {
             throw new Error('Not Found User');
         }
 
-        const CartDao = new CartMongooseDao();
-        const validateCart = await CartDao.getOne(cartId);
+        const validateCart = await this.cartRepository.getOne(cartId);
         if (!validateCart) {
             throw new Error('Not Found Cart');
         }
@@ -76,11 +79,11 @@ class UserManager {
             throw new Error('User Has Cart Already');
         }
 
-        return this.userDao.addCart(id, cartId)
+        return this.userRepository.addCart(id, cartId)
     }
 
     async deleteCart(id){
-        const validateUser = await this.userDao.validateId(id);
+        const validateUser = await this.userRepository.validateId(id);
         if (!validateUser) {
             throw new Error('Not Found User');
         }
@@ -90,17 +93,19 @@ class UserManager {
             throw new Error('Not Found Cart');
         }
 
-        return this.userDao.deleteCart(id);
+        return this.userRepository.deleteCart(id);
     }
 
     async addRole(id, roleId){
-        const validateUser = await this.userDao.validateId(id);
+        await idStringValidation.parseAsync(id);
+        await idStringValidation.parseAsync(roleId);
+
+        const validateUser = await this.userRepository.validateId(id);
         if (!validateUser) {
             throw new Error('Not Found User');
         }
 
-        const roleDao = new RoleMongooseDao();
-        const validateRole = await roleDao.validateId(roleId);
+        const validateRole = await this.roleRepository.validateId(roleId);
         if (!validateRole) {
             throw new Error('Not Found Role');
         }
@@ -110,17 +115,19 @@ class UserManager {
             throw new Error('Role Already Added');
         }
 
-        return this.userDao.addRole(id, validateRole)
+        return this.userRepository.addRole(id, validateRole)
     }
 
     async deleteRole(id, roleId){
-        const validateUser = await this.userDao.validateId(id);
+        await idStringValidation.parseAsync(id);
+        await idStringValidation.parseAsync(roleId);
+
+        const validateUser = await this.userRepository.validateId(id);
         if (!validateUser) {
             throw new Error('Not Found User');
         }
 
-        const roleDao = new RoleMongooseDao();
-        const validateRole = await roleDao.validateId(roleId);
+        const validateRole = await this.roleRepository.validateId(roleId);
         if (!validateRole) {
             throw new Error('Not Found Role');
         }
@@ -130,11 +137,11 @@ class UserManager {
             throw new Error("Not Found User's Role");
         }
 
-        return this.userDao.deleteRole(id, validateRole._id)
+        return this.userRepository.deleteRole(id, validateRole._id)
     }
 
     async deleteAllRoles(id){
-        const validate = await this.userDao.validateId(id);
+        const validate = await this.userRepository.validateId(id);
         if (!validate) {
             throw new Error('Not Found User');
         }
@@ -144,7 +151,7 @@ class UserManager {
             throw new Error('Not Found Roles');
         }
 
-        return this.userDao.deleteAllRoles(id);
+        return this.userRepository.deleteAllRoles(id);
     }
 }
 

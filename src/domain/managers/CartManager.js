@@ -1,80 +1,86 @@
-import CartMongooseDao from "../../data/daos/CartMongooseDao.js";
-import ProductMongooseDao from "../../data/daos/ProductMongooseDao.js";
+import container from "../../container.js";
+import idStringValidation from "../validations/shared/idStringValidation.js";
 
 class CartManager {
     constructor() {
-        this.dao = new CartMongooseDao()
+        this.cartRepository = container.resolve('CartRepository');
+        this.productRepository = container.resolve('ProductRepository');
     }
 
     async create() {
-        return this.dao.create()
+        return this.cartRepository.create()
     }
 
     async getOne(id) {
-        const cartById = await this.dao.getOne(id);
-        if (cartById === null) {
-            return { status: "error", error: "Not Found Id" };
+        const cart = await this.cartRepository.validateId(id)
+        if (cart === null) {
+            throw new Error('Not Found Id');
         }
-        return cartById;
+        return this.cartRepository.getOne(id);
     }
 
     async addToCart(cartId, productId) {
+        await idStringValidation.parseAsync(cartId);
+        await idStringValidation.parseAsync(productId);
 
-        const cart = await this.dao.getOne(cartId);
+        const cart = await this.cartRepository.validateId(cartId);
         if (cart === null) {
-            return { status: "error", error: "Not Found Id" };
+            throw new Error('Not Found Id');
         }
-        const productDao = new ProductMongooseDao()
-        const validateProduct= await productDao.getOne(productId);
+
+        const validateProduct= await this.productRepository.validateId(productId);
         if (validateProduct === null) {
-            return { status: "error", error: "Not Found Product" };
+            throw new Error('Not Found Product Id');
         }
 
         const productExist = cart.products.findIndex(prod => prod.id === productId);
 
         if (productExist !== -1) {
             const update = cart.products[productExist].quantity + 1;
-            return this.dao.updatedCart(cartId, productId, update);
+            return this.cartRepository.updatedCart(cartId, productId, update);
         }
 
-        return this.dao.addToCart(cartId, productId);
+        return this.cartRepository.addToCart(cartId, productId);
     }
 
     async deleteOne(cartId, productId) {
-        const cart = await this.dao.getOne(cartId);
+        await idStringValidation.parseAsync(cartId);
+        await idStringValidation.parseAsync(productId);
+
+        const cart = await this.cartRepository.validateId(cartId);
         if (cart === null) {
-            return { status: "error", error: "Not Found Id" };
+            throw new Error('Not Found Id');
         }
-        const productDao = new ProductMongooseDao()
-        const product= await productDao.getOne(productId);
+
+        const product= await this.productRepository.validateId(productId);
         if (product === null) {
-            return { status: "error", error: "Not Found Product" };
+            throw new Error('Not Found Product Id');
         }
         const productExist = cart.products.findIndex(product => product.id === productId);
 
         if (productExist === -1) {
-            return { status: "error", error: "Not Found Product in Cart" };
+            throw new Error('Not Found Product in Cart');
         }
 
-        return this.dao.deleteOne(cartId, productId);
+        return this.cartRepository.deleteOne(cartId, productId);
     }
 
     async deleteAll(id) {
-        const cart = await this.dao.getOne(id);
+        const cart = await this.cartRepository.validateId(id);
         if (cart === null) {
-            return { status: "error", error: "Not Found Id" };
+            throw new Error('Not Found Id');
         }
 
-        return this.dao.deleteAll(id)
+        return this.cartRepository.deleteAll(id)
     }
 
     async updateOne(id, data) {
-        const cart = await this.dao.getOne(id);
+        const cart = await this.cartRepository.validateId(id);
         if (cart === null) {
-            return { status: "error", error: "Not Found Id" };
+            throw new Error('Not Found Id');
         }
 
-        return this.dao.updateOne(id, data)
+        return this.cartRepository.updateOne(id, data)
     }
 }
 
