@@ -1,5 +1,4 @@
 import container from "../../container.js";
-import idStringValidation from "../validations/shared/idStringValidation.js";
 
 class UserManager {
     constructor() {
@@ -61,9 +60,6 @@ class UserManager {
     }
 
     async addCart(id, cartId){
-        await idStringValidation.parseAsync(id);
-        await idStringValidation.parseAsync(cartId);
-
         const validateUser = await this.userRepository.validateId(id);
         if (!validateUser) {
             throw new Error('Not Found User');
@@ -97,9 +93,6 @@ class UserManager {
     }
 
     async addRole(id, roleId){
-        await idStringValidation.parseAsync(id);
-        await idStringValidation.parseAsync(roleId);
-
         const validateUser = await this.userRepository.validateId(id);
         if (!validateUser) {
             throw new Error('Not Found User');
@@ -119,9 +112,6 @@ class UserManager {
     }
 
     async deleteRole(id, roleId){
-        await idStringValidation.parseAsync(id);
-        await idStringValidation.parseAsync(roleId);
-
         const validateUser = await this.userRepository.validateId(id);
         if (!validateUser) {
             throw new Error('Not Found User');

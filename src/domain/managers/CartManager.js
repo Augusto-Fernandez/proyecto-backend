@@ -1,5 +1,4 @@
 import container from "../../container.js";
-import idStringValidation from "../validations/shared/idStringValidation.js";
 
 class CartManager {
     constructor() {
@@ -20,9 +19,6 @@ class CartManager {
     }
 
     async addToCart(cartId, productId) {
-        await idStringValidation.parseAsync(cartId);
-        await idStringValidation.parseAsync(productId);
-
         const cart = await this.cartRepository.validateId(cartId);
         if (cart === null) {
             throw new Error('Not Found Id');
@@ -44,9 +40,6 @@ class CartManager {
     }
 
     async deleteOne(cartId, productId) {
-        await idStringValidation.parseAsync(cartId);
-        await idStringValidation.parseAsync(productId);
-
         const cart = await this.cartRepository.validateId(cartId);
         if (cart === null) {
             throw new Error('Not Found Id');

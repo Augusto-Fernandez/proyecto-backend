@@ -1,5 +1,6 @@
 import CartManager from "../../domain/managers/CartManager.js";
 import idValidation from "../../domain/validations/shared/idValidation.js";
+import productIdValidation from "../../domain/validations/cart/productIdValidation.js";
 import cartUpdateValidation from "../../domain/validations/cart/cartUpdateValidation.js";
 
 export const save = async (req, res, next) => {
@@ -26,6 +27,7 @@ export const getOne = async (req, res, next) => {
 
 export const addToCart = async (req, res, next) => {
     try {
+        await productIdValidation.parseAsync(req.params)
         const { id } = req.params;
         const { pid } = req.params;
         const manager = new CartManager();
@@ -38,6 +40,7 @@ export const addToCart = async (req, res, next) => {
 
 export const deleteOne = async (req, res, next) => {
     try {
+        await productIdValidation.parseAsync(req.params)
         const { id } = req.params;
         const { pid } = req.params;
         const manager = new CartManager();

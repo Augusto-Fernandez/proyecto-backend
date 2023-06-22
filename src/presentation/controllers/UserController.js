@@ -1,5 +1,7 @@
 import UserManager from "../../domain/managers/UserManager.js";
 import idValidation from "../../domain/validations/shared/idValidation.js";
+import cartIdValidation from "../../domain/validations/user/cartIdValidation.js";
+import roleIdValidation from "../../domain/validations/user/roleIdValidation.js";
 import userCreateValidation from "../../domain/validations/user/userCreateValidation.js"
 import userUpdateValidation from "../../domain/validations/user/userUpdateValidation.js"
 
@@ -63,6 +65,7 @@ export const deleteOne = async (req, res, next) => {
 
 export const addCart = async (req, res, next) =>{
     try{
+        await cartIdValidation.parseAsync(req.params);
         const { id } = req.params;
         const { cid } = req.params;
         const manager = new UserManager();
@@ -87,6 +90,7 @@ export const deleteCart = async (req, res, next) =>{
 
 export const addRole = async (req, res, next) =>{
     try{
+        await roleIdValidation.parseAsync(req.params);
         const { id } = req.params;
         const { pid } = req.params;
         const manager = new UserManager();
@@ -99,6 +103,7 @@ export const addRole = async (req, res, next) =>{
 
 export const deleteRole = async (req, res, next) =>{
     try{
+        await roleIdValidation.parseAsync(req.params);
         const { id } = req.params;
         const { pid } = req.params;
         const manager = new UserManager();
