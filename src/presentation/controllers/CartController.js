@@ -75,3 +75,16 @@ export const updateOne = async (req, res, next) => {
         next(e)
     }
 }
+
+export const purchase = async (req, res, next) => {
+    try{
+        await idValidation.parseAsync(req.params);
+        const { id } = req.params;
+        const { _doc } = req.user;
+        const manager = new CartManager();
+        const cart = manager.purchase(id, _doc);
+        res.status(200).send({ status: "sucess", cart, message: "Successful Purchase" });
+    }catch(e){
+        next(e)
+    }
+}
