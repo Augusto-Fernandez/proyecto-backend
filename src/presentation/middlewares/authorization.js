@@ -1,10 +1,10 @@
 const authorization = (permission) =>{
     return async(req, res, next) =>{
-        const user = req.user;
+        const {_doc} = req.user;
 
-        if(!user.isAdmin && !user.role?.permissions.includes(permission))
+        if(!_doc.isAdmin && !_doc.role?.permissions.includes(permission))
         {
-            return res.status(401).send({message: 'Not authorized!'});
+            return res.status(401).send({message: 'Not authorized'});
         }
 
         next();
