@@ -65,7 +65,7 @@ class UserManager {
             throw new Error('Not Found User');
         }
 
-        const validateCart = await this.cartRepository.getOne(cartId);
+        const validateCart = await this.cartRepository.validateId(cartId);
         if (!validateCart) {
             throw new Error('Not Found Cart');
         }
