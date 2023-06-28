@@ -1,4 +1,5 @@
 import container from "../../container.js";
+import MessengerService from "../../shared/MessengerService.js";
 
 class CartManager {
     constructor() {
@@ -147,6 +148,24 @@ class CartManager {
             amount: totalAmount,
             purchaser: user.email
         }
+
+        const message = new MessengerService
+
+        const mail = {
+            from: process.env.SMTP_EMAIL,
+            to: user.email,
+            subject: 'Confirmación de compra',
+            html:`
+            <di>
+                <h1>Compra realizada satisfactoriamente</h1>
+                <p>ID: ${code}</p>
+                <p>Total: ${totalAmount}</p>
+            </div>
+            `,
+            attachment:[]
+        }
+
+        message.sendMessage(mail);
 
         return this.cartRepository.purchase(dto);
     }
