@@ -92,9 +92,9 @@ export const addRole = async (req, res, next) =>{
     try{
         await roleIdValidation.parseAsync(req.params);
         const { id } = req.params;
-        const { pid } = req.params;
+        const { rid } = req.params;
         const manager = new UserManager();
-        await manager.addRole(id, pid)
+        await manager.addRole(id, rid)
         res.send({ status: 'success', message: 'Role added' })
     }catch(e){
         next(e)
@@ -105,9 +105,9 @@ export const deleteRole = async (req, res, next) =>{
     try{
         await roleIdValidation.parseAsync(req.params);
         const { id } = req.params;
-        const { pid } = req.params;
+        const { rid } = req.params;
         const manager = new UserManager();
-        await manager.deleteRole(id, pid)
+        await manager.deleteRole(id, rid)
         res.send({ status: 'success', message: 'Role deleted' })
     }catch(e){
         next(e)
