@@ -1,10 +1,14 @@
-const authorization = (permission) =>{
-    return async(req, res, next) =>{
-        const {_doc} = req.user;
+import RoleManager from "../../domain/managers/RoleManager.js";
 
-        if(!_doc.isAdmin && !_doc.role?.permissions.includes(permission))
-        {
-            return res.status(401).send({message: 'Not authorized'});
+const authorization = (permission) => {
+    return async (req, res, next) => {
+        const { _doc } = req.user;
+        const roleManager = new RoleManager()
+
+        const prueba = await roleManager.getOne(_doc.role);
+
+        if (!_doc.isAdmin && !prueba.id.permissions == permission) {
+            return res.status(401).send({ message: 'Not authorized' });
         }
 
         next();
