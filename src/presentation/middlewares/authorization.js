@@ -5,9 +5,9 @@ const authorization = (permission) => {
         const { _doc } = req.user;
         const roleManager = new RoleManager()
 
-        const prueba = await roleManager.getOne(_doc.role);
+        const roles = await roleManager.getOne(_doc.role);
 
-        if (!_doc.isAdmin && !prueba.id.permissions == permission) {
+        if (!_doc.isAdmin && !roles.id.permissions == permission) {
             return res.status(401).send({ message: 'Not authorized' });
         }
 
