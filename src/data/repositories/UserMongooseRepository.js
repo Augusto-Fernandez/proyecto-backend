@@ -12,7 +12,7 @@ class UserMongooseRepository {
 
     async paginate(criteria) {
         const { limit, page } = criteria;
-        const userDocuments = await userSchema.paginate({}, { page });/* ({}, {limit, page}) */
+        const userDocuments = await userSchema.paginate({}, {limit, page});/* cambiar a si no devuelve nada({}, { page }) */
         const {docs, ... pagination} = userDocuments;
 
         const users = docs.map(document => new User ({

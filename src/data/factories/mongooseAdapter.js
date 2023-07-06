@@ -8,6 +8,10 @@ class MongooseAdapter {
         });
     }
 
+    async drop() {
+        await this.connection.dropDatabase();
+    }
+
     async close() {
         await this.connection.disconnect();
     }
