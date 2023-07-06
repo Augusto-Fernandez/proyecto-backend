@@ -10,6 +10,7 @@ const expect = chai.expect;
 const db = DbFactory.create(process.env.DB);
 
 import UserMongooseRepository from "../data/repositories/UserMongooseRepository.js";
+import RoleMongooseRepository from "../data/repositories/RoleMongooseRepository.js";
 
 describe("Testing User Mongoose Repository", () => {
     before(function () {
@@ -50,7 +51,50 @@ describe("Testing User Mongoose Repository", () => {
             .then(result => {
                 expect(result.firstName).to.be.equals(user.firstName);
                 expect(result.email).to.be.equals(user.email);
-            }
-            );
+                expect(result.lastName).to.be.equals(user.lastName);
+                expect(result.age).to.be.equals(user.age);
+            });
+    });
+    it('El repositorio debe poder encontrar un user', function (){
+        return this.userRepository
+            .getOne("64a71143e28f3638571814cc")
+            .then(result => {
+                expect(result).to.not.be.null;
+                expect(result).to.not.be.undefined;
+                expect(result).to.be.an('object');
+                expect(result).to.have.property('id');
+            })
+    });
+    it('El repositorio debe poder actualizar un user', function (){
+        const user = {
+            firstName: faker.person.firstName(),
+            lastName: faker.person.lastName(),
+            email: faker.internet.email(),
+            age: 18,
+            isAdmin: false,
+            password: 12345678
+        };
+
+        return this.userRepository
+            .updateOne("64a71143e28f3638571814cc", user)
+            .then(result => {
+                expect(result).to.not.be.null;
+                expect(result).to.not.be.undefined;
+                expect(result).to.be.an('object');
+                expect(result).to.have.property('id');
+                expect(result.firstName).to.be.equals(user.firstName);
+                expect(result.email).to.be.equals(user.email);
+                expect(result.lastName).to.be.equals(user.lastName);
+                expect(result.age).to.be.equals(user.age);
+            })
+    });
+    it('El repositorio debe poder eliminar un user', function (){
+        return this.userRepository
+            .deleteOne("64a73aecd84cdc204559213d")
+            .then(result => {
+                expect(result).to.not.be.null;
+                expect(result).to.not.be.undefined;
+                expect(result).to.be.an('object');
+            })
     });
 });
