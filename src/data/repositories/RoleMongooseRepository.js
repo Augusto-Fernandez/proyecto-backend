@@ -8,7 +8,7 @@ class RoleMongooseRepository {
 
     async paginate(criteria){
         const {limit, page} = criteria;
-        const roleDocuments = await roleSchema.paginate({},{page});/* ({}, {limit, page}) */
+        const roleDocuments = await roleSchema.paginate({}, {limit, page});/* cambiar a si no devuelve nada({}, { page }) */
         const {docs, ... pagination} = roleDocuments;
 
         const roles = docs.map(document => new Role ({

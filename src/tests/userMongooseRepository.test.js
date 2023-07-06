@@ -34,7 +34,7 @@ describe("Testing User Mongoose Repository", () => {
                 expect(Array.isArray(result.users)).to.be.equals(true);
                 expect(result.pagination.limit).to.be.equals(5);
             }
-            );
+        );
     });
     it('El repositorio debe poder crear un user', function () {
         const user = {
