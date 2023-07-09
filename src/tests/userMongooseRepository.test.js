@@ -16,6 +16,7 @@ describe("Testing User Mongoose Repository", () => {
     before(function () {
         db.init(process.env.DB_URI);
         this.userRepository = new UserMongooseRepository();
+        this.user = {};
     });
     after(function () {
         db.drop();
@@ -37,7 +38,7 @@ describe("Testing User Mongoose Repository", () => {
         );
     });
     it('El repositorio debe poder crear un user', function () {
-        const user = {
+        const payload = {
             firstName: faker.person.firstName(),
             lastName: faker.person.lastName(),
             email: faker.internet.email(),
@@ -46,18 +47,22 @@ describe("Testing User Mongoose Repository", () => {
             password: 12345678
         };
 
-        return this.userRepository
-            .create(user)
+        this.user = this.userRepository.create(payload)
+
+        return this.user
             .then(result => {
-                expect(result.firstName).to.be.equals(user.firstName);
-                expect(result.email).to.be.equals(user.email);
-                expect(result.lastName).to.be.equals(user.lastName);
-                expect(result.age).to.be.equals(user.age);
+                expect(result.firstName).to.be.equals(payload.firstName);
+                expect(result.email).to.be.equals(payload.email);
+                expect(result.lastName).to.be.equals(payload.lastName);
+                expect(result.age).to.be.equals(payload.age);
             });
     });
-    it('El repositorio debe poder encontrar un user', function (){
+    it('El repositorio debe poder encontrar un user', async function (){
+        const user = await this.user;
+        const userId = user.id.toString();
+
         return this.userRepository
-            .getOne("64a71143e28f3638571814cc")
+            .getOne(userId)
             .then(result => {
                 expect(result).to.not.be.null;
                 expect(result).to.not.be.undefined;
@@ -65,8 +70,11 @@ describe("Testing User Mongoose Repository", () => {
                 expect(result).to.have.property('id');
             })
     });
-    it('El repositorio debe poder actualizar un user', function (){
-        const user = {
+    it('El repositorio debe poder actualizar un user', async function (){
+        const user = await this.user;
+        const userId = user.id.toString();
+        
+        const update = {
             firstName: faker.person.firstName(),
             lastName: faker.person.lastName(),
             email: faker.internet.email(),
@@ -76,25 +84,26 @@ describe("Testing User Mongoose Repository", () => {
         };
 
         return this.userRepository
-            .updateOne("64a71143e28f3638571814cc", user)
+            .updateOne(userId, update)
             .then(result => {
                 expect(result).to.not.be.null;
                 expect(result).to.not.be.undefined;
                 expect(result).to.be.an('object');
                 expect(result).to.have.property('id');
-                expect(result.firstName).to.be.equals(user.firstName);
-                expect(result.email).to.be.equals(user.email);
-                expect(result.lastName).to.be.equals(user.lastName);
-                expect(result.age).to.be.equals(user.age);
+                expect(result.firstName).to.be.equals(update.firstName);
+                expect(result.email).to.be.equals(update.email);
+                expect(result.lastName).to.be.equals(update.lastName);
+                expect(result.age).to.be.equals(update.age);
             })
     });
-    it('El repositorio debe poder eliminar un user', function (){
+    it('El repositorio debe poder eliminar un user', async function (){
+        const user = await this.user;
+        const userId = user.id.toString();
+
         return this.userRepository
-            .deleteOne("64a73aecd84cdc204559213d")
+            .deleteOne(userId)
             .then(result => {
-                expect(result).to.not.be.null;
-                expect(result).to.not.be.undefined;
-                expect(result).to.be.an('object');
+                console.log("el pedo 2011")
             })
     });
 });

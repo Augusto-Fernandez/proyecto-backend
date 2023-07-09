@@ -42,8 +42,8 @@ class UserMongooseRepository {
             age: document?.age,
             cart: document?.cart,
             password: document?.password,
-            isAdmin: document.isAdmin,
-            role: document.role
+            isAdmin: document?.isAdmin,
+            role: document?.role
         })
     }
 
@@ -58,8 +58,8 @@ class UserMongooseRepository {
             age: document?.age,
             cart: document?.cart,
             password: document?.password,
-            isAdmin: document.isAdmin,
-            role: document.role
+            isAdmin: document?.isAdmin,
+            role: document?.role
         })
     }
 
@@ -74,7 +74,7 @@ class UserMongooseRepository {
             age: document?.age,
             cart: document?.cart,
             password: document?.password,
-            isAdmin: document.isAdmin,
+            isAdmin: document?.isAdmin,
             role: null
         })
     }
@@ -89,7 +89,7 @@ class UserMongooseRepository {
             email: document?.email,
             age: document?.age,
             cart: document?.cart,
-            isAdmin: document.isAdmin
+            isAdmin: document?.isAdmin
         })
     }
 
@@ -112,8 +112,8 @@ class UserMongooseRepository {
             age: document?.age,
             cart: document?.cart,
             password: document?.password,
-            isAdmin: document.isAdmin,
-            role: document.role
+            isAdmin: document?.isAdmin,
+            role: document?.role
         })
     }
 
@@ -131,8 +131,8 @@ class UserMongooseRepository {
             age: document?.age,
             cart: document?.cart,
             password: document?.password,
-            isAdmin: document.isAdmin,
-            role: document.role
+            isAdmin: document?.isAdmin,
+            role: document?.role
         })
     }
 
@@ -151,8 +151,8 @@ class UserMongooseRepository {
             age: document?.age,
             cart: document?.cart,
             password: document?.password,
-            isAdmin: document.isAdmin,
-            role: document.role
+            isAdmin: document?.isAdmin,
+            role: document?.role
         })
     }
 
@@ -171,8 +171,8 @@ class UserMongooseRepository {
             age: document?.age,
             cart: document?.cart,
             password: document?.password,
-            isAdmin: document.isAdmin,
-            role: document.role
+            isAdmin: document?.isAdmin,
+            role: document?.role
         })
     }
 
@@ -190,8 +190,8 @@ class UserMongooseRepository {
             age: document?.age,
             cart: document?.cart,
             password: document?.password,
-            isAdmin: document.isAdmin,
-            role: document.role
+            isAdmin: document?.isAdmin,
+            role: document?.role
         })
     }
 }
