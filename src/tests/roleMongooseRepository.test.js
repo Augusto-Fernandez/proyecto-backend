@@ -19,7 +19,7 @@ describe("Testing Role Mongoose Repository", () => {
     });
     after(function () {
         db.drop();
-        db.close();
+        /* db.close() */
     });
     beforeEach(function () {
         this.timeout(5000);
