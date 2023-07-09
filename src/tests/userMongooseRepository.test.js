@@ -103,7 +103,8 @@ describe("Testing User Mongoose Repository", () => {
         return this.userRepository
             .deleteOne(userId)
             .then(result => {
-                console.log("el pedo 2011")
+                expect(result).to.not.be.null;
+                expect(result).to.not.be.undefined;
             })
     });
 });

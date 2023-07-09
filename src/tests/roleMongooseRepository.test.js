@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { faker } from '@faker-js/faker';
+import { faker, ro } from '@faker-js/faker';
 import DbFactory from "../data/factories/dbFactory.js";
 import chai from "chai";
 
@@ -15,6 +15,7 @@ describe("Testing Role Mongoose Repository", () => {
     before(function () {
         db.init(process.env.DB_URI);
         this.roleRepository = new RoleMongooseRepository();
+        this.role = {};
     });
     after(function () {
         db.drop();
@@ -35,29 +36,28 @@ describe("Testing Role Mongoose Repository", () => {
             }
         );
     });
-    it('El repositorio debe poder crear un rol', function () {
-        const role = {
+    it('El repositorio debe poder crear un rol', async function () {
+        const payload = {
             name: faker.lorem.word(),
             permissions:[
                 faker.lorem.word()
             ]
         };
 
-        return this.roleRepository
-            .create(role)
+        this.role = this.roleRepository.create(payload);
+
+        return this.role
             .then(result => {
-                expect(result).to.not.be.true;
-                /* 
-                    expect(result).to.not.be.null;
-                    expect(result).to.not.be.undefined;
-                    expect(result.name).to.be.equals(role.name);
-                    expect(Array.isArray(permissions)).to.be.equals(role.permissions);
-                */
+                expect(result.id.name).to.be.equals(payload.name);
+                expect(result.id.permissions).to.deep.equal(payload.permissions);
             });
     });
-    it('El repositorio debe poder encontrar un rol', function (){
+    it('El repositorio debe poder encontrar un rol', async function (){
+        const role = await this.role;
+        const roleId = role.id.id.toString();
+        
         return this.roleRepository
-            .getOne("64a74f9e5b74ca50c50bb820")
+            .getOne(roleId)
             .then(result => {
                 expect(result).to.not.be.null;
                 expect(result).to.not.be.undefined;
@@ -65,35 +65,37 @@ describe("Testing Role Mongoose Repository", () => {
                 expect(result).to.have.property('id');
             });
     });
-    it('El repositorio debe poder actualizar un role', function (){
-        const role = {
+    it('El repositorio debe poder actualizar un role', async function (){
+        const role = await this.role;
+        const roleId = role.id.id.toString();
+        
+        const payload = {
             name: faker.lorem.word(),
             permissions:[
                 faker.lorem.word()
             ]
         };
 
-        return this.userRepository
-            .updateOne("64a74f9e5b74ca50c50bb820", role)
-            .then(result => {
-                expect(result).to.be.true;
-                /* 
-                    expect(result).to.not.be.null;
-                    expect(result).to.not.be.undefined;
-                    expect(result).to.be.an('object');
-                    expect(result).to.have.property('id');
-                    expect(result.name).to.be.equals(role.name);
-                    expect(Array.isArray(permissions)).to.be.equals(role.permissions);
-                */
-            })
-    });
-    it('El repositorio debe poder eliminar un role', function (){
         return this.roleRepository
-            .deleteOne("64a751cec4e35f5c626cb293")
+            .updateOne(roleId, payload)
             .then(result => {
                 expect(result).to.not.be.null;
                 expect(result).to.not.be.undefined;
                 expect(result).to.be.an('object');
+                expect(result).to.have.property('id');
+                expect(result.id.name).to.be.equals(payload.name);
+                expect(result.id.permissions).to.deep.equal(payload.permissions);
+            })
+    });
+    it('El repositorio debe poder eliminar un role', async function (){
+        const role = await this.role;
+        const roleId = role.id.id.toString();
+        
+        return this.roleRepository
+            .deleteOne(roleId)
+            .then(result => {
+                expect(result).to.not.be.null;
+                expect(result).to.not.be.undefined;
             })
     });
 });
