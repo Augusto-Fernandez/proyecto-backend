@@ -8,7 +8,7 @@ class ProductMongooseRepository {
 
     async getAll(criteria) {
         const { name, limit, page } = criteria
-        const productDocuments = await productsSchema.paginate({ name }, { page })/* saqué el limit porque no dejaba ver todos los productos si no se pasaba query */
+        const productDocuments = await productsSchema.paginate({name}, {limit, page})/*si no devuelve los productos { name }, { page } */
         const {docs, ... pagination} = productDocuments;
 
         const products = docs.map(document => new Product({
