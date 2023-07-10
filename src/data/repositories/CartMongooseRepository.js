@@ -95,6 +95,10 @@ class CartMongooseRepository {
     async getAllTickets(){
         return ticketSchema.find();
     }
+
+    async deleteCart(id){
+        return cartsSchema.deleteOne({_id: id})
+    }
 }
 
 export default CartMongooseRepository;

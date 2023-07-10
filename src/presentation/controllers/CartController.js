@@ -88,3 +88,15 @@ export const purchase = async (req, res, next) => {
         next(e)
     }
 }
+
+export const deleteCart = async (req, res, next) => {
+    try {
+        await idValidation.parseAsync(req.params);
+        const { id } = req.params;
+        const manager = new CartManager();
+        const cart = await manager.deleteCart(id)
+        res.send({ status: 'success', cart });
+    } catch (e) {
+        next(e)
+    }
+};

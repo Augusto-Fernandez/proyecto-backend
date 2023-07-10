@@ -169,6 +169,14 @@ class CartManager {
 
         return this.cartRepository.purchase(dto);
     }
+
+    async deleteCart(id){
+        const validate = await this.cartRepository.validateId(id)
+        if (validate === null) {
+            throw new Error('Not Found Id');
+        }
+        return this.cartRepository.deleteCart(id)
+    }
 }
 
 export default CartManager;

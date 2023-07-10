@@ -1,7 +1,7 @@
 import { Router} from "express";
 import auth from "../middlewares/auth.js";
 import validateIdParam from "../middlewares/validateIdParam.js";
-import { addToCart, deleteAll, deleteOne, getOne, purchase, save, updateOne } from "../controllers/CartController.js";
+import { addToCart, deleteAll, deleteCart, deleteOne, getOne, purchase, save, updateOne } from "../controllers/CartController.js";
 import authorization from "../middlewares/authorization.js";
 import userOnly from "../middlewares/userOnly.js";
 
@@ -16,5 +16,6 @@ cartRouter.delete("/:id/products/:pid", authorization('deleteOne'), deleteOne);
 cartRouter.delete("/:id", validateIdParam, authorization('deleteAll'), deleteAll);
 cartRouter.put("/:id", validateIdParam, authorization('updateCart'), updateOne);
 cartRouter.get("/:id/purchase", validateIdParam, authorization('purchase'), purchase);
+cartRouter.delete("/:id/cart", validateIdParam, authorization('deleteCart'), deleteCart);
 
 export default cartRouter;
