@@ -9,7 +9,7 @@ class SessionManager{
     async login(data){
         const user = await this.userRepository.validateEmail(data.email);
 
-        if(user.password === undefined){
+        if(!user){
             throw new Error('Not Found User Email')
         }
         const isHashedPassword = await isValidPassword(data.password, user.password);

@@ -1,5 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import compression from "express-compression";
 
 import productRouter from "../../presentation/routes/ProductRouter.js";
 import cartRouter from "../../presentation/routes/CartRouter.js";
@@ -15,6 +16,12 @@ class AppExpress{
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(cookieParser());
+        this.app.use(compression({
+            brotli: {
+                enabled: true,
+                zlib: {}
+            },
+        }));
     }
 
     build(){
@@ -25,6 +32,14 @@ class AppExpress{
         this.app.use('/api/roles', roleRouter);
 
         this.app.use(errorHandler);
+    }
+
+    callback(){
+        return this.app;
+    }
+
+    close(){
+        this.server.close();
     }
 
     listen(){
