@@ -17,8 +17,8 @@ describe("Testing Auth Endpoints Success", () => {
     });
     /*
     after(async function () {
-        await this.db.drop(); 
-        await this.db.close();
+        //await this.db.drop(); 
+        //await this.db.close();
         this.requester.app.close(() => {
             console.log('Conexión cerrada');
         });
@@ -94,8 +94,8 @@ describe("Testing Auth Endpoints Fails", () => {
     });
     /*
     after(async function () {
-        await this.db.drop(); 
-        await this.db.close();
+        //await this.db.drop(); 
+        //await this.db.close();
         this.requester.app.close(() => {
             console.log('Conexión cerrada');
         });

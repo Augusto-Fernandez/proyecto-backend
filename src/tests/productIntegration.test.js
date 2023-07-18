@@ -13,7 +13,7 @@ describe("Testing Product Endpoints Success", () => {
         this.app = app;
         this.db = db;
         this.product = {};
-        const res = await this.requester.post('/api/sessions/login').send({email: 'admin@admin.com', password: '12345678'});
+        const res = this.requester.post('/api/sessions/login').send({email: 'admin@admin.com', password: '12345678'});
         this.jwt = res.body.accessToken;
     });
     /*
@@ -43,8 +43,8 @@ describe("Testing Product Endpoints Success", () => {
 
         this.product = this.requester
                         .post('/api/products/')
-                        .send(payload)
                         .set('Authorization', `Bearer ${this.jwt}`)
+                        .send(payload)
 
         return this.requester
             .then(result => {
@@ -69,8 +69,8 @@ describe("Testing Product Endpoints Success", () => {
 
             return this.requester
                 .get('/api/products/:id')
-                .send(productId)
                 .set('Authorization', `Bearer ${this.jwt}`)
+                .send(productId)
                 .then(result => {
                     const { _body, status } = result;
                     console.log(_body)
@@ -94,8 +94,8 @@ describe("Testing Product Endpoints Success", () => {
     
             return this.productRepository
                 .put('/api/products/:id')
-                .send(productId, update)
                 .set('Authorization', `Bearer ${this.jwt}`)
+                .send(productId, update)
                 .then(result => {
                     const { _body, status } = result;
                     console.log(_body)
@@ -108,8 +108,8 @@ describe("Testing Product Endpoints Success", () => {
 
             return this.requester
                 .delete('/api/products/:id')
-                .send(productId)
                 .set('Authorization', `Bearer ${this.jwt}`)
+                .send(productId)
                 .then(result => {
                     const { _body, status } = result;
                     console.log(_body)
