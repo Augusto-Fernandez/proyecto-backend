@@ -1,34 +1,28 @@
 import { faker } from '@faker-js/faker';
-import chai from "chai";
 import supertest from 'supertest';
 import initServer from './app.js'
 
-const expect = chai.expect;
-let jwt = "";
+const { app, db } = await initServer();
 
 describe("Testing Auth Endpoints Success", () => {
-    before(async function () {
-        const { app, db } = await initServer();
+    let jwt;
+    let requester;
+
+    beforeAll(async function () {
         const application = app.callback();
-        this.requester = supertest.agent(application);
-        this.app = app;
-        this.db = db;
+        requester = supertest.agent(application);
         this.payload = {};
     });
-    /*
-    after(async function () {
+    afterAll(async function () {
         //await this.db.drop(); 
-        //await this.db.close();
-        this.requester.app.close(() => {
+        await db.close();
+        /*
+        requester.app.close(() => {
             console.log('Conexión cerrada');
         });
+        */
     });
-    */
-    beforeEach(async function () {
-        this.timeout(2000);
-        await new Promise(resolve => setTimeout(resolve, 500));
-    });
-    it('Creacion de cuenta /api/sessions/signup', function () {
+    test('Creacion de cuenta /api/sessions/signup', function () {
         this.payload = {
             firstName: `${faker.person.firstName()} Ana Maria`,
             lastName: `${faker.person.lastName()} Ana Maria`,
@@ -37,75 +31,70 @@ describe("Testing Auth Endpoints Success", () => {
             password: "12345678"
         };
 
-        return this.requester
+        return requester
             .post('/api/sessions/signup')
             .send(this.payload)
             .then(result => {
                 const { _body, status } = result;
-                expect(status).to.be.equals(201);
-                expect(_body.signup.email).to.be.equals(this.payload.email);
-                expect(_body.message).to.be.equals("User created.");
+                expect(status).toEqual(201);
+                expect(_body.signup.email).toEqual(payload.email);
+                expect(_body.message).toEqual("User created.");
             }
             );
-    });
-    it('Login de cuenta /api/sessions/login', function () {
+    }, 60000);
+    test('Login de cuenta /api/sessions/login', function () {
         const payload = {
             email: this.payload.email,
             password: this.payload.password
         };
 
-        return this.requester
+        return requester
             .post('/api/sessions/login')
             .send(payload)
             .then(result => {
                 const { _body, status } = result;
 
-                expect(status).to.be.equals(200);
-                expect(_body.message).to.be.equals("Login success!");
+                expect(status).toEqual(200);
+                expect(_body.message).toEqual("Login success!");
 
                 jwt = _body.sessionLogin;
             });
     });
-    it('Current /api/sessions/current', function () {
+    test('Current /api/sessions/current', function () {
         const payload = {
             email: this.payload.email,
             password: this.payload.password
         };
 
-        return this.requester
+        return requester
             .get('/api/sessions/current')
             .set('Authorization', `Bearer ${jwt}`)
             .send(payload)
             .then(result => {
                 const { _body, status } = result;
-                expect(status).to.be.equals(200);
-                expect(_body.payload._doc.email).to.be.equals(this.payload.email);
+                expect(status).toEqual(200);
+                expect(_body.payload._doc.email).toEqual(payload.email);
             });
-    });
+    }, 60000);
 });
 
 describe("Testing Auth Endpoints Fails", () => {
-    before(async function () {
-        const { app, db } = await initServer();
+    let requester;
+    
+    beforeAll(async function () {
         const application = app.callback();
-        this.requester = supertest.agent(application);
-        this.app = app;
-        this.db = db;
+        requester = supertest.agent(application);
     });
-    /*
-    after(async function () {
+    afterAll(async function () {
         //await this.db.drop(); 
-        //await this.db.close();
-        this.requester.app.close(() => {
+        await db.close();
+        /*
+        requester.app.close(() => {
             console.log('Conexión cerrada');
         });
+        */
     });
-    */
-    beforeEach(async function () {
-        this.timeout(2000);
-        await new Promise(resolve => setTimeout(resolve, 500));
-    });
-    it('Creacion de cuenta /api/sessions/signup', function () {
+    test('Creacion de cuenta /api/sessions/signup', function () {
         const payload = {
             firstName: 'Ana',
             lastName: 'Ana',
@@ -114,44 +103,44 @@ describe("Testing Auth Endpoints Fails", () => {
             password: "12345678"
         };
 
-        return this.requester
+        return requester
             .post('/api/sessions/signup')
             .send(payload)
             .then(result => {
                 const { status } = result;
-                expect(status).to.be.equals(400);
+                expect(status).toEqual(400);
             });
-    });
-    it('Error format email /api/sessions/login', function () {
+    }, 60000);
+    test('Error format email /api/sessions/login', function () {
         const payload = {
             email: 'Invalid email',
             password: 'incorrectpassword'
         };
 
-        return this.requester
+        return requester
             .post('/api/sessions/login')
             .send(payload)
             .then(result => {
                 const { _body, status } = result;
 
-                expect(status).to.be.equals(400);
-                expect(_body.message[0].message).to.be.equals(payload.email);
-                /* expect(_body.message[0].message).to.be.equals("Invalid email"); */
+                expect(status).toEqual(400);
+                expect(_body.message[0].message).toEqual(payload.email);
+                // expect(_body.message[0].message).to.be.equals("Invalid email");
             });
-    });
-    it('User dont exist /api/sessions/login', function () {
+    }, 60000);
+    test('User dont exist /api/sessions/login', function () {
         const payload = {
             email: 'martin@gmail.com',
             password: 'incorrectpassword'
         };
 
-        return this.requester
+        return requester
             .post('/api/sessions/login')
             .send(payload)
             .then(result => {
                 const { status } = result;
 
-                expect(status).to.be.equals(404);
+                expect(status).toEqual(404);
             });
-    });
+    }, 60000);
 });
