@@ -2,41 +2,36 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { faker } from '@faker-js/faker';
-import DbFactory from "../data/factories/dbFactory.js";
-import chai from "chai";
-
-const expect = chai.expect;
-
-const db = DbFactory.create(process.env.DB);
+import initServer from './app.js';
 
 import ProductMongooseRepository from "../data/repositories/ProductMongooseRepository.js"
 
+const { db } = await initServer();
+
 describe("Testing Product Mongoose Repository", () => {
-    before(function () {
-        db.init(process.env.DB_URI);
-        this.productRepository = new ProductMongooseRepository();
-        this.product = {};
+    const productRepository = new ProductMongooseRepository();
+    let product;
+    
+    beforeAll( async function () {
+       await db.init(process.env.DB_URI);
     });
-    after(function () {
-        db.drop();
-        /* db.close() */
+    afterAll(async function () {
+        //await db.drop();
+        await db.close();
     });
-    beforeEach(function () {
-        this.timeout(5000);
-    });
-    it('El repositorio debe ser una instancia de ProductMongooseRepository', function () {
-        expect(this.productRepository instanceof ProductMongooseRepository).to.be.ok;
-    });
-    it('El repositorio debe devolver un arreglo', function () {
-        return this.productRepository
+    test('El repositorio debe ser una instancia de ProductMongooseRepository', function () {
+        expect(productRepository instanceof ProductMongooseRepository).toBeTruthy();
+    }, 60000);
+    test('El repositorio debe devolver un arreglo', async function () {
+        return productRepository
             .getAll({ limit: 5, page: 1 })
             .then(result => {
-                expect(Array.isArray(result.payload.products)).to.be.equals(true);
-                expect(result.payload.pagination.limit).to.be.equals(5);
+                expect(Array.isArray(result.payload.products)).toBe(true);
+                expect(result.payload.pagination.limit).toEqual(5);
             }
         );
-    });
-    it('El repositorio debe poder crear un producto', function () {
+    }, 60000);
+    test('El repositorio debe poder crear un producto', async function () {
         const payload = {
             title: faker.lorem.word(),
             description: faker.lorem.sentence(),
@@ -45,39 +40,39 @@ describe("Testing Product Mongoose Repository", () => {
             code: faker.string.alphanumeric(),
             stock: faker.number.int(),
             status: true
-            /* enable: true daba error porque está true como default */
+            //enable: true daba error porque está true como default
         };
 
-        this.product = this.productRepository.create(payload)
+        product = productRepository.create(payload)
 
-        return this.product
+        return product
             .then(result => {
-                expect(result.id.title).to.be.equals(payload.title);
-                expect(result.id.description).to.be.equals(payload.description);
-                expect(result.id.price).to.be.equals(payload.price);
-                expect(result.id.thumbnail).to.be.equals(payload.thumbnail);
-                expect(result.id.code).to.be.equals(payload.code);
-                expect(result.id.stock).to.be.equals(payload.stock);
-                expect(result.id.status).to.be.equals(payload.status);
-                /* expect(result.id.enable).to.be.equals(payload.enable); */
+                expect(result.id.title).toEqual(payload.title);
+                expect(result.id.description).toEqual(payload.description);
+                expect(result.id.price).toEqual(payload.price);
+                expect(result.id.thumbnail).toEqual(payload.thumbnail);
+                expect(result.id.code).toEqual(payload.code);
+                expect(result.id.stock).toEqual(payload.stock);
+                expect(result.id.status).toEqual(payload.status);
+                //expect(result.id.enable).to.be.equals(payload.enable);
             });
-    });
-    it('El repositorio debe poder encontrar un producto', async function (){
-        const product = await this.product;
-        const productId = product.id.id.toString();
+    }, 60000);
+    test('El repositorio debe poder encontrar un producto', async function (){
+        const foundProduct = await product;
+        const productId = foundProduct.id.id.toString();
 
-        return this.productRepository
+        return productRepository
             .getOne(productId)
             .then(result => {
-                expect(result).to.not.be.null;
-                expect(result).to.not.be.undefined;
-                expect(result).to.be.an('object');
-                expect(result).to.have.property('id');
+                expect(result).not.toBeNull();
+                expect(result).toBeDefined();
+                expect(typeof result).toBe('object'); 
+                expect(result).toHaveProperty('id');
             })
-    });
-    it('El repositorio debe poder actualizar un producto', async function (){
-        const product = await this.product;
-        const productId = product.id.id.toString();
+    }, 60000);
+    test('El repositorio debe poder actualizar un producto', async function (){
+        const foundProduct = await product;
+        const productId = foundProduct.id.id.toString()
         
         const update = {
             title: faker.lorem.word(),
@@ -87,35 +82,35 @@ describe("Testing Product Mongoose Repository", () => {
             code: faker.string.alphanumeric(),
             stock: faker.number.int(),
             status: true
-            /* enable: true */
+            // enable: true
         };
 
-        return this.productRepository
+        return productRepository
             .updateOne(productId, update)
             .then(result => {
-                expect(result).to.not.be.null;
-                expect(result).to.not.be.undefined;
-                expect(result).to.be.an('object');
-                expect(result).to.have.property('id');
-                expect(result.id.title).to.be.equals(update.title);
-                expect(result.id.description).to.be.equals(update.description);
-                expect(result.id.price).to.be.equals(update.price);
-                expect(result.id.thumbnail).to.be.equals(update.thumbnail);
-                expect(result.id.code).to.be.equals(update.code);
-                expect(result.id.stock).to.be.equals(update.stock);
-                expect(result.id.status).to.be.equals(update.status)
-                /* expect(result.enable).to.be.equals(update.enable); */
+                expect(result).not.toBeNull();
+                expect(result).toBeDefined();
+                expect(typeof result).toBe('object'); 
+                expect(result).toHaveProperty('id')
+                expect(result.id.title).toEqual(update.title);
+                expect(result.id.description).toEqual(update.description);
+                expect(result.id.price).toEqual(update.price);
+                expect(result.id.thumbnail).toEqual(update.thumbnail);
+                expect(result.id.code).toEqual(update.code);
+                expect(result.id.stock).toEqual(update.stock);
+                expect(result.id.status).toEqual(update.status);
+                //expect(result.enable).to.be.equals(update.enable);
             })
-    });
-    it('El repositorio debe poder eliminar un producto', async function (){
-        const product = await this.product;
-        const productId = product.id.id.toString();
+    }, 60000);
+    test('El repositorio debe poder eliminar un producto', async function (){
+        const foundProduct = await product;
+        const productId = foundProduct.id.id.toString()
 
-        return this.productRepository
+        return productRepository
             .delete(productId)
             .then(result => {
-                expect(result).to.not.be.null;
-                expect(result).to.not.be.undefined;
+                expect(result).not.toBeNull();
+                expect(result).toBeDefined();
             })
-    });
+    }, 60000);
 });

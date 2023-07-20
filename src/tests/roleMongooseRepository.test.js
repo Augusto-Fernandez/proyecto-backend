@@ -1,42 +1,37 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { faker, ro } from '@faker-js/faker';
-import DbFactory from "../data/factories/dbFactory.js";
-import chai from "chai";
-
-const expect = chai.expect;
-
-const db = DbFactory.create(process.env.DB);
+import { faker } from '@faker-js/faker';
+import initServer from './app.js';
 
 import RoleMongooseRepository from "../data/repositories/RoleMongooseRepository.js";
 
+const { db } = await initServer();
+
 describe("Testing Role Mongoose Repository", () => {
-    before(function () {
-        db.init(process.env.DB_URI);
-        this.roleRepository = new RoleMongooseRepository();
-        this.role = {};
+    const roleRepository = new RoleMongooseRepository();
+    let role;
+
+    beforeAll( async function () {
+       await db.init(process.env.DB_URI);
     });
-    after(function () {
-        db.drop();
-        /* db.close() */
+    afterAll(async function () {
+        //await db.drop();
+        await db.close();
     });
-    beforeEach(function () {
-        this.timeout(5000);
-    });
-    it('El repositorio debe ser una instancia de RoleMongooseRepository', function () {
-        expect(this.roleRepository instanceof RoleMongooseRepository).to.be.ok;
-    });
-    it('El repositorio debe devolver un arreglo', function () {
-        return this.roleRepository
+    test('El repositorio debe ser una instancia de RoleMongooseRepository', function () {
+        expect(roleRepository instanceof RoleMongooseRepository).toBeTruthy();
+    }, 60000);
+    test('El repositorio debe devolver un arreglo', async function () {
+        return roleRepository
             .paginate({ limit: 5, page: 1 })
             .then(result => {
-                expect(Array.isArray(result.roles)).to.be.equals(true);
-                expect(result.pagination.limit).to.be.equals(5);
+                expect(Array.isArray(result.roles)).toBe(true);
+                expect(result.pagination.limit).toBe(5);
             }
         );
-    });
-    it('El repositorio debe poder crear un rol', async function () {
+    }, 60000);
+    test('El repositorio debe poder crear un rol', async function () {
         const payload = {
             name: faker.lorem.word(),
             permissions:[
@@ -44,30 +39,30 @@ describe("Testing Role Mongoose Repository", () => {
             ]
         };
 
-        this.role = this.roleRepository.create(payload);
+        role = roleRepository.create(payload);
 
-        return this.role
+        return role
             .then(result => {
-                expect(result.id.name).to.be.equals(payload.name);
-                expect(result.id.permissions).to.deep.equal(payload.permissions);
+                expect(result.id.name).toEqual(payload.name);
+                expect(result.id.permissions).toStrictEqual(payload.permissions);
             });
-    });
-    it('El repositorio debe poder encontrar un rol', async function (){
-        const role = await this.role;
-        const roleId = role.id.id.toString();
+    }, 60000);
+    test('El repositorio debe poder encontrar un rol', async function (){
+        const foundRole = await role;
+        const roleId = foundRole.id.id.toString();
         
-        return this.roleRepository
+        return roleRepository
             .getOne(roleId)
             .then(result => {
-                expect(result).to.not.be.null;
-                expect(result).to.not.be.undefined;
-                expect(result).to.be.an('object');
-                expect(result).to.have.property('id');
+                expect(result).not.toBeNull();
+                expect(result).toBeDefined();
+                expect(typeof result).toBe('object'); 
+                expect(result).toHaveProperty('id');
             });
-    });
-    it('El repositorio debe poder actualizar un role', async function (){
-        const role = await this.role;
-        const roleId = role.id.id.toString();
+    }, 60000);
+    test('El repositorio debe poder actualizar un role', async function (){
+        const foundRole = await role;
+        const roleId = foundRole.id.id.toString();
         
         const payload = {
             name: faker.lorem.word(),
@@ -76,26 +71,26 @@ describe("Testing Role Mongoose Repository", () => {
             ]
         };
 
-        return this.roleRepository
+        return roleRepository
             .updateOne(roleId, payload)
             .then(result => {
-                expect(result).to.not.be.null;
-                expect(result).to.not.be.undefined;
-                expect(result).to.be.an('object');
-                expect(result).to.have.property('id');
-                expect(result.id.name).to.be.equals(payload.name);
-                expect(result.id.permissions).to.deep.equal(payload.permissions);
+                expect(result).not.toBeNull();
+                expect(result).toBeDefined();
+                expect(typeof result).toBe('object'); 
+                expect(result).toHaveProperty('id');
+                expect(result.id.name).toEqual(payload.name);
+                expect(result.id.permissions).toStrictEqual(payload.permissions);
             })
-    });
-    it('El repositorio debe poder eliminar un role', async function (){
-        const role = await this.role;
-        const roleId = role.id.id.toString();
+    }, 60000);
+    test('El repositorio debe poder eliminar un role', async function (){
+        const foundRole = await role;
+        const roleId = foundRole.id.id.toString();
         
-        return this.roleRepository
+        return roleRepository
             .deleteOne(roleId)
             .then(result => {
-                expect(result).to.not.be.null;
-                expect(result).to.not.be.undefined;
+                expect(result).not.toBeNull();
+                expect(result).toBeDefined();
             })
-    });
+    }, 60000);
 });

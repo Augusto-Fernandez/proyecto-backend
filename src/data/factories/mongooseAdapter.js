@@ -2,14 +2,14 @@ import mongoose from "mongoose";
 
 class MongooseAdapter {
     async init(uri) {
-        this.connection = await mongoose.connect(uri, {
+        await mongoose.connect(uri, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
     }
 
     async close() {
-        await this.connection.disconnect();
+        await mongoose.connection.close();
     }
 
     async drop() {

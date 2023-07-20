@@ -2,42 +2,36 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { faker } from '@faker-js/faker';
-import DbFactory from "../data/factories/dbFactory.js";
-import chai from "chai";
-
-const expect = chai.expect;
-
-const db = DbFactory.create(process.env.DB);
+import initServer from './app.js';
 
 import UserMongooseRepository from "../data/repositories/UserMongooseRepository.js";
-import RoleMongooseRepository from "../data/repositories/RoleMongooseRepository.js";
+
+const { db } = await initServer()
 
 describe("Testing User Mongoose Repository", () => {
-    before(function () {
-        db.init(process.env.DB_URI);
-        this.userRepository = new UserMongooseRepository();
-        this.user = {};
+    const userRepository = new UserMongooseRepository();
+    let user;
+
+    beforeAll( async function () {
+        await db.init(process.env.DB_URI);
     });
-    after(function () {
-        db.drop();
-        db.close();
+     afterAll(async function () {
+         //await db.drop();
+         await db.close();
     });
-    beforeEach(function () {
-        this.timeout(5000);
-    });
-    it('El repositorio debe ser una instancia de UserMongooseRepository', function () {
-        expect(this.userRepository instanceof UserMongooseRepository).to.be.ok;
-    });
-    it('El repositorio debe devolver un arreglo', function () {
-        return this.userRepository
+    test('El repositorio debe ser una instancia de UserMongooseRepository', function () {
+        expect(userRepository instanceof UserMongooseRepository).toBeTruthy();
+    }, 60000);
+    test('El repositorio debe devolver un arreglo', async function () {
+        return userRepository
             .paginate({ limit: 5, page: 1 })
             .then(result => {
-                expect(Array.isArray(result.users)).to.be.equals(true);
-                expect(result.pagination.limit).to.be.equals(5);
+                expect(Array.isArray(result.users)).toBe(true);
+                expect(result.pagination.limit).toBe(5);
             }
         );
-    });
-    it('El repositorio debe poder crear un user', function () {
+    }, 60000);
+    test('El repositorio debe poder crear un user', async function () {
         const payload = {
             firstName: faker.person.firstName(),
             lastName: faker.person.lastName(),
@@ -47,32 +41,32 @@ describe("Testing User Mongoose Repository", () => {
             password: 12345678
         };
 
-        this.user = this.userRepository.create(payload)
+        user = userRepository.create(payload)
 
-        return this.user
+        return user
             .then(result => {
-                expect(result.firstName).to.be.equals(payload.firstName);
-                expect(result.email).to.be.equals(payload.email);
-                expect(result.lastName).to.be.equals(payload.lastName);
-                expect(result.age).to.be.equals(payload.age);
+                expect(result.firstName).toEqual(payload.firstName);
+                expect(result.email).toEqual(payload.email);
+                expect(result.lastName).toEqual(payload.lastName);
+                expect(result.age).toEqual(payload.age);
             });
-    });
-    it('El repositorio debe poder encontrar un user', async function (){
-        const user = await this.user;
-        const userId = user.id.toString();
+    }, 60000);
+    test('El repositorio debe poder encontrar un user', async function (){
+        const foundUser = await user;
+        const userId = foundUser.id.toString();
 
-        return this.userRepository
+        return userRepository
             .getOne(userId)
             .then(result => {
-                expect(result).to.not.be.null;
-                expect(result).to.not.be.undefined;
-                expect(result).to.be.an('object');
-                expect(result).to.have.property('id');
+                expect(result).not.toBeNull();
+                expect(result).toBeDefined();
+                expect(typeof result).toBe('object'); 
+                expect(result).toHaveProperty('id');
             })
-    });
-    it('El repositorio debe poder actualizar un user', async function (){
-        const user = await this.user;
-        const userId = user.id.toString();
+    }, 60000);
+    test('El repositorio debe poder actualizar un user', async function (){
+        const foundUser = await user;
+        const userId = foundUser.id.toString();
         
         const update = {
             firstName: faker.person.firstName(),
@@ -83,28 +77,28 @@ describe("Testing User Mongoose Repository", () => {
             password: 12345678
         };
 
-        return this.userRepository
+        return userRepository
             .updateOne(userId, update)
             .then(result => {
-                expect(result).to.not.be.null;
-                expect(result).to.not.be.undefined;
-                expect(result).to.be.an('object');
-                expect(result).to.have.property('id');
-                expect(result.firstName).to.be.equals(update.firstName);
-                expect(result.email).to.be.equals(update.email);
-                expect(result.lastName).to.be.equals(update.lastName);
-                expect(result.age).to.be.equals(update.age);
+                expect(result).not.toBeNull();
+                expect(result).toBeDefined();
+                expect(typeof result).toBe('object'); 
+                expect(result).toHaveProperty('id');
+                expect(result.firstName).toEqual(update.firstName);
+                expect(result.email).toEqual(update.email);
+                expect(result.lastName).toEqual(update.lastName);
+                expect(result.age).toEqual(update.age);
             })
-    });
-    it('El repositorio debe poder eliminar un user', async function (){
-        const user = await this.user;
-        const userId = user.id.toString();
+    }, 60000);
+    test('El repositorio debe poder eliminar un user', async function (){
+        const foundUser = await user;
+        const userId = foundUser.id.toString();
 
-        return this.userRepository
+        return userRepository
             .deleteOne(userId)
             .then(result => {
-                expect(result).to.not.be.null;
-                expect(result).to.not.be.undefined;
+                expect(result).not.toBeNull();
+                expect(result).toBeDefined();
             })
-    });
+    }, 60000);
 });

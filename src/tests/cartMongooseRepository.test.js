@@ -2,57 +2,49 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { faker } from '@faker-js/faker';
-import DbFactory from "../data/factories/dbFactory.js";
-import chai from "chai";
-
-const expect = chai.expect;
-
-const db = DbFactory.create(process.env.DB);
+import initServer from './app.js';
 
 import CartMongooseRepository from "../data/repositories/CartMongooseRepository.js";
-import ProductMongooseRepository from "../data/repositories/ProductMongooseRepository.js";
+
+const { db } = await initServer();
 
 describe("Testing Cart Mongoose Repository", () => {
-    before(function () {
-        db.init(process.env.DB_URI);
-        this.cartRepository = new CartMongooseRepository();
-        this.cart = {};
+    const cartRepository = new CartMongooseRepository();
+    let cart;
+    
+    beforeAll( async function () {
+        await db.init(process.env.DB_URI);
     });
-    after(function () {
-        db.drop();
-        /* db.close() */
-    });
-    beforeEach(function () {
-        this.timeout(5000);
-    });
-    it('El repositorio debe ser una instancia de CartMongooseRepository', function () {
-        expect(this.cartRepository instanceof CartMongooseRepository).to.be.ok;
-    });
-    it('El repositorio debe poder crear un cart', function () {
-        this.cart = this.cartRepository.create({})
+    afterAll(async function () {
+        //await db.drop();
+        await db.close();
+    })
+    test('El repositorio debe ser una instancia de CartMongooseRepository', function () {
+        expect(cartRepository instanceof CartMongooseRepository).toBeTruthy();
+    })
+    test('El repositorio debe poder crear un cart', async function () {
+        cart = cartRepository.create({})
 
-        return this.cart
+        return cart
             .then(result => {
-                expect(result.id).to.be.ok;
-                expect(result.products).to.be.ok;
+                expect(result._id).toBeTruthy();
+                expect(result.products).toBeTruthy();
             });
-    });
-    it('El repositorio debe poder encontrar un cart', async function (){
-        const cart = await this.cart;
-        const cartId = cart.id.toString();
+    }, 60000);
+    test('El repositorio debe poder encontrar un cart', async function (){
+        const cartId = await cart
 
-        return this.cartRepository
-            .getOne(cartId)
+        return cartRepository
+            .getOne(cartId.id)
             .then(result => {
-                expect(result).to.not.be.null;
-                expect(result).to.not.be.undefined;
-                expect(result).to.be.an('object');
-                expect(result).to.have.property('id');
+                expect(result).not.toBeNull();
+                expect(result).toBeDefined();
+                expect(typeof result).toBe('object'); 
+                expect(result).toHaveProperty('id');
             })
-    });
-    it('El repositorio debe poder actualizar un role', async function (){
-        const cart = await this.cart;
-        const cartId = cart.id.toString();
+    }, 60000);
+    test('El repositorio debe poder actualizar un cart', async function (){
+        const cartId = await cart
         
         const payload = {
             products:[
@@ -68,27 +60,27 @@ describe("Testing Cart Mongoose Repository", () => {
             ]
         };
 
-        return this.cartRepository
-            .updateOne(cartId, payload)
+        return cartRepository
+            .updateOne(cartId.id, payload)
             .then(result => {
-                expect(result).to.not.be.null;
-                expect(result).to.not.be.undefined;
-                expect(result).to.be.an('object');
-                expect(result).to.have.property('id');
-                expect(result.id.id).to.be.ok
-                expect(result.id.products).to.deep.equal(payload.products);
+                expect(result).not.toBeNull();
+                expect(result).toBeDefined();
+                expect(typeof result).toBe('object'); 
+                expect(result).toHaveProperty('id');
+                expect(result.id.id).toBeTruthy();
+                expect(result.id.products).toStrictEqual(payload.products);
             })
-    });
-    it('El repositorio debe poder eliminar un cart', async function (){
-        const cart = await this.cart;
-        const cartId = cart.id.toString();
+    }, 60000);
+    test('El repositorio debe poder eliminar un cart', async function (){
+        const cartId = await cart
 
-        return this.cartRepository
-            .deleteCart(cartId)
+        return cartRepository
+            .deleteCart(cartId.id)
             .then(result => {
-                expect(result).to.not.be.null;
-                expect(result).to.not.be.undefined;
+                expect(result).not.toBeNull();
+                expect(result).toBeDefined();
             })
-    });
+    }, 60000);
 });
+
 
