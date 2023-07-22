@@ -6,7 +6,7 @@ import AppFactory from "../presentation/factories/appFactory.js";
 
 const initServer = async () => {
     const db = DbFactory.create(process.env.DB);
-    db.init(process.env.DB_URI);
+    await db.init(process.env.DB_URI);
 
     const app = AppFactory.create();
 
