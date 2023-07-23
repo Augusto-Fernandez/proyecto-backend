@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
+    "cluster": "pm2 start src/app.js -i 2",
     "start": "nodemon",
     "command": "node src/command.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
