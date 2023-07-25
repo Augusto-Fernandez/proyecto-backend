@@ -1,0 +1,43 @@
+version: '3.6'
+
+services:
+  node:
+    container_name: proyecto-backend_node_1
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./src:/app/src
+      - ./docker.env:/app/.env
+    networks:
+      - examplenet
+
+  db:
+    container_name: proyecto-backend_db_1
+    restart: always
+    image: bitnami/mongodb:4.2
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGODB_ROOT_PASSWORD=12345678
+      - MONGODB_USERNAME=exampleuser
+      - MONGODB_PASSWORD=examplepassword
+      - MONGODB_DATABASE=exampledatabase
+    networks:
+      - examplenet
+
+  mail:
+    container_name: proyecto-backend_mail_1
+    restart: always
+    image: mailhog/mailhog:latest
+    ports:
+      - "8025:8025"
+    networks:
+     - examplenet
+
+networks:
+  examplenet:
+    driver: "bridge"
