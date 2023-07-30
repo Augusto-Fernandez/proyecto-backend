@@ -1,0 +1,232 @@
+paths:
+  /api/users/:
+    post:
+      summary: Create User
+      tags:
+        - User
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              example:
+                {
+                  "firstName": "example",
+                  "lastName": "example",
+                  "email": "example@gmail.com",
+                  "age": 18,
+                  "password": "12345678"
+                }
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              example:
+                {
+                  "status": "sucess",
+                  "msg": "Usuario creado",
+                  "user": {
+                    "id": "646564bb16c17838817c9fbc",
+                    "firstName": "example",
+                    "lastName": "example",
+                    "age": 18
+                  }
+                }
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "error": "El email test@gmail.com ya se encuentra registrado."
+                }
+    get:
+      summary: Get Users
+      tags:
+        - User
+      responses:
+        "200":
+          description: "Success"
+        "500":
+          description: Internal Error Server
+  /api/users/:id/:
+    get:
+      summary: Get One User
+      tags:
+        - User
+      responses:
+        "200":
+          description: "Success"
+        "500":
+          description: Internal Error Server
+    put:
+      summary: Updates User
+      tags:
+        - User
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              example:
+                {
+                  "firstName": "example",
+                  "lastName": "example",
+                  "email": "example@gmail.com",
+                  "age": 18,
+                  "password": "12345678"
+                }
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              example:
+                {
+                  "status": "sucess",
+                  "msg": "Usuario creado",
+                  "user": {
+                    "id": "646564bb16c17838817c9fbc",
+                    "firstName": "example",
+                    "lastName": "example",
+                    "age": 18
+                  }
+                }
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "error": "El email test@gmail.com ya se encuentra registrado."
+                }
+    delete:
+      summary: Deletes One User
+      tags:
+        - User
+      responses:
+        "200":
+          description: "Success"
+        "500":
+          description: Internal Error Server
+  /api/users/:id/carts/:cid:
+    post:
+      summary: Add Cart to User
+      tags:
+        - User
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              example:
+                {
+                  "status": "sucess",
+                  "msg": "Usuario creado",
+                  "user": {
+                    "id": "646564bb16c17838817c9fbc",
+                    "firstName": "example",
+                    "lastName": "example",
+                    "age": 18,
+                    "cart": ObjectId("645ab7c7b6f255408bea9193")
+                  }
+                }
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "error": "El email test@gmail.com ya se encuentra registrado."
+                }
+  /api/users/:id/carts:
+    delete:
+      summary: Deletes User's Cart
+      tags:
+        - User
+      responses:
+        "200":
+          description: "Success"
+        "500":
+          description: Internal Error Server
+  /api/users/:id/roles/:rid:
+    post:
+      summary: Add Role to User
+      tags:
+        - User
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              example:
+                {
+                  "status": "sucess",
+                  "msg": "Usuario creado",
+                  "user": {
+                    "id": "646564bb16c17838817c9fbc",
+                    "firstName": "example",
+                    "lastName": "example",
+                    "age": 18,
+                    "role": ObjectId("647e2ed476c4cb6643198e38")
+                  }
+                }
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "error": "El email test@gmail.com ya se encuentra registrado."
+                }
+    delete:
+      summary: Deletes One User's Role
+      tags:
+        - User
+      responses:
+        "200":
+          description: "Success"
+        "500":
+          description: Internal Error Server
+  /api/users/:id/roles:
+    delete:
+      summary: Deletes All User's Role
+      tags:
+        - User
+      responses:
+        "200":
+          description: "Success"
+        "500":
+          description: Internal Error Server
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+          required: true
+        lastName:
+          type: string
+          required: true
+        email:
+          type: string
+          required: true
+          unique: true
+        age:
+          type: number
+          required: true
+        password:
+          type: string
+          required: true
+        cart:
+          type: ObjectId
+          default: []
+        role:
+          type: ObjectId
+          default: 'client'
+        isAdmin:
+          type: boolean
+          default: false

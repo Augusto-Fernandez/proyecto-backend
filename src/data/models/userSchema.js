@@ -7,11 +7,11 @@ const userSchema = new Schema({
     firstName: { type: Schema.Types.String, required: true },
     lastName: { type: Schema.Types.String },
     email: { type: Schema.Types.String, unique: true, required: true },
-    age: { type: Schema.Types.Number, default: 18 },
+    age: { type: Schema.Types.Number, default: 18, required: true },
     cart:{type: Schema.Types.Array, ref:'carts', default: []},
     role: [{ type: Schema.Types.ObjectId, index: true, ref: 'roles', default: 'client' }],
     isAdmin: { type: Schema.Types.Boolean, default: false },
-    password: { type: Schema.Types.String }
+    password: { type: Schema.Types.String, required: true }
 });
 
 userSchema.plugin(paginate);
