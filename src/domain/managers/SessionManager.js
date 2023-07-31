@@ -24,7 +24,7 @@ class SessionManager{
     async signup(data){
         const validate = await this.userRepository.validateEmail(data.email);
         if (validate) {
-            throw new Error('Login failed, password already used.');
+            throw new Error('Login failed, email already used.');
         }
 
         const dto = {

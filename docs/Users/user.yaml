@@ -25,7 +25,7 @@ paths:
               example:
                 {
                   "status": "sucess",
-                  "msg": "Usuario creado",
+                  "message": 'User created.',
                   "user": {
                     "id": "646564bb16c17838817c9fbc",
                     "firstName": "example",
@@ -39,7 +39,7 @@ paths:
             application/json:
               example:
                 {
-                  "error": "El email test@gmail.com ya se encuentra registrado."
+                  "error": "Email already used"
                 }
     get:
       summary: Get Users
@@ -58,6 +58,8 @@ paths:
       responses:
         "200":
           description: "Success"
+        "404":
+          description: "Not Found User"
         "500":
           description: Internal Error Server
     put:
@@ -85,7 +87,7 @@ paths:
               example:
                 {
                   "status": "sucess",
-                  "msg": "Usuario creado",
+                  "message": 'User updated.',
                   "user": {
                     "id": "646564bb16c17838817c9fbc",
                     "firstName": "example",
@@ -93,13 +95,15 @@ paths:
                     "age": 18
                   }
                 }
+        "404":
+          description: "Not Found User"
         "500":
           description: Internal Error Server
           content:
             application/json:
               example:
                 {
-                  "error": "El email test@gmail.com ya se encuentra registrado."
+                  "error": "Email already used"
                 }
     delete:
       summary: Deletes One User
@@ -108,6 +112,8 @@ paths:
       responses:
         "200":
           description: "Success"
+        "404":
+          description: "Not Found User"
         "500":
           description: Internal Error Server
   /api/users/:id/carts/:cid:
@@ -123,7 +129,7 @@ paths:
               example:
                 {
                   "status": "sucess",
-                  "msg": "Usuario creado",
+                  "message": 'Cart added',
                   "user": {
                     "id": "646564bb16c17838817c9fbc",
                     "firstName": "example",
@@ -132,13 +138,19 @@ paths:
                     "cart": ObjectId("645ab7c7b6f255408bea9193")
                   }
                 }
+        "404-1":
+          description: "Not Found User"
+        "404-2":
+          description: "Not Found Cart"
+        "404-3":
+          description: "User Has Cart Already"
         "500":
           description: Internal Error Server
           content:
             application/json:
               example:
                 {
-                  "error": "El email test@gmail.com ya se encuentra registrado."
+                  "error": "Email already used"
                 }
   /api/users/:id/carts:
     delete:
@@ -148,6 +160,10 @@ paths:
       responses:
         "200":
           description: "Success"
+        "404-1":
+          description: "Not Found User"
+        "404-2":
+          description: "Not Found Cart"
         "500":
           description: Internal Error Server
   /api/users/:id/roles/:rid:
@@ -163,7 +179,7 @@ paths:
               example:
                 {
                   "status": "sucess",
-                  "msg": "Usuario creado",
+                  "message": 'Role added',
                   "user": {
                     "id": "646564bb16c17838817c9fbc",
                     "firstName": "example",
@@ -172,13 +188,19 @@ paths:
                     "role": ObjectId("647e2ed476c4cb6643198e38")
                   }
                 }
+        "404-1":
+          description: "Not Found User"
+        "404-2":
+          description: "Not Found Role"
+        "404-3":
+          description: "Role Already Added"
         "500":
           description: Internal Error Server
           content:
             application/json:
               example:
                 {
-                  "error": "El email test@gmail.com ya se encuentra registrado."
+                  "error": "Email already used"
                 }
     delete:
       summary: Deletes One User's Role
@@ -187,6 +209,12 @@ paths:
       responses:
         "200":
           description: "Success"
+        "404-1":
+          description: "Not Found User"
+        "404-2":
+          description: "Not Found Role"
+        "404-3":
+          description: "Not Found User's Role"
         "500":
           description: Internal Error Server
   /api/users/:id/roles:
@@ -197,6 +225,10 @@ paths:
       responses:
         "200":
           description: "Success"
+        "404-1":
+          description: "Not Found User"
+        "404-2":
+          description: "Not Found Roles"
         "500":
           description: Internal Error Server
 
@@ -230,3 +262,4 @@ components:
         isAdmin:
           type: boolean
           default: false
+          

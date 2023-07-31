@@ -1,0 +1,190 @@
+paths:
+  /api/session/login:
+    post:
+      summary: Login User
+      tags:
+        - Session
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              example:
+                {
+                  "email": "example@example.com",
+                  "password": "12345678"
+                }
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              example:
+                {
+                  "status": "success",
+                  "message": "Login success!",
+                  "user": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImZpcnN0TmFtZSI6InRlc3QiLCJsYXN0TmFtZSI6InRlc3QiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiYWdlIjozMCwicm9sZSI6IlJPTEVfVVNFUiJ9LCJpYXQiOjE2OTA1MDgyOTgsImV4cCI6MTY5MDUwODM1OH0.ZZ3_nFcf1swwt6ow_uOaGNgMY8p1gUMWBHFFzy20voM"
+                }
+        "404-1":
+          description: "Not Found User Email"
+        "404-2":
+          description: "Login failed, invalid password."
+        "500":
+          description: Internal Error Server
+
+  /api/session/logout:
+    post:
+      summary: Logout User
+      tags:
+        - Session
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              example:
+                {
+                  "status": "success",
+                  "message": "Logout ok!"
+                }
+        "500":
+          description: Internal Error Server
+
+  /api/session/current:
+    get:
+      summary: Current User
+      tags:
+        - Session
+      security:
+        - bearerAuth: [ ]
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              example:
+                {
+                  "status": "Success",
+                  "payload": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImZpcnN0TmFtZSI6InRlc3QiLCJsYXN0TmFtZSI6InRlc3QiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiYWdlIjozMCwicm9sZSI6IlJPTEVfVVNFUiJ9LCJpYXQiOjE2OTA1MDgyOTgsImV4cCI6MTY5MDUwODM1OH0.ZZ3_nFcf1swwt6ow_uOaGNgMY8p1gUMWBHFFzy20voM"
+                }
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "Authentication error"
+                }
+        "500":
+          description: Internal Error Server
+
+  /api/session/signup:
+    post:
+      summary: Signup User
+      tags:
+        - Session
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              example:
+                {
+                  "firstName": "example",
+                  "lastName": "example",
+                  "email": "example@gmail.com",
+                  "age": 18,
+                  "password": "12345678"
+                }
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              example:
+                {
+                  "status": "sucess",
+                  "message": 'User created.',
+                  "user": {
+                    "id": "646564bb16c17838817c9fbc",
+                    "firstName": "example",
+                    "lastName": "example",
+                    "age": 18
+                  }
+                }
+        "400":
+          description: "Login failed, email alre"
+        "500":
+          description: Internal Error Server
+
+  /api/session/forget-password/:
+    post:
+      summary: Password Recovery
+      tags:
+        - Session
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              example:
+                {
+                  "email": "example@example.com",
+                  "password": "12345678"
+                }
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              example:
+                {
+                  "status": "sucess",
+                  "message": 'User change password.',
+                  "user": {
+                    "id": "646564bb16c17838817c9fbc",
+                    "firstName": "example",
+                    "lastName": "example",
+                    "age": 18
+                  }
+                }
+        "404":
+          description: "Not Found User Email"
+        "500":
+          description: Internal Error Server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+          required: true
+        lastName:
+          type: string
+          required: true
+        email:
+          type: string
+          required: true
+          unique: true
+        age:
+          type: number
+          required: true
+        password:
+          type: string
+          required: true
+        cart:
+          type: ObjectId
+          default: []
+        role:
+          type: ObjectId
+          default: 'client'
+        isAdmin:
+          type: boolean
+          default: false
