@@ -11,6 +11,7 @@ import userRouter from "../../presentation/routes/UserRouter.js";
 import roleRouter from "../../presentation/routes/RoleRouter.js";
 import emailRouter from "../../presentation/routes/EmailRouter.js";
 import swaggerOptions from "../../config/swaggerConfig.js";
+import { addLogger } from "../../utils/logger.js";
 
 import errorHandler from "../../presentation/middlewares/errorHandler.js";
 
@@ -29,6 +30,8 @@ class AppExpress{
     }
 
     build(){
+        this.app.use(addLogger);
+
         this.app.use('/api/products', productRouter);
         this.app.use('/api/carts', cartRouter);
         this.app.use('/api/sessions', sessionRouter);
