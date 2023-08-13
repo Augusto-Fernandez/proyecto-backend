@@ -2,7 +2,7 @@ const adminOnly = () =>{
     return async(req, res, next) =>{
         const {_doc} = req.user;
 
-        if(!_doc.isAdmin)
+        if( _doc.isAdmin!==true)
         {
             return res.status(401).send({message: 'Not authorized'});
         }

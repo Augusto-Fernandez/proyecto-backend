@@ -8,7 +8,10 @@ class User{
         this.cart=props.cart,
         this.password=props.password,
         this.isAdmin=props.isAdmin,
-        this.role=props.role
+        this.role=props.role,
+        this.premium=props.premium,
+        this.documents=props.documents,
+        this.last_connection=props.last_connection
     }
 }
 

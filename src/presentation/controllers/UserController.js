@@ -125,3 +125,15 @@ export const deleteAllRoles = async (req, res, next) =>{
         next(e)
     }
 }
+
+export const premium = async (req, res, next) => {
+    try{
+        await idValidation.parseAsync(req.params);
+        const { id } = req.params;
+        const manager = new UserManager();
+        await manager.premium(id);
+        res.send({ status: 'success', message: 'Premium Added' });
+    }catch(e){
+        next(e)
+    }
+}

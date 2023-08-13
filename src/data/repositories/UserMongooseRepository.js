@@ -43,7 +43,10 @@ class UserMongooseRepository {
             cart: document?.cart,
             password: document?.password,
             isAdmin: document?.isAdmin,
-            role: document?.role
+            role: document?.role,
+            premium: document?.premium,
+            documents: document?.documents,
+            last_connection: document?.last_connection
         })
     }
 

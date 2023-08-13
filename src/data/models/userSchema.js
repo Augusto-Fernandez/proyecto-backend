@@ -11,7 +11,13 @@ const userSchema = new Schema({
     cart:{type: Schema.Types.Array, ref:'carts', default: []},
     role: [{ type: Schema.Types.ObjectId, index: true, ref: 'roles', default: 'client' }],
     isAdmin: { type: Schema.Types.Boolean, default: false },
-    password: { type: Schema.Types.String }
+    password: { type: Schema.Types.String },
+    premium: { type: Schema.Types.Boolean, default: false },
+    documents: [{
+      name: { type: Schema.Types.String},
+      reference: { type: Schema.Types.String}
+    }],
+    last_connection: {type: Schema.Types.String}
 });
 
 userSchema.plugin(paginate);

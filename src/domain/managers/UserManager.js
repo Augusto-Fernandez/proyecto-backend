@@ -149,6 +149,34 @@ class UserManager {
 
         return this.userRepository.deleteAllRoles(id);
     }
+
+    async premium(id){
+        const validate = await this.userRepository.validateId(id);
+        if (!validate) {
+            throw new Error('Not Found User');
+        }
+
+        const getUser = await this.userRepository.getOne(id);
+
+        if(getUser.premium === true){
+            throw new Error('User is already premium'); 
+        }
+        
+        const dto = {
+            firstName: getUser.firstName,
+            lastName: getUser.lastName,
+            email: getUser.email,
+            age: getUser.age,
+            premium: true,
+            documents: [{
+                name: '',
+                reference: ''
+            }],
+            last_connection: ''
+        }
+
+        return this.userRepository.updateOne(id, dto);
+    }
 }
 
 export default UserManager;
