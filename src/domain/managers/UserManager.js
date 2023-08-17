@@ -177,6 +177,22 @@ class UserManager {
 
         return this.userRepository.updateOne(id, dto);
     }
+
+    async uploadFiles(id,data){
+        const validate = await this.userRepository.validateId(id);
+        if (!validate) {
+            throw new Error('Not Found User');
+        }
+
+        const dto = {
+            documents: [{
+                name: data.originalname,
+                reference: data.path
+            }]
+        }
+
+        return this.userRepository.updateOne(id, dto);
+    }
 }
 
 export default UserManager;

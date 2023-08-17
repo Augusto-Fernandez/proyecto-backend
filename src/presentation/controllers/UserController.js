@@ -137,3 +137,18 @@ export const premium = async (req, res, next) => {
         next(e)
     }
 }
+
+export const uploadFiles = async (req, res, next) => {
+    try{
+        await idValidation.parseAsync(req.params);
+        const { id } = req.params;
+        const manager = new UserManager();
+        const files = req.files;
+        files.forEach(async data => {
+            await manager.uploadFiles(id, data)
+        });
+
+    }catch(e){
+        next(e)
+    }
+}
