@@ -67,8 +67,8 @@ describe("Testing Cart Mongoose Repository", () => {
                 expect(result).toBeDefined();
                 expect(typeof result).toBe('object'); 
                 expect(result).toHaveProperty('id');
-                expect(result.id.id).toBeTruthy();
-                expect(result.id.products).toStrictEqual(payload.products);
+                expect(result.id).toBeTruthy();
+                expect(result.products).toStrictEqual(payload.products);
             })
     }, 60000);
     test('El repositorio debe poder eliminar un cart', async function (){

@@ -11,16 +11,16 @@ class ProductMongooseRepository {
         const productDocuments = await productsSchema.paginate({name}, {limit, page})/*si no devuelve los productos { name }, { page } */
         const {docs, ... pagination} = productDocuments;
 
-        const products = docs.map(document => new Product({
-            id: document._id,
-            title: document.title,
-            description: document.description,
-            price: document.price,
-            thumbnail: document.thumbnail,
-            code: document.code,
-            stock: document.stock,
-            status: document.status
-        }));
+        const products = docs.map(document => new Product(
+            document._id,
+            document.title,
+            document.description,
+            document.price,
+            document.thumbnail,
+            document.code,
+            document.stock,
+            document.status
+        ));
 
         return {
             status: "success",
@@ -34,16 +34,16 @@ class ProductMongooseRepository {
     async getAsc() {
         const productDocuments = await productsSchema.find().sort({ price: 1 });
 
-        const products = productDocuments.map(document => new Product({
-            id: document._id,
-            title: document.title,
-            description: document.description,
-            price: document.price,
-            thumbnail: document.thumbnail,
-            code: document.code,
-            stock: document.stock,
-            status: document.status
-        }));
+        const products = productDocuments.map(document => new Product(
+            document._id,
+            document.title,
+            document.description,
+            document.price,
+            document.thumbnail,
+            document.code,
+            document.stock,
+            document.status
+        ));
 
         return products;
     }
@@ -51,16 +51,16 @@ class ProductMongooseRepository {
     async getDesc() {
         const productDocuments = await productsSchema.find().sort({ price: -1 });
 
-        const products = productDocuments.map(document => new Product({
-            id: document._id,
-            title: document.title,
-            description: document.description,
-            price: document.price,
-            thumbnail: document.thumbnail,
-            code: document.code,
-            stock: document.stock,
-            status: document.status
-        }));
+        const products = productDocuments.map(document => new Product(
+            document._id,
+            document.title,
+            document.description,
+            document.price,
+            document.thumbnail,
+            document.code,
+            document.stock,
+            document.status
+        ));
 
         return products;
     }
@@ -68,46 +68,46 @@ class ProductMongooseRepository {
     async getOne(id) {
         const document = await productsSchema.findOne({ _id: id })
 
-        return new Product({
-            id: document._id,
-            title: document.title,
-            description: document.description,
-            price: document.price,
-            thumbnail: document.thumbnail,
-            code: document.code,
-            stock: document.stock,
-            status: document.status
-        })
+        return new Product(
+            document._id,
+            document.title,
+            document.description,
+            document.price,
+            document.thumbnail,
+            document.code,
+            document.stock,
+            document.status
+        )
     }
 
     async create(data) {
         const document = await productsSchema.create(data)
 
-        return new Product({
-            id: document._id,
-            title: document.title,
-            description: document.description,
-            price: document.price,
-            thumbnail: document.thumbnail,
-            code: document.code,
-            stock: document.stock,
-            status: document.status
-        })
+        return new Product(
+            document._id,
+            document.title,
+            document.description,
+            document.price,
+            document.thumbnail,
+            document.code,
+            document.stock,
+            document.status
+        )
     }
 
     async updateOne(id, data) {
         const document = await productsSchema.findByIdAndUpdate({ _id: id }, data, { new: true })
 
-        return new Product({
-            id: document._id,
-            title: document.title,
-            description: document.description,
-            price: document.price,
-            thumbnail: document.thumbnail,
-            code: document.code,
-            stock: document.stock,
-            status: document.status
-        })
+        return new Product(
+            document._id,
+            document.title,
+            document.description,
+            document.price,
+            document.thumbnail,
+            document.code,
+            document.stock,
+            document.status
+        )
     }
 
     async delete(id) {

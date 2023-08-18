@@ -43,13 +43,13 @@ describe("Testing Role Mongoose Repository", () => {
 
         return role
             .then(result => {
-                expect(result.id.name).toEqual(payload.name);
-                expect(result.id.permissions).toStrictEqual(payload.permissions);
+                expect(result.name).toEqual(payload.name);
+                expect(result.permissions).toStrictEqual(payload.permissions);
             });
     }, 60000);
     test('El repositorio debe poder encontrar un rol', async function (){
         const foundRole = await role;
-        const roleId = foundRole.id.id.toString();
+        const roleId = foundRole.id.toString();
         
         return roleRepository
             .getOne(roleId)
@@ -62,7 +62,7 @@ describe("Testing Role Mongoose Repository", () => {
     }, 60000);
     test('El repositorio debe poder actualizar un role', async function (){
         const foundRole = await role;
-        const roleId = foundRole.id.id.toString();
+        const roleId = foundRole.id.toString();
         
         const payload = {
             name: faker.lorem.word(),
@@ -78,13 +78,13 @@ describe("Testing Role Mongoose Repository", () => {
                 expect(result).toBeDefined();
                 expect(typeof result).toBe('object'); 
                 expect(result).toHaveProperty('id');
-                expect(result.id.name).toEqual(payload.name);
-                expect(result.id.permissions).toStrictEqual(payload.permissions);
+                expect(result.name).toEqual(payload.name);
+                expect(result.permissions).toStrictEqual(payload.permissions);
             })
     }, 60000);
     test('El repositorio debe poder eliminar un role', async function (){
         const foundRole = await role;
-        const roleId = foundRole.id.id.toString();
+        const roleId = foundRole.id.toString();
         
         return roleRepository
             .deleteOne(roleId)

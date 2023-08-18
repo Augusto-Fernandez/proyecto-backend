@@ -47,19 +47,19 @@ describe("Testing Product Mongoose Repository", () => {
 
         return product
             .then(result => {
-                expect(result.id.title).toEqual(payload.title);
-                expect(result.id.description).toEqual(payload.description);
-                expect(result.id.price).toEqual(payload.price);
-                expect(result.id.thumbnail).toEqual(payload.thumbnail);
-                expect(result.id.code).toEqual(payload.code);
-                expect(result.id.stock).toEqual(payload.stock);
-                expect(result.id.status).toEqual(payload.status);
+                expect(result.title).toEqual(payload.title);
+                expect(result.description).toEqual(payload.description);
+                expect(result.price).toEqual(payload.price);
+                expect(result.thumbnail).toEqual(payload.thumbnail);
+                expect(result.code).toEqual(payload.code);
+                expect(result.stock).toEqual(payload.stock);
+                expect(result.status).toEqual(payload.status);
                 //expect(result.id.enable).to.be.equals(payload.enable);
             });
     }, 60000);
     test('El repositorio debe poder encontrar un producto', async function (){
         const foundProduct = await product;
-        const productId = foundProduct.id.id.toString();
+        const productId = foundProduct.id.toString();
 
         return productRepository
             .getOne(productId)
@@ -72,7 +72,7 @@ describe("Testing Product Mongoose Repository", () => {
     }, 60000);
     test('El repositorio debe poder actualizar un producto', async function (){
         const foundProduct = await product;
-        const productId = foundProduct.id.id.toString()
+        const productId = foundProduct.id.toString()
         
         const update = {
             title: faker.lorem.word(),
@@ -92,19 +92,19 @@ describe("Testing Product Mongoose Repository", () => {
                 expect(result).toBeDefined();
                 expect(typeof result).toBe('object'); 
                 expect(result).toHaveProperty('id')
-                expect(result.id.title).toEqual(update.title);
-                expect(result.id.description).toEqual(update.description);
-                expect(result.id.price).toEqual(update.price);
-                expect(result.id.thumbnail).toEqual(update.thumbnail);
-                expect(result.id.code).toEqual(update.code);
-                expect(result.id.stock).toEqual(update.stock);
-                expect(result.id.status).toEqual(update.status);
+                expect(result.title).toEqual(update.title);
+                expect(result.description).toEqual(update.description);
+                expect(result.price).toEqual(update.price);
+                expect(result.thumbnail).toEqual(update.thumbnail);
+                expect(result.code).toEqual(update.code);
+                expect(result.stock).toEqual(update.stock);
+                expect(result.status).toEqual(update.status);
                 //expect(result.enable).to.be.equals(update.enable);
             })
     }, 60000);
     test('El repositorio debe poder eliminar un producto', async function (){
         const foundProduct = await product;
-        const productId = foundProduct.id.id.toString()
+        const productId = foundProduct.id.toString()
 
         return productRepository
             .delete(productId)

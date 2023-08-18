@@ -15,10 +15,10 @@ class CartMongooseRepository {
     async getOne(id) {
         const document = await cartsSchema.findOne({ _id: id }).populate("products.id");
 
-        return new Cart({
-            id: document._id,
-            products: document.products
-        })
+        return new Cart(
+            document._id,
+            document.products
+        )
     }
 
     async addToCart(cartId, cartProductId) {
@@ -28,10 +28,10 @@ class CartMongooseRepository {
             { new: true }
         );/* .populate("products.id"); */
 
-        return new Cart({
-            id: document._id,
-            products: document.products
-        })
+        return new Cart(
+            document._id,
+            document.products
+        )
     }
 
     async updatedCart(cartId, cartProductId, index) {
@@ -40,10 +40,10 @@ class CartMongooseRepository {
             { $set: { "products.$.quantity": index } }
         );
 
-        return new Cart({
-            id: document._id,
-            products: document.products
-        })
+        return new Cart(
+            document._id,
+            document.products
+        )
     }
 
     async deleteOne(cartId, cartProductId) {
@@ -53,10 +53,10 @@ class CartMongooseRepository {
             { returnOriginal: false }
         );
 
-        return new Cart({
-            id: document._id,
-            products: document.products
-        })
+        return new Cart(
+            document._id,
+            document.products
+        )
     }
 
     async deleteAll(id) {
@@ -65,31 +65,31 @@ class CartMongooseRepository {
             { $set: { products: [] } }
         )
 
-        return new Cart({
-            id: document._id,
-            products: document.products
-        })
+        return new Cart(
+            document._id,
+            document.products
+        )
     }
 
     async updateOne(id, data) {
         const document = await cartsSchema.findOneAndUpdate({ _id: id }, data, { new: true });
 
-        return new Cart({
-            id: document._id,
-            products: document.products
-        })
+        return new Cart(
+            document._id,
+            document.products
+        )
     }
 
     async purchase(data){
         const document = await ticketSchema.create(data);
 
-        return new Ticket({
-            id: document._id,
-            code: document.code,
-            purchase_datetime: document.purchase_datetime,
-            amount: document.amount,
-            purchaser: document.purchaser
-        })
+        return new Ticket(
+            document._id,
+            document.code,
+            document.purchase_datetime,
+            document.amount,
+            document.purchaser
+        )
     }
 
     async getAllTickets(){
