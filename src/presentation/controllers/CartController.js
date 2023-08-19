@@ -31,7 +31,7 @@ export const addToCart = async (req, res, next) => {
         const { id } = req.params;
         const { pid } = req.params;
         const manager = new CartManager();
-        const cart = manager.addToCart(id, pid)
+        const cart = await manager.addToCart(id, pid)
         res.status(201).send({ status: "sucess", cart, message: "Product added" });
     } catch (e) {
         next(e)
@@ -44,7 +44,7 @@ export const deleteOne = async (req, res, next) => {
         const { id } = req.params;
         const { pid } = req.params;
         const manager = new CartManager();
-        const cart = manager.deleteOne(id, pid);
+        const cart = await manager.deleteOne(id, pid);
         res.status(200).send({ status: "sucess", cart, message: "Cart Item deleted" });
     } catch (e) {
         next(e)
@@ -56,7 +56,7 @@ export const deleteAll = async (req, res, next) => {
         await idValidation.parseAsync(req.params);
         const { id } = req.params;
         const manager = new CartManager();
-        const cart = manager.deleteAll(id);
+        const cart = await manager.deleteAll(id);
         res.status(200).send({ status: "sucess", cart, message: "Cart Item deleted" });
     } catch (e) {
         next(e)
@@ -69,7 +69,7 @@ export const updateOne = async (req, res, next) => {
         await cartUpdateValidation.parseAsync(req.body);
         const { id } = req.params;
         const manager = new CartManager();
-        const cart = manager.updateOne(id, req.body);
+        const cart = await manager.updateOne(id, req.body);
         res.status(200).send({ status: "sucess", cart, message: "Cart updated" });
     } catch (e) {
         next(e)
@@ -82,7 +82,7 @@ export const purchase = async (req, res, next) => {
         const { id } = req.params;
         const { _doc } = req.user;
         const manager = new CartManager();
-        const cart = manager.purchase(id, _doc);
+        const cart = await manager.purchase(id, _doc);
         res.status(200).send({ status: "sucess", cart, message: "Successful Purchase" });
     }catch(e){
         next(e)
