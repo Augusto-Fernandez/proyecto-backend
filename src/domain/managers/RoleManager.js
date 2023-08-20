@@ -6,7 +6,18 @@ class RoleManager{
     }
 
     async paginate(criteria){
-        return this.roleRepository.paginate(criteria);
+        const { limit, page } = criteria
+        let defaultLimit = await this.roleRepository.docCount();
+
+        if(limit !== undefined){
+            defaultLimit = limit
+        }
+
+        const dto = {
+            limit: defaultLimit,
+            page: page
+        }
+        return this.roleRepository.paginate(dto);
     }
 
     async getOne(id){

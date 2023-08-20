@@ -9,7 +9,18 @@ class UserManager {
     }
 
     async paginate(criteria) {
-        return this.userRepository.paginate(criteria);
+        const { limit, page } = criteria
+        let defaultLimit = await this.userRepository.docCount();
+
+        if(limit !== undefined){
+            defaultLimit = limit
+        }
+
+        const dto = {
+            limit: defaultLimit,
+            page: page
+        }
+        return this.userRepository.paginate(dto);
     }
 
     async getOneByEmail(email) {

@@ -10,6 +10,10 @@ class UserMongooseRepository {
         return userSchema.findOne({ email })
     }
 
+    async docCount(){
+        return userSchema.countDocuments();
+    }
+
     async paginate(criteria) {
         const { limit, page } = criteria;
         const userDocuments = await userSchema.paginate({}, {limit, page});/* cambiar a si no devuelve nada({}, { page }) */

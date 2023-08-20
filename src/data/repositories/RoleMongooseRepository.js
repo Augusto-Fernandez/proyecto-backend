@@ -10,6 +10,10 @@ class RoleMongooseRepository {
         return roleSchema.findOne({ _id: id, permissions: permission });
     }
 
+    async docCount(){
+        return roleSchema.countDocuments();
+    }
+
     async paginate(criteria){
         const {limit, page} = criteria;
         const roleDocuments = await roleSchema.paginate({}, {limit, page});/* cambiar a si no devuelve nada({}, { page }) */

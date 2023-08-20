@@ -6,6 +6,10 @@ class ProductMongooseRepository {
         return productsSchema.findOne({ _id: id });
     }
 
+    async docCount(){
+        return productsSchema.countDocuments();
+    }
+
     async getAll(criteria) {
         const { name, limit, page } = criteria
         const productDocuments = await productsSchema.paginate({name}, {limit, page})/*si no devuelve los productos { name }, { page } */

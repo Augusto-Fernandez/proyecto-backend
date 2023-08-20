@@ -11,7 +11,20 @@ class ProductManager {
         } else if (sort === "desc") {
             return this.productRepository.getDesc()
         }
-        return this.productRepository.getAll(criteria)
+        const { name, limit, page } = criteria
+        let defaultLimit = await this.productRepository.docCount();
+
+        if(limit !== undefined){
+            defaultLimit = limit
+        }
+
+        const dto = {
+            name: name,
+            limit: defaultLimit,
+            page: page
+        }
+
+        return this.productRepository.getAll(dto)
     }
 
     async getOne(id) {
