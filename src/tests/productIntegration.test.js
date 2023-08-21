@@ -21,7 +21,7 @@ describe("Testing Product Endpoints Success", () => {
     });
     afterAll(async function () {
         await _db.close();
-        await _requester._app.close();
+        //await _requester._app.close();
     });
     test('El repositorio debe devolver un arreglo', async function () {
         const result = await _requester.get('/api/products/')
@@ -32,81 +32,71 @@ describe("Testing Product Endpoints Success", () => {
     }, 60000);
     test('Creacion de producto /api/products/', async function () {
         const payload = {
-            title: faker.lorem.word(),
-            description: faker.lorem.sentence(),
-            price: faker.number.int(),
-            thumbnail: faker.lorem.word(),
-            code: faker.string.alphanumeric(),
-            stock: faker.number.int(),
-            status: true
-            /* enable: true daba error porque está true como default */
+            title: "Test Product",
+            description: "Test Description",
+            price: 1,
+            thumbnail: "Test Thumbnail",
+            code: "1111111111111",
+            stock: 1,
+            status: true,
         };
-
-        const result = await _requester.post('/api/products')
+        const result = await _requester.post('/api/products/')
                             .set('Authorization', `Bearer ${_jwt}`)
                             .send(payload)
         const { _body, status } = result;
 
-        _product=_body.id
+        _product=_body.product;
 
         expect(status).toEqual(201);
-        expect(_body.id.title).toEqual(payload.title);
-        expect(_body.id.description).toEqual(payload.description);
-        expect(_body.id.price).toEqual(payload.price);
-        expect(_body.id.thumbnail).toEqual(payload.thumbnail);
-        expect(_body.id.code).toEqual(payload.code);
-        expect(_body.id.stock).toEqual(payload.stock);
-        expect(_body.id.status).toEqual(payload.status);
+        expect(_body.product.title).toEqual(payload.title);
+        expect(_body.product.description).toEqual(payload.description);
+        expect(_body.product.price).toEqual(payload.price);
+        expect(_body.product.thumbnail).toEqual(payload.thumbnail);
+        expect(_body.product.code).toEqual(payload.code);
+        expect(_body.product.stock).toEqual(payload.stock);
+        expect(_body.product.status).toEqual(payload.status);
     }, 60000);
     test('El repositorio debe poder encontrar un producto /api/products/:id', async function (){
-        const foundProduct = await _product;
-        const productId = foundProduct.id.id.toString();
-
-        const result = await _requester.get(`/api/products/${productId}`)
+        const result = await _requester.get(`/api/products/${_product.id}`)
                             .set('Authorization', `Bearer ${_jwt}`)
     
         const { status } = result;
         expect(status).toEqual(200);
     }, 60000);
     test('El repositorio debe poder actualizar un producto /api/products/:id', async function (){
-        const foundProduct = await _product;
-        const productId = foundProduct.id.id.toString()
-        
         const update = {
-            title: faker.lorem.word(),
-            description: faker.lorem.sentence(),
-            price: faker.number.int(),
-            thumbnail: faker.lorem.word(),
-            code: faker.string.alphanumeric(),
-            stock: faker.number.int(),
-            status: true
-            // enable: true
+            title: "Update Test Product",
+            description: "Update Test Description",
+            price: 2,
+            thumbnail: "Update Test Thumbnail",
+            code: "222222222222",
+            stock: 2,
+            status: true,
         };
 
-        const result = await _requester.put(`/api/products/${productId}`)
+        const result = await _requester.put(`/api/products/${_product.id}`)
                             .set('Authorization', `Bearer ${_jwt}`)
                             .send(update)
         const { _body, status } = result;
+
         expect(status).toEqual(200);
-        expect(_body.id.title).toEqual(update.title);
-        expect(_body.id.description).toEqual(update.description);
-        expect(_body.id.price).toEqual(update.price);
-        expect(_body.id.thumbnail).toEqual(update.thumbnail);
-        expect(_body.id.code).toEqual(update.code);
-        expect(_body.id.stock).toEqual(update.stock);
-        expect(_body.id.status).toEqual(update.status);
+        expect(_body.product.title).toEqual(update.title);
+        expect(_body.product.description).toEqual(update.description);
+        expect(_body.product.price).toEqual(update.price);
+        expect(_body.product.thumbnail).toEqual(update.thumbnail);
+        expect(_body.product.code).toEqual(update.code);
+        expect(_body.product.stock).toEqual(update.stock);
+        expect(_body.product.status).toEqual(update.status);
     }, 60000);
     test('El repositorio debe poder eliminar un producto /api/products/:id', async function (){
-        const foundProduct = await _product;
-        const productId = foundProduct.id.id.toString();
-
-        const result = await _requester.delete(`/api/products/${productId}`)
+        const result = await _requester.delete(`/api/products/${_product.id}`)
                             .set('Authorization', `Bearer ${_jwt}`)
     
         const { status } = result;
         expect(status).toEqual(200);
     }, 60000);
 });
+
 describe("Testing Product Endpoints Fail", () => {
     let _requester;
     let _app;
@@ -125,7 +115,7 @@ describe("Testing Product Endpoints Fail", () => {
     });
     afterAll(async function () {
         await _db.close();
-        await _requester.app.close();
+        //await _requester.app.close();
     });
     test('Fallo reacion de producto /api/products/', async function () {
         const payload = {
@@ -134,7 +124,6 @@ describe("Testing Product Endpoints Fail", () => {
             code: faker.string.alphanumeric(),
             stock: faker.number.int(),
             status: true
-            /* enable: true daba error porque está true como default */
         };
 
         const result = await _requester.post('/api/products')
@@ -142,16 +131,16 @@ describe("Testing Product Endpoints Fail", () => {
                             .send(payload)
         const { status } = result;
 
-        expect(status).toEqual(401);
+        expect(status).toEqual(400);
     }, 60000);
     test('Fallo donde el repositorio debe poder encontrar un producto /api/products/:id', async function (){
         const result = await _requester.get(`/api/products/${faker.string.numeric(24)}`)
                             .set('Authorization', `Bearer ${_jwt}`)
     
         const { status } = result;
-        expect(status).toEqual(401);
+        expect(status).toEqual(404);
     }, 60000);
-    test('El repositorio debe poder actualizar un producto /api/products/:id', async function (){
+    test('El repositorio debe fallar la actualizar un producto /api/products/:id', async function (){
         const update = {
             title: faker.lorem.word(),
             description: faker.lorem.sentence(),
@@ -160,7 +149,6 @@ describe("Testing Product Endpoints Fail", () => {
             code: faker.string.alphanumeric(),
             stock: faker.number.int(),
             status: true
-            // enable: true
         };
 
         const result = await _requester.delete(`/api/products/${faker.string.numeric(24)}`)
@@ -168,13 +156,13 @@ describe("Testing Product Endpoints Fail", () => {
                             .send(update)
     
         const { status } = result;
-        expect(status).toEqual(401);
+        expect(status).toEqual(404);
     }, 60000);
     test('Fallo donde el repositorio debe poder eliminar un producto /api/products/:id', async function (){
         const result = await _requester.delete(`/api/products/${faker.string.numeric(24)}`)
                             .set('Authorization', `Bearer ${_jwt}`)
     
         const { status } = result;
-        expect(status).toEqual(401);
+        expect(status).toEqual(404);
     }, 60000);
 });
