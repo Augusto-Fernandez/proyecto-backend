@@ -18,7 +18,7 @@ describe("Testing Auth Endpoints Success", () => {
     });
     afterAll(async function () {
         await _db.close();
-        await _requester.app.close();
+        await _app.close();
     });
     test('Creacion de cuenta /api/sessions/signup', async function () {
         _payload = {
@@ -74,7 +74,7 @@ describe("Testing Auth Endpoints Fails", () => {
     });
     afterAll(async function () {
         await _db.close();
-        await _requester.app.close();
+        await _app.close();
     });
     test('Creacion de cuenta /api/sessions/signup', async function () {
         const payload = {

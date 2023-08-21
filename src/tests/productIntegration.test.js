@@ -21,7 +21,7 @@ describe("Testing Product Endpoints Success", () => {
     });
     afterAll(async function () {
         await _db.close();
-        //await _requester._app.close();
+        await _app.close();
     });
     test('El repositorio debe devolver un arreglo', async function () {
         const result = await _requester.get('/api/products/')
@@ -115,7 +115,7 @@ describe("Testing Product Endpoints Fail", () => {
     });
     afterAll(async function () {
         await _db.close();
-        //await _requester.app.close();
+        await _app.close();
     });
     test('Fallo reacion de producto /api/products/', async function () {
         const payload = {

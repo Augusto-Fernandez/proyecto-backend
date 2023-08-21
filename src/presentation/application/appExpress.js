@@ -49,14 +49,20 @@ class AppExpress{
         return this.app;
     }
 
-    close(){
-        this.server.close();
-    }
-
     listen(){
-        return this.app.listen(process.env.NODE_PORT, () => {
+        this.server = this.app.listen(process.env.NODE_PORT, () => {
             console.log(`Server listening on port ${process.env.NODE_PORT}`);
         });
+
+        return this.server;
+    }
+
+    close(){
+        if (this.server) {
+            this.server.close(() => {
+                console.log('Server closed');
+            });
+        }
     }
 }
 
