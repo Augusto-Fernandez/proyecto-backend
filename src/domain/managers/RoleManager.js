@@ -23,7 +23,7 @@ class RoleManager{
     async getOne(id){
         const validate = await this.roleRepository.validateId(id);
         if(!validate){
-            throw new Error('Role dont exist');
+            throw new Error('Not Found Id');
         }
         return this.roleRepository.getOne(id);
     }
@@ -35,7 +35,7 @@ class RoleManager{
     async updateOne(id,data){
         const validate = await this.roleRepository.validateId(id);
         if (!validate){
-            throw new Error('Role dont exist');
+            throw new Error('Not Found Id');
         }
         return this.roleRepository.updateOne(id,data);
     }
@@ -43,7 +43,7 @@ class RoleManager{
     async deleteOne(id){
         const validate = await this.roleRepository.validateId(id);
         if (!validate){
-            throw new Error('Role dont exist');
+            throw new Error('Not Found Id');
         }
         return this.roleRepository.deleteOne(id);
     }

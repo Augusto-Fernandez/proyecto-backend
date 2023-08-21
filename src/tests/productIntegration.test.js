@@ -117,7 +117,7 @@ describe("Testing Product Endpoints Fail", () => {
         await _db.close();
         await _app.close();
     });
-    test('Fallo reacion de producto /api/products/', async function () {
+    test('Fallo creacion de producto /api/products/', async function () {
         const payload = {
             title: faker.lorem.word(),
             thumbnail: faker.lorem.word(),
