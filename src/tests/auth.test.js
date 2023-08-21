@@ -8,6 +8,7 @@ describe("Testing Auth Endpoints Success", () => {
     let _app;
     let _db;
     let _payload = {};
+    let _user;
 
     beforeAll(async function () {
         const { app, db } = await initServer();
@@ -17,6 +18,11 @@ describe("Testing Auth Endpoints Success", () => {
         _db = db;
     });
     afterAll(async function () {
+        const login = await _requester.post('/api/sessions/login').send({email: 'admin@admin.com', password: '12345678'});
+        _jwt=login.body.sessionLogin;
+
+        await _requester.delete(`/api/users/${_user}`).set('Authorization', `Bearer ${_jwt}`)
+
         await _db.close();
         await _app.close();
     });
@@ -31,6 +37,9 @@ describe("Testing Auth Endpoints Success", () => {
 
         const result = await _requester.post('/api/sessions/signup').send(_payload);
         const { _body, status } = result;
+        
+        _user = _body.signup.id;
+
         expect(status).toEqual(201);
         expect(_body.signup.email).toEqual(_payload.email);
         expect(_body.message).toEqual("User created.");
@@ -99,7 +108,6 @@ describe("Testing Auth Endpoints Fails", () => {
         const { _body, status } = result;
         expect(status).toEqual(400);
         expect(_body.message[0].message).toEqual(payload.email);
-        // expect(_body.message[0].message).toEqual("Invalid email");
     }, 60000);
     test('User dont exist /api/sessions/login', async function () {
         const payload = {
