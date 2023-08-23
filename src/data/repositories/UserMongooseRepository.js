@@ -24,9 +24,7 @@ class UserMongooseRepository {
             firstName: document.firstName,
             lastName: document.lastName,
             email: document.email,
-            age: document.age,
-            cart: document.cart,
-            isAdmin: document.isAdmin
+            role: document.role
         }));
 
         return {

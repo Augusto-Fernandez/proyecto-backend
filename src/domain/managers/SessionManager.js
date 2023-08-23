@@ -1,5 +1,6 @@
 import container from "../../container.js";
 import { createHash, isValidPassword, generateToken } from "../../shared/index.js";
+import currentDate from "../../utils/currentDate.js";
 
 class SessionManager{
     constructor() {
@@ -17,6 +18,22 @@ class SessionManager{
         if(!isHashedPassword){
             throw new Error('Login failed, invalid password.')
         }
+
+        const dto = {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            age: user.age,
+            cart: user.cart,
+            password: user.password,
+            isAdmin: user.isAdmin,
+            role: user.role,
+            premium: user.premium,
+            documents: user.documents,
+            last_connection: currentDate
+        }
+
+        await this.userRepository.updateOne(user.id, dto);
 
         const accessToken = await generateToken(user);
         return accessToken
