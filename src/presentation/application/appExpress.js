@@ -12,6 +12,7 @@ import roleRouter from "../../presentation/routes/RoleRouter.js";
 import emailRouter from "../../presentation/routes/EmailRouter.js";
 import swaggerOptions from "../../config/swaggerConfig.js";
 import { addLogger } from "../../utils/logger.js";
+import cronHandler from "../middlewares/cron.js";
 
 import errorHandler from "../../presentation/middlewares/errorHandler.js";
 
@@ -30,6 +31,8 @@ class AppExpress{
     }
 
     build(){
+        this.app.use(cronHandler);
+
         this.app.use(addLogger);
 
         this.app.use('/api/products', productRouter);

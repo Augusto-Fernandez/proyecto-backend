@@ -46,7 +46,8 @@ class SessionManager{
 
         const dto = {
             ...data,
-            password: await createHash(data.password, 10)
+            password: await createHash(data.password, 10),
+            last_connection: currentDate
         }
 
         const user = await this.userRepository.create(dto);

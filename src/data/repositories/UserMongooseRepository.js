@@ -14,6 +14,10 @@ class UserMongooseRepository {
         return userSchema.countDocuments();
     }
 
+    async getAll(){
+        return userSchema.find();
+    }
+
     async paginate(criteria) {
         const { limit, page } = criteria;
         const userDocuments = await userSchema.paginate({}, {limit, page});/* cambiar a si no devuelve nada({}, { page }) */
