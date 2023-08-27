@@ -19,6 +19,10 @@ export const login = async (req, res, next) => {
 };
 
 export const logout = async (req, res) => {
+    const { _doc } = req.user;
+    const manager = new SessionManager();
+    await manager.logout(_doc.id);
+
     req.session.destroy(err => {
         if (!err) {
             return res.send({ message: 'Logout ok!' });

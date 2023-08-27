@@ -98,6 +98,11 @@ class SessionManager{
         user.password = await createHash(data.password, 10);
         return this.userRepository.updateOne(user.id, user);
     }
+    async logout(id){
+        const user = await this.userRepository.getOne(id);
+        user.last_connection = currentDate;
+        await this.userRepository.updateOne(id, user);
+    }
 }
 
 export default SessionManager
