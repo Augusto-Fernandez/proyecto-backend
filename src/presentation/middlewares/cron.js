@@ -14,18 +14,16 @@ const cronHandler = async (req, res, next) => {
         last_connection: dateFormat(user.last_connection)
     }));
 
-    //cron.schedule('0 */48 * * *', async () => {
-    cron.schedule('*/30 * * * * *', async () => {
+    cron.schedule('0 */48 * * *', async () => {
         const cutoffTime = new Date();
         cutoffTime.setHours(cutoffTime.getHours() - 48);
 
         const usersToDelete = lastConnections.filter(user => user.last_connection < cutoffTime);
 
         for (const user of usersToDelete) {
-            console.log(`Se eliminó a usuario ${user.id}`)
-            //await userRepository.deleteOne(user.id)
+            await userRepository.deleteOne(user.id)
             const message = new MailService;
-            message.send('deletedUser.hbs',{userName:user.firstName},user.email,'Deleted Account'); // ver si falta await
+            await message.send('deletedUser.hbs',{userName:user.firstName},user.email,'Deleted Account');
         }
     });
 
