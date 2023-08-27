@@ -203,6 +203,26 @@ class UserMongooseRepository {
             role: document?.role
         })
     }
+
+    async uploadFiles(id, data){
+        const document = await cartsSchema.findByIdAndUpdate(
+            id,
+            { $push: { documents: { name: data.name, reference: data.path } } },
+            { new: true }
+        );
+
+        return new User({
+            id: document?._id,
+            firstName: document?.firstName,
+            lastName: document?.lastName,
+            email: document?.email,
+            age: document?.age,
+            cart: document?.cart,
+            password: document?.password,
+            isAdmin: document?.isAdmin,
+            role: document?.role
+        })
+    }
 }
 
 export default UserMongooseRepository;

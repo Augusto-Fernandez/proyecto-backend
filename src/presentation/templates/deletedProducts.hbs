@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <p>Hello, {{userName}}</p>
+        <br>
+        <p>You have deleted the following products:</p>
+        {{#each products}}
+        <div>
+            <p>{{this.title}}</p>
+        </div>
+        {{/each}}
+        <br>
+        <p>Cheers,</p>
+        <p>The team</p>
+    </body>
+</html>
