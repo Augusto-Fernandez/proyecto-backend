@@ -25,7 +25,7 @@ const cronHandler = async (req, res, next) => {
             console.log(`Se eliminó a usuario ${user.id}`)
             //await userRepository.deleteOne(user.id)
             const message = new MailService;
-            message.send('deletedUser.hbs',{userName:user.firstName},user.email,'Deleted Account');
+            message.send('deletedUser.hbs',{userName:user.firstName},user.email,'Deleted Account'); // ver si falta await
         }
     });
 

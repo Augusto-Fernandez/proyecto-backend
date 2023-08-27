@@ -1,6 +1,7 @@
 import container from "../../container.js";
 import { createHash, isValidPassword, generateToken } from "../../shared/index.js";
 import currentDate from "../../utils/currentDate.js";
+import MailService from "../../shared/MailService.js";
 
 class SessionManager{
     constructor() {
@@ -53,7 +54,7 @@ class SessionManager{
         const user = await this.userRepository.create(dto);
         return user
     }
-    async forgetPassword(data){
+    async changePassword(data){
         const validate = await this.userRepository.validateEmail(data.email);
         if (!validate) {
             throw new Error('Not Found User Email');
@@ -66,6 +67,35 @@ class SessionManager{
 
         const user = await this.userRepository.getOneByEmail(dto.email);
         user.password = dto.password;
+        return this.userRepository.updateOne(user.id, user);
+    }
+    async forgetPassword(data){
+        const validate = await this.userRepository.validateEmail(data.email);
+        if (!validate) {
+            throw new Error('Not Found User Email');
+        }
+
+        const user = await this.userRepository.getOneByEmail(data.email);
+        const accessToken = await generateToken(user);
+
+        const dto = {
+            userName: user.firstName,
+            token: accessToken
+        }
+        
+        const message = new MailService();
+        const messageInfo = await message.send('forgotPassword.hbs', dto, user.email, 'Password Reset');
+
+        return messageInfo;
+    }
+    async resetPassword(data){
+        const validate = await this.userRepository.validateEmail(data.email);
+        if (!validate) {
+            throw new Error('Not Found User Email');
+        }
+
+        const user = await this.userRepository.getOneByEmail(data.email);
+        user.password = await createHash(data.password, 10);
         return this.userRepository.updateOne(user.id, user);
     }
 }

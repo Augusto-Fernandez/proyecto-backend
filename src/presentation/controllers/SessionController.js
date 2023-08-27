@@ -1,6 +1,7 @@
 import SessionManager from "../../domain/managers/SessionManager.js";
 import loginValidation from "../../domain/validations/session/loginValidation.js";
 import userCreateValidation from "../../domain/validations/user/userCreateValidation.js";
+import emailValidation from "../../domain/validations/session/emailValidation.js";
 
 export const login = async (req, res, next) => {
     try{
@@ -42,13 +43,38 @@ export const signup = async (req, res, next) => {
     }
 };
 
+export const changePassword = async (req, res, next) => {
+    try{
+        const { _doc } = req.user;
+        const { password } = req.body;
+        const manager = new SessionManager();
+        const changePassword = await manager.changePassword({ email: _doc.email, password })
+        res.status(200).send({ status: 'success', changePassword, message: 'User change password.' });
+    }catch (e){
+        next(e)
+    }
+};
+
 export const forgetPassword = async (req, res, next) => {
     try{
-        await loginValidation.parseAsync(req.body)
-        const { email, password } = req.body;
+        await emailValidation.parseAsync(req.body);
+        const { email } = req.body;
         const manager = new SessionManager();
-        const forgetPassword = await manager.forgetPassword({ email, password })
-        res.status(200).send({ status: 'success', forgetPassword, message: 'User change password.' });
+        const forgetPassword = await manager.forgetPassword({ email })
+        res.status(200).send({ status: 'success', forgetPassword, message: 'Mail sended' });
+    }catch (e){
+        next(e)
+    }
+};
+
+export const resetPassword = async (req, res, next) => {
+    try{
+        const { _doc } = req.user;
+        const { password } = req.body;
+        await loginValidation.parseAsync({email: _doc.email, password});
+        const manager = new SessionManager();
+        const resetPassword = await manager.resetPassword({ email: _doc.email, password })
+        res.status(200).send({ status: 'success', resetPassword, message: 'User change password.' });
     }catch (e){
         next(e)
     }
