@@ -59,12 +59,12 @@ export const changePassword = async (req, res, next) => {
     }
 };
 
-export const forgetPassword = async (req, res, next) => {
+export const forgotPassword = async (req, res, next) => {
     try{
         await emailValidation.parseAsync(req.body);
         const { email } = req.body;
         const manager = new SessionManager();
-        const forgetPassword = await manager.forgetPassword({ email })
+        const forgetPassword = await manager.forgotPassword({ email })
         res.status(200).send({ status: 'success', forgetPassword, message: 'Mail sended' });
     }catch (e){
         next(e)
@@ -73,11 +73,10 @@ export const forgetPassword = async (req, res, next) => {
 
 export const resetPassword = async (req, res, next) => {
     try{
-        const { _doc } = req.user;
+        const { token } = req.query
         const { password } = req.body;
-        await loginValidation.parseAsync({email: _doc.email, password});
         const manager = new SessionManager();
-        const resetPassword = await manager.resetPassword({ email: _doc.email, password })
+        const resetPassword = await manager.resetPassword({ token , password })
         res.status(200).send({ status: 'success', resetPassword, message: 'User change password.' });
     }catch (e){
         next(e)

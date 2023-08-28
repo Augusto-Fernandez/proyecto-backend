@@ -9,7 +9,6 @@ import cartRouter from "../../presentation/routes/CartRouter.js";
 import sessionRouter from "../../presentation/routes/SessionRouter.js";
 import userRouter from "../../presentation/routes/UserRouter.js";
 import roleRouter from "../../presentation/routes/RoleRouter.js";
-import emailRouter from "../../presentation/routes/EmailRouter.js";
 import swaggerOptions from "../../config/swaggerConfig.js";
 import { addLogger } from "../../utils/logger.js";
 import cronHandler from "../middlewares/cron.js";
@@ -40,7 +39,6 @@ class AppExpress{
         this.app.use('/api/sessions', sessionRouter);
         this.app.use('/api/users', userRouter);
         this.app.use('/api/roles', roleRouter);
-        this.app.use('/api/email', emailRouter);
         
         const specs = swaggerJSDoc(swaggerOptions);
         this.app.use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));

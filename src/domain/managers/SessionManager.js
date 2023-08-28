@@ -2,6 +2,7 @@ import container from "../../container.js";
 import { createHash, isValidPassword, generateToken } from "../../shared/index.js";
 import currentDate from "../../utils/currentDate.js";
 import MailService from "../../shared/MailService.js";
+import jwt from "jsonwebtoken";
 
 class SessionManager{
     constructor() {
@@ -69,7 +70,7 @@ class SessionManager{
         user.password = dto.password;
         return this.userRepository.updateOne(user.id, user);
     }
-    async forgetPassword(data){
+    async forgotPassword(data){
         const validate = await this.userRepository.validateEmail(data.email);
         if (!validate) {
             throw new Error('Not Found User Email');
@@ -89,12 +90,9 @@ class SessionManager{
         return messageInfo;
     }
     async resetPassword(data){
-        const validate = await this.userRepository.validateEmail(data.email);
-        if (!validate) {
-            throw new Error('Not Found User Email');
-        }
+        const authToken = jwt.verify(data.token, process.env.PRIVATE_KEY)
 
-        const user = await this.userRepository.getOneByEmail(data.email);
+        const user = await this.userRepository.getOneByEmail(authToken.user._doc.email);
         user.password = await createHash(data.password, 10);
         return this.userRepository.updateOne(user.id, user);
     }
