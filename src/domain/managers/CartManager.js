@@ -1,5 +1,6 @@
 import container from "../../container.js";
-import MessengerService from "../../shared/MessengerService.js";
+import currentDate from "../../utils/currentDate.js"
+import MailService from "../../shared/MailService.js"
 
 class CartManager {
     constructor() {
@@ -95,17 +96,6 @@ class CartManager {
             }
         }));
 
-        const currentDate = new Date();
-
-        const hour = currentDate.getHours();
-        const minutes = currentDate.getMinutes();
-        const formattedMinutes = minutes.toString().padStart(2, '0');
-        const day = currentDate.getDate();
-        const month = currentDate.getMonth()+1;
-        const year = currentDate.getFullYear();
-
-        const purchaseDate = `${hour}:${formattedMinutes} - ${day}/${month}/${year}`;
-
         let onStock = [];
         let outOfStock = [];
         let totalAmount = 0;
@@ -136,36 +126,18 @@ class CartManager {
 
         await this.cartRepository.deleteAll(id);
 
-        if(outOfStock.length>0){
-            await Promise.all(outOfStock.map(async (prod) => {
-                await this.cartRepository.updateOne(id, {prod})
-            }));
-        }
-
         const dto = {
             code: code.toString(),
-            purchase_datetime: purchaseDate,
+            purchase_datetime: currentDate,
             amount: totalAmount,
             purchaser: user.email
         }
 
-        const message = new MessengerService
-
-        const mail = {
-            from: process.env.SMTP_EMAIL,
-            to: user.email,
-            subject: 'Confirmación de compra',
-            html:`
-            <di>
-                <h1>Compra realizada satisfactoriamente</h1>
-                <p>ID: ${code}</p>
-                <p>Total: ${totalAmount}</p>
-            </div>
-            `,
-            attachment:[]
-        }
-
-        message.sendMessage(mail);
+        const message = new MailService();
+        await message.send('purchaseConfirmation.hbs', {
+            userName: user.firstName,
+            code: code,
+            totalAmount: totalAmount }, user.email, 'Purchase Confirmation');
 
         return this.cartRepository.purchase(dto);
     }
