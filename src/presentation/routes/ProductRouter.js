@@ -13,7 +13,7 @@ productRouter.get("/", authorization('getProducts'), list);
 productRouter.get("/:id", validateIdParam, authorization('getProduct'),  getOne);
 productRouter.post("/", adminOnly(), save)
 productRouter.put("/:id", validateIdParam, adminOnly(), update);
-productRouter.delete("/:id", validateIdParam, authorization('deleteProduct'),  deleteOne);
+productRouter.delete("/:id", validateIdParam, adminOnly(),  deleteOne);
 
 productRouter.param('id', idParam)
 

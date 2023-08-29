@@ -124,7 +124,7 @@ class CartManager {
             throw new Error('Empty Cart, Out Of Stock');
         }
 
-        await this.cartRepository.deleteAll(id);
+        await this.cartRepository.deleteCart(id);
 
         const dto = {
             code: code.toString(),
