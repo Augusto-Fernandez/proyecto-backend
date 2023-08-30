@@ -78,7 +78,7 @@ class CartManager {
         return this.cartRepository.updateOne(id, data)
     }
 
-    async purchase(id, user){
+    async checkout(id, user){
         const cart = await this.cartRepository.validateId(id);
         if (cart === null) {
             throw new Error('Not Found Id');
@@ -139,7 +139,7 @@ class CartManager {
             code: code,
             totalAmount: totalAmount }, user.email, 'Purchase Confirmation');
 
-        return this.cartRepository.purchase(dto);
+        return this.cartRepository.checkout(dto);
     }
 
     async deleteCart(id){

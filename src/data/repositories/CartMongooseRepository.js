@@ -80,7 +80,7 @@ class CartMongooseRepository {
         )
     }
 
-    async purchase(data){
+    async checkout(data){
         const document = await ticketSchema.create(data);
 
         return new Ticket(
