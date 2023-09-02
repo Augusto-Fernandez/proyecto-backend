@@ -1,6 +1,7 @@
 import container from "../../container.js";
 import { createHash } from "../../shared/index.js";
 import MailService from "../../shared/MailService.js";
+import currentDate from "../../utils/currentDate.js";
 
 class UserManager {
     constructor() {
@@ -44,7 +45,8 @@ class UserManager {
     async create(data) {
         const dto = {
             ...data,
-            password: await createHash(data.password, 10)
+            password: await createHash(data.password, 10),
+            last_connection: currentDate
         }
 
         const user = await this.userRepository.create(dto);
