@@ -13,6 +13,9 @@ const errorHandler = (err, req, res, next) =>
   }else if (err?.message.includes('Role Already Added')){
     req.logger.error(err.stack);
     return res.status(404).json({ message: err.message });
+  }else if (err?.message.includes('Product Already Added')){
+    req.logger.error(err.stack);
+    return res.status(404).json({ message: err.message });
   }else if (err?.message.includes('Empty Cart')){
     req.logger.error(err.stack);
     return res.status(404).json({ message: err.message });

@@ -66,6 +66,10 @@ class CartManager {
             throw new Error('Not Found Id');
         }
 
+        if(cart.products.length < 1){
+            throw new Error('Not Found Products in Cart');
+        }
+
         return this.cartRepository.deleteAll(id)
     }
 
@@ -73,6 +77,27 @@ class CartManager {
         const cart = await this.cartRepository.validateId(id);
         if (cart === null) {
             throw new Error('Not Found Id');
+        }
+
+        let validatedProducts = [];
+
+        await Promise.all(data.products.map(async (prod) => {
+            const validateProduct = await this.productRepository.validateId(prod.id);
+            if (validateProduct === null) {
+                throw new Error('Not Found Product Id');
+            }
+            validatedProducts.push(validateProduct.id);
+        }));
+
+        
+        const idSet = new Set();
+
+        for (const id of validatedProducts) {
+            if (idSet.has(id)) {
+                throw new Error('Product Already Added')
+            } else {
+                idSet.add(id);
+            }
         }
 
         return this.cartRepository.updateOne(id, data)

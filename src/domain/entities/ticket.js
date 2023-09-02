@@ -1,10 +1,10 @@
 class Ticket{
-    constructor(props){
-        this.id=props.id,
-        this.code=props.code,
-        this.purchase_datetime=props.purchase_datetime,
-        this.amount=props.amount,
-        this.purchaser=props.purchaser
+    constructor(id, code, purchase_datetime, amount, purchaser){
+        this.id=id,
+        this.code=code,
+        this.purchase_datetime=purchase_datetime,
+        this.amount=amount,
+        this.purchaser=purchaser
     }
 }
 
