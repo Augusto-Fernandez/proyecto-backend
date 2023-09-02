@@ -3,7 +3,6 @@ import idValidation from "../../domain/validations/shared/idValidation.js";
 import cartIdValidation from "../../domain/validations/user/cartIdValidation.js";
 import roleIdValidation from "../../domain/validations/user/roleIdValidation.js";
 import userCreateValidation from "../../domain/validations/user/userCreateValidation.js"
-import userUpdateValidation from "../../domain/validations/user/userUpdateValidation.js"
 
 export const list = async (req, res, next) => {
     try{
@@ -41,7 +40,8 @@ export const save = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
     try{
-        await userUpdateValidation.parseAsync({ ...req.body, id: req.params })
+        await idValidation.parseAsync(req.params);
+        await userCreateValidation.parseAsync(req.body)
         const { id } = req.params;
         const manager = new UserManager();
         const result = await manager.updateOne(id, req.body);
