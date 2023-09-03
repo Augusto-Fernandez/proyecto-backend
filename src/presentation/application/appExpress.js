@@ -2,7 +2,8 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import compression from "express-compression";
 import swaggerJSDoc from "swagger-jsdoc";
-import swaggerUiExpress from 'swagger-ui-express'
+import swaggerUiExpress from 'swagger-ui-express';
+import cors from 'cors'
 
 import productRouter from "../../presentation/routes/ProductRouter.js";
 import cartRouter from "../../presentation/routes/CartRouter.js";
@@ -20,6 +21,7 @@ class AppExpress{
         this.app = express();
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
+        this.app.use(cors());
         this.app.use(cookieParser());
         this.app.use(compression({
             brotli: {
