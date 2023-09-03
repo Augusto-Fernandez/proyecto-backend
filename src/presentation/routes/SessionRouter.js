@@ -6,7 +6,7 @@ const sessionRouter = Router();
 
 sessionRouter.post('/login', login);
 
-sessionRouter.post('/logout', logout);
+sessionRouter.post('/logout', auth, logout);
 
 sessionRouter.get('/current', auth, current);
 

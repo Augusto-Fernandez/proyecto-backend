@@ -2,6 +2,7 @@ import SessionManager from "../../domain/managers/SessionManager.js";
 import loginValidation from "../../domain/validations/session/loginValidation.js";
 import userCreateValidation from "../../domain/validations/user/userCreateValidation.js";
 import emailValidation from "../../domain/validations/session/emailValidation.js";
+import passwordValidation from "../../domain/validations/session/passwordValidation.js";
 
 export const login = async (req, res, next) => {
     try{
@@ -23,12 +24,8 @@ export const logout = async (req, res) => {
     const manager = new SessionManager();
     await manager.logout(_doc.id);
 
-    req.session.destroy(err => {
-        if (!err) {
-            return res.send({ message: 'Logout ok!' });
-        }
-        res.send({ message: 'Logout error!', body: err })
-    });
+    res.clearCookie('accessToken');
+    return res.status(200).send({ message: 'Logout ok!' });
 };
 
 export const current = async (req, res) => {
@@ -49,6 +46,7 @@ export const signup = async (req, res, next) => {
 
 export const changePassword = async (req, res, next) => {
     try{
+        await passwordValidation.parseAsync(req.body)
         const { _doc } = req.user;
         const { password } = req.body;
         const manager = new SessionManager();
@@ -73,6 +71,7 @@ export const forgotPassword = async (req, res, next) => {
 
 export const resetPassword = async (req, res, next) => {
     try{
+        await passwordValidation.parseAsync(req.body)
         const { token } = req.query
         const { password } = req.body;
         const manager = new SessionManager();
