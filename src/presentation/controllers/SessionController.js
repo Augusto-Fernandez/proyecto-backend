@@ -11,7 +11,7 @@ export const login = async (req, res, next) => {
         const manager = new SessionManager();
         const sessionLogin = await manager.login({ email, password });
         res.cookie('accessToken', sessionLogin, {
-            maxAge: 60 * 60 * 1000,
+            maxAge: 40 * 24 * 60 * 60 * 1000,
             httpOnly: true
         }).send({ message: 'Login success!', sessionLogin });
     }catch(e){
