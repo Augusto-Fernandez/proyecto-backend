@@ -1,7 +1,7 @@
 import mongoose,{Schema} from "mongoose";
 import paginate from "mongoose-paginate-v2";
 
-const productCollection = 'products'
+const productCollection = 'products';
 
 const productModel = new Schema ({
     title: {type: Schema.Types.String, require: true},
@@ -14,5 +14,6 @@ const productModel = new Schema ({
     enable: {type: Schema.Types.Boolean, default: true}
 })
 
-productModel.plugin(paginate)
-export default mongoose.model(productCollection, productModel)
+productModel.plugin(paginate);
+
+export default mongoose.model(productCollection, productModel);

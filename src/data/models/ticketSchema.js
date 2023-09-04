@@ -8,7 +8,7 @@ const ticketSchema = new Schema({
     purchase_datetime: { type: Schema.Types.String, required: true },
     amount: { type: Schema.Types.Number, required: true },
     purchaser: { type: Schema.Types.String, required: true }
-});
+})
 
 ticketSchema.plugin(paginate);
 

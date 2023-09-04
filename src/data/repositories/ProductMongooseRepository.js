@@ -11,8 +11,8 @@ class ProductMongooseRepository {
     }
 
     async getAll(criteria) {
-        const { name, limit, page } = criteria
-        const productDocuments = await productsSchema.paginate({name}, {limit, page})/*si no devuelve los productos { name }, { page } */
+        const { limit, page } = criteria
+        const productDocuments = await productsSchema.paginate({}, {limit, page});
         const {docs, ... pagination} = productDocuments;
 
         const products = docs.map(document => new Product(
@@ -24,7 +24,7 @@ class ProductMongooseRepository {
             document.code,
             document.stock,
             document.status
-        ));
+        ))
 
         return {
             status: "success",
@@ -47,7 +47,7 @@ class ProductMongooseRepository {
             document.code,
             document.stock,
             document.status
-        ));
+        ))
 
         return products;
     }
@@ -64,13 +64,13 @@ class ProductMongooseRepository {
             document.code,
             document.stock,
             document.status
-        ));
+        ))
 
         return products;
     }
 
     async getOne(id) {
-        const document = await productsSchema.findOne({ _id: id })
+        const document = await productsSchema.findOne({ _id: id });
 
         return new Product(
             document._id,
@@ -85,7 +85,7 @@ class ProductMongooseRepository {
     }
 
     async create(data) {
-        const document = await productsSchema.create(data)
+        const document = await productsSchema.create(data);
 
         return new Product(
             document._id,
@@ -100,7 +100,7 @@ class ProductMongooseRepository {
     }
 
     async updateOne(id, data) {
-        const document = await productsSchema.findByIdAndUpdate({ _id: id }, data, { new: true })
+        const document = await productsSchema.findByIdAndUpdate({ _id: id }, data, { new: true });
 
         return new Product(
             document._id,
@@ -115,7 +115,7 @@ class ProductMongooseRepository {
     }
 
     async delete(id) {
-        return productsSchema.deleteOne({ _id: id })
+        return productsSchema.deleteOne({ _id: id });
     }
 }
 

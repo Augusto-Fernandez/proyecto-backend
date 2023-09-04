@@ -7,7 +7,7 @@ class UserMongooseRepository {
     }
 
     async validateEmail(email) {
-        return userSchema.findOne({ email })
+        return userSchema.findOne({ email });
     }
 
     async docCount(){
@@ -20,7 +20,7 @@ class UserMongooseRepository {
 
     async paginate(criteria) {
         const { limit, page } = criteria;
-        const userDocuments = await userSchema.paginate({}, {limit, page});/* cambiar a si no devuelve nada({}, { page }) */
+        const userDocuments = await userSchema.paginate({}, {limit, page});
         const {docs, ... pagination} = userDocuments;
 
         const users = docs.map(document => new User ({
@@ -29,12 +29,12 @@ class UserMongooseRepository {
             lastName: document.lastName,
             email: document.email,
             role: document.role
-        }));
+        }))
 
         return {
             users,
             pagination
-        };
+        }
     }
 
     async getOne(id) {

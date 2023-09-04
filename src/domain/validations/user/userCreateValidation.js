@@ -5,7 +5,7 @@ const userCreateValidation = z.object({
     lastName: z.string().min(5).max(35),
     email: z.string().email(),
     age: z.number(),
-    password: z.string(),
-});
+    password: z.string()
+})
 
 export default userCreateValidation;

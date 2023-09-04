@@ -8,6 +8,6 @@ const productCreateValidation = z.object({
     code: z.string(),
     stock: z.number().max(999),
     status: z.boolean()
-});
+})
 
 export default productCreateValidation;

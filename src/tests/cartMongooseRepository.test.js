@@ -16,14 +16,13 @@ describe("Testing Cart Mongoose Repository", () => {
         await db.init(process.env.DB_URI);
     });
     afterAll(async function () {
-        //await db.drop();
         await db.close();
     })
     test('El repositorio debe ser una instancia de CartMongooseRepository', function () {
         expect(cartRepository instanceof CartMongooseRepository).toBeTruthy();
     })
     test('El repositorio debe poder crear un cart', async function () {
-        cart = cartRepository.create({})
+        cart = cartRepository.create({});
 
         return cart
             .then(result => {
@@ -32,7 +31,7 @@ describe("Testing Cart Mongoose Repository", () => {
             });
     }, 60000);
     test('El repositorio debe poder encontrar un cart', async function (){
-        const cartId = await cart
+        const cartId = await cart;
 
         return cartRepository
             .getOne(cartId.id)
@@ -44,7 +43,7 @@ describe("Testing Cart Mongoose Repository", () => {
             })
     }, 60000);
     test('El repositorio debe poder actualizar un cart', async function (){
-        const cartId = await cart
+        const cartId = await cart;
         
         const payload = {
             products:[
@@ -58,7 +57,7 @@ describe("Testing Cart Mongoose Repository", () => {
                     status: true
                 }
             ]
-        };
+        }
 
         return cartRepository
             .updateOne(cartId.id, payload)

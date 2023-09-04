@@ -9,10 +9,5 @@ const cartModel = new Schema ({
 })
 
 cartModel.plugin(paginate);
-/**
-cartModel.pre('findOne', function (){
-    this.populate(['products'])
-})
- */
 
-export default mongoose.model(cartCollection, cartModel)
+export default mongoose.model(cartCollection, cartModel);

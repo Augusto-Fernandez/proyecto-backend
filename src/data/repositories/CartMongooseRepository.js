@@ -26,7 +26,7 @@ class CartMongooseRepository {
             cartId,
             { $push: { products: { id: cartProductId, quantity: 1 } } },
             { new: true }
-        );/* .populate("products.id"); */
+        );
 
         return new Cart(
             document._id,
@@ -63,7 +63,7 @@ class CartMongooseRepository {
         const document = await cartsSchema.findOneAndUpdate(
             { _id: id },
             { $set: { products: [] } }
-        )
+        );
 
         return new Cart(
             document._id,
@@ -97,7 +97,7 @@ class CartMongooseRepository {
     }
 
     async deleteCart(id){
-        return cartsSchema.deleteOne({_id: id})
+        return cartsSchema.deleteOne({_id: id});
     }
 }
 

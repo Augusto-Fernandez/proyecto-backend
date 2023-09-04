@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import supertest from 'supertest';
-import initServer from './app.js'
+import initServer from './app.js';
 
 describe("Testing Product Endpoints Success", () => {
     let _requester;
@@ -17,7 +17,7 @@ describe("Testing Product Endpoints Success", () => {
         _db = db;
 
         const login = await _requester.post('/api/sessions/login').send({email: 'admin@admin.com', password: '12345678'});
-        _jwt=login.body.sessionLogin
+        _jwt=login.body.sessionLogin;
     });
     afterAll(async function () {
         await _db.close();
@@ -39,7 +39,7 @@ describe("Testing Product Endpoints Success", () => {
             code: "1111111111111",
             stock: 1,
             status: true,
-        };
+        }
         const result = await _requester.post('/api/products/')
                             .set('Authorization', `Bearer ${_jwt}`)
                             .send(payload)
@@ -72,7 +72,7 @@ describe("Testing Product Endpoints Success", () => {
             code: "222222222222",
             stock: 2,
             status: true,
-        };
+        }
 
         const result = await _requester.put(`/api/products/${_product.id}`)
                             .set('Authorization', `Bearer ${_jwt}`)
@@ -111,7 +111,7 @@ describe("Testing Product Endpoints Fail", () => {
         _db = db;
 
         const login = await _requester.post('/api/sessions/login').send({email: 'admin@admin.com', password: '12345678'});
-        _jwt=login.body.sessionLogin
+        _jwt=login.body.sessionLogin;
     });
     afterAll(async function () {
         await _db.close();
@@ -124,7 +124,7 @@ describe("Testing Product Endpoints Fail", () => {
             code: faker.string.alphanumeric(),
             stock: faker.number.int(),
             status: true
-        };
+        }
 
         const result = await _requester.post('/api/products')
                             .set('Authorization', `Bearer ${_jwt}`)
@@ -149,7 +149,7 @@ describe("Testing Product Endpoints Fail", () => {
             code: faker.string.alphanumeric(),
             stock: faker.number.int(),
             status: true
-        };
+        }
 
         const result = await _requester.delete(`/api/products/${faker.string.numeric(24)}`)
                             .set('Authorization', `Bearer ${_jwt}`)

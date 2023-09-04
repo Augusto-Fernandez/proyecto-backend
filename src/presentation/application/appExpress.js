@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import compression from "express-compression";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUiExpress from 'swagger-ui-express';
-import cors from 'cors'
+import cors from 'cors';
 
 import productRouter from "../../presentation/routes/ProductRouter.js";
 import cartRouter from "../../presentation/routes/CartRouter.js";
@@ -27,8 +27,8 @@ class AppExpress{
             brotli: {
                 enabled: true,
                 zlib: {}
-            },
-        }));
+            }
+        }))
     }
 
     build(){
@@ -64,9 +64,9 @@ class AppExpress{
         if (this.server) {
             this.server.close(() => {
                 console.log('Server closed');
-            });
+            })
         }
     }
 }
 
-export default AppExpress
+export default AppExpress;

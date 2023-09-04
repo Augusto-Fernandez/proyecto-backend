@@ -17,7 +17,6 @@ const initServer = async () => {
         app,
         db
     }
-};
+}
 
 export default initServer;
-

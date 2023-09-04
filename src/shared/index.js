@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 
 export const createHash = async (password) =>{
-    return await bcrypt.hash(password, 10)
+    return await bcrypt.hash(password, 10);
 }
 
 export const isValidPassword = async (password, passwordHash) =>{

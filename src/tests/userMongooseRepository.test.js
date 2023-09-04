@@ -6,7 +6,7 @@ import initServer from './app.js';
 
 import UserMongooseRepository from "../data/repositories/UserMongooseRepository.js";
 
-const { db } = await initServer()
+const { db } = await initServer();
 
 describe("Testing User Mongoose Repository", () => {
     const userRepository = new UserMongooseRepository();
@@ -16,7 +16,6 @@ describe("Testing User Mongoose Repository", () => {
         await db.init(process.env.DB_URI);
     });
      afterAll(async function () {
-         //await db.drop();
          await db.close();
     });
     test('El repositorio debe ser una instancia de UserMongooseRepository', function () {
@@ -41,7 +40,7 @@ describe("Testing User Mongoose Repository", () => {
             password: 12345678
         };
 
-        user = userRepository.create(payload)
+        user = userRepository.create(payload);
 
         return user
             .then(result => {
@@ -62,7 +61,7 @@ describe("Testing User Mongoose Repository", () => {
                 expect(result).toBeDefined();
                 expect(typeof result).toBe('object'); 
                 expect(result).toHaveProperty('id');
-            })
+            });
     }, 60000);
     test('El repositorio debe poder actualizar un user', async function (){
         const foundUser = await user;
@@ -88,7 +87,7 @@ describe("Testing User Mongoose Repository", () => {
                 expect(result.email).toEqual(update.email);
                 expect(result.lastName).toEqual(update.lastName);
                 expect(result.age).toEqual(update.age);
-            })
+            });
     }, 60000);
     test('El repositorio debe poder eliminar un user', async function (){
         const foundUser = await user;
@@ -99,6 +98,6 @@ describe("Testing User Mongoose Repository", () => {
             .then(result => {
                 expect(result).not.toBeNull();
                 expect(result).toBeDefined();
-            })
+            });
     }, 60000);
 });

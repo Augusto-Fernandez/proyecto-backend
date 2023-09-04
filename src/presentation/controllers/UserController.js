@@ -2,7 +2,7 @@ import UserManager from "../../domain/managers/UserManager.js";
 import idValidation from "../../domain/validations/shared/idValidation.js";
 import cartIdValidation from "../../domain/validations/user/cartIdValidation.js";
 import roleIdValidation from "../../domain/validations/user/roleIdValidation.js";
-import userCreateValidation from "../../domain/validations/user/userCreateValidation.js"
+import userCreateValidation from "../../domain/validations/user/userCreateValidation.js";
 
 export const list = async (req, res, next) => {
     try{
@@ -13,7 +13,7 @@ export const list = async (req, res, next) => {
     }catch(e){
         next(e);
     }
-};
+}
 
 export const getOne = async (req, res, next) => {
     try{
@@ -25,31 +25,31 @@ export const getOne = async (req, res, next) => {
     }catch(e){
         next(e);
     }
-};
+}
 
 export const save = async (req, res, next) => {
     try{
-        await userCreateValidation.parseAsync(req.body)
+        await userCreateValidation.parseAsync(req.body);
         const manager = new UserManager();
         const user = await manager.create(req.body);
-        res.send({ status: 'success', user, message: 'User created.' })
+        res.send({ status: 'success', user, message: 'User created.' });
     }catch(e){
         next(e);
     }
-};
+}
 
 export const update = async (req, res, next) => {
     try{
         await idValidation.parseAsync(req.params);
-        await userCreateValidation.parseAsync(req.body)
+        await userCreateValidation.parseAsync(req.body);
         const { id } = req.params;
         const manager = new UserManager();
         const result = await manager.updateOne(id, req.body);
-        res.send({ status: 'success', result, message: 'User updated.' })
+        res.send({ status: 'success', result, message: 'User updated.' });
     }catch(e){
         next(e);
     }
-};
+}
 
 export const deleteOne = async (req, res, next) => {
     try{
@@ -57,11 +57,11 @@ export const deleteOne = async (req, res, next) => {
         const { id } = req.params;
         const manager = new UserManager();
         await manager.deleteOne(id);
-        res.send({ status: 'success', message: 'User deleted.' })
+        res.send({ status: 'success', message: 'User deleted.' });
     }catch(e){
         next(e);
     }
-};
+}
 
 export const addCart = async (req, res, next) =>{
     try{
@@ -70,7 +70,7 @@ export const addCart = async (req, res, next) =>{
         const { cid } = req.params;
         const manager = new UserManager();
         await manager.addCart(id, cid);
-        res.send({ status: 'success', message: 'Cart added' })
+        res.send({ status: 'success', message: 'Cart added' });
     }catch(e){
         next(e);
     }
@@ -82,7 +82,7 @@ export const deleteCart = async (req, res, next) =>{
         const { id } = req.params;
         const manager = new UserManager();
         await manager.deleteCart(id);
-        res.send({ status: 'success', message: 'Cart deleted' })
+        res.send({ status: 'success', message: 'Cart deleted' });
     }catch(e){
         next(e);
     }
@@ -94,10 +94,10 @@ export const addRole = async (req, res, next) =>{
         const { id } = req.params;
         const { rid } = req.params;
         const manager = new UserManager();
-        await manager.addRole(id, rid)
-        res.send({ status: 'success', message: 'Role added' })
+        await manager.addRole(id, rid);
+        res.send({ status: 'success', message: 'Role added' });
     }catch(e){
-        next(e)
+        next(e);
     }
 }
 
@@ -107,10 +107,10 @@ export const deleteRole = async (req, res, next) =>{
         const { id } = req.params;
         const { rid } = req.params;
         const manager = new UserManager();
-        await manager.deleteRole(id, rid)
-        res.send({ status: 'success', message: 'Role deleted' })
+        await manager.deleteRole(id, rid);
+        res.send({ status: 'success', message: 'Role deleted' });
     }catch(e){
-        next(e)
+        next(e);
     }
 }
 
@@ -122,7 +122,7 @@ export const deleteAllRoles = async (req, res, next) =>{
         await manager.deleteAllRoles(id);
         res.send({ status: 'success', message: 'All Roles Deleted' });
     }catch(e){
-        next(e)
+        next(e);
     }
 }
 
@@ -134,7 +134,7 @@ export const premium = async (req, res, next) => {
         await manager.premium(id);
         res.send({ status: 'success', message: 'Premium Added' });
     }catch(e){
-        next(e)
+        next(e);
     }
 }
 
@@ -145,10 +145,9 @@ export const uploadFiles = async (req, res, next) => {
         const manager = new UserManager();
         const files = req.files;
         files.forEach(async data => {
-            await manager.uploadFiles(id, data)
+            await manager.uploadFiles(id, data);
         });
-
     }catch(e){
-        next(e)
+        next(e);
     }
 }

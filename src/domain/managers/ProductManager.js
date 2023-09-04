@@ -1,60 +1,59 @@
-import container from "../../container.js"
+import container from "../../container.js";
 
 class ProductManager {
     constructor() {
-        this.productRepository = container.resolve('ProductRepository')
+        this.productRepository = container.resolve('ProductRepository');
     }
 
     async getAll(sort, criteria) {
         if (sort === "asc") {
-            return this.productRepository.getAsc()
+            return this.productRepository.getAsc();
         } else if (sort === "desc") {
-            return this.productRepository.getDesc()
+            return this.productRepository.getDesc();
         }
-        const { name, limit, page } = criteria
+        const { limit, page } = criteria;
         let defaultLimit = await this.productRepository.docCount();
 
         if(limit !== undefined){
-            defaultLimit = limit
+            defaultLimit = limit;
         }
 
         const dto = {
-            name: name,
             limit: defaultLimit,
             page: page
         }
 
-        return this.productRepository.getAll(dto)
+        return this.productRepository.getAll(dto);
     }
 
     async getOne(id) {
-        const validate = await this.productRepository.validateId(id)
+        const validate = await this.productRepository.validateId(id);
         if (validate === null) {
             throw new Error('Not Found Id');
         }
 
-        return this.productRepository.getOne(id)
+        return this.productRepository.getOne(id);
     }
 
     async create(data) {
-        return this.productRepository.create(data)
+        return this.productRepository.create(data);
     }
 
     async updatOne(id, data) {
-        const validate = await this.productRepository.validateId(id)
+        const validate = await this.productRepository.validateId(id);
         if (validate === null) {
             throw new Error('Not Found Id');
         }
 
-        return this.productRepository.updateOne(id, data)
+        return this.productRepository.updateOne(id, data);
     }
 
     async delete(id) {
-        const validate = await this.productRepository.validateId(id)
+        const validate = await this.productRepository.validateId(id);
         if (validate === null) {
             throw new Error('Not Found Id');
         }
-        return this.productRepository.delete(id)
+        return this.productRepository.delete(id);
     }
 }
 

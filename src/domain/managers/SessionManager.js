@@ -13,12 +13,12 @@ class SessionManager{
         const user = await this.userRepository.validateEmail(data.email);
 
         if(!user){
-            throw new Error('Not Found User Email')
+            throw new Error('Not Found User Email');
         }
         const isHashedPassword = await isValidPassword(data.password, user.password);
 
         if(!isHashedPassword){
-            throw new Error('Login failed, invalid password.')
+            throw new Error('Login failed, invalid password.');
         }
 
         const dto = {
@@ -38,7 +38,7 @@ class SessionManager{
         await this.userRepository.updateOne(user.id, dto);
 
         const accessToken = await generateToken(user);
-        return accessToken
+        return accessToken;
     }
     async signup(data){
         const validate = await this.userRepository.validateEmail(data.email);
@@ -53,7 +53,7 @@ class SessionManager{
         }
 
         const user = await this.userRepository.create(dto);
-        return user
+        return user;
     }
     async changePassword(data){
         const validate = await this.userRepository.validateEmail(data.email);
@@ -90,7 +90,7 @@ class SessionManager{
         return messageInfo;
     }
     async resetPassword(data){
-        const authToken = jwt.verify(data.token, process.env.PRIVATE_KEY)
+        const authToken = jwt.verify(data.token, process.env.PRIVATE_KEY);
 
         const user = await this.userRepository.getOneByEmail(authToken.user._doc.email);
         user.password = await createHash(data.password, 10);
@@ -103,4 +103,4 @@ class SessionManager{
     }
 }
 
-export default SessionManager
+export default SessionManager;

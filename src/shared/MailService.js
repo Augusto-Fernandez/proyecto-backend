@@ -13,7 +13,7 @@ class MailService {
                 pass: process.env.SMTP_KEY
             },
             secure: false
-        };
+        }
     }
 
     async send(templateFile, data, to, subject) {
@@ -29,7 +29,7 @@ class MailService {
             to: to,
             subject: subject,
             html
-        };
+        }
 
         await transporter.sendMail(mailOptions);
     }

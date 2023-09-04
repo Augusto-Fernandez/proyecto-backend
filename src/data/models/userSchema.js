@@ -18,18 +18,8 @@ const userSchema = new Schema({
       reference: { type: Schema.Types.String}
     }],
     last_connection: {type: Schema.Types.String}
-});
+})
 
 userSchema.plugin(paginate);
-
-/*
-userSchema.pre('find', function () {
-  this.populate(['role']);
-});
-
-userSchema.pre('findOne', function () {
-  this.populate(['role']);
-});
-*/
 
 export default mongoose.model(userCollection, userSchema);

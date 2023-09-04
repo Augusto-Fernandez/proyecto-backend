@@ -12,11 +12,11 @@ class UserManager {
     }
 
     async paginate(criteria) {
-        const { limit, page } = criteria
+        const { limit, page } = criteria;
         let defaultLimit = await this.userRepository.docCount();
 
         if (limit !== undefined) {
-            defaultLimit = limit
+            defaultLimit = limit;
         }
 
         const dto = {
@@ -91,12 +91,12 @@ class UserManager {
             throw new Error('Not Found Cart');
         }
 
-        const cartLength = validateUser.cart.length
+        const cartLength = validateUser.cart.length;
         if (cartLength > 0) {
             throw new Error('User Has Cart Already');
         }
 
-        return this.userRepository.addCart(id, cartId)
+        return this.userRepository.addCart(id, cartId);
     }
 
     async deleteCart(id) {
@@ -114,11 +114,11 @@ class UserManager {
             const cart = await this.cartRepository.getOne(validateUser.cart[0].id);
             const products = await Promise.all(cart.products.map(async prod => {
                 const foundProducts = await this.productRepository.getOne(prod.id);
-                return foundProducts.title
-            }));
+                return foundProducts.title;
+            }))
 
             const message = new MailService();
-            await message.send('deletedProducts.hbs', {userName: validateUser.name, products}, validateUser.email, 'Deleted Products')
+            await message.send('deletedProducts.hbs', {userName: validateUser.name, products}, validateUser.email, 'Deleted Products');
         }
 
         return this.userRepository.deleteCart(id);
@@ -140,7 +140,7 @@ class UserManager {
             throw new Error('Role Already Added');
         }
 
-        return this.userRepository.addRole(id, validateRole)
+        return this.userRepository.addRole(id, validateRole);
     }
 
     async deleteRole(id, roleId) {
@@ -159,7 +159,7 @@ class UserManager {
             throw new Error("Not Found User's Role");
         }
 
-        return this.userRepository.deleteRole(id, validateRole._id)
+        return this.userRepository.deleteRole(id, validateRole._id);
     }
 
     async deleteAllRoles(id) {
@@ -168,7 +168,7 @@ class UserManager {
             throw new Error('Not Found User');
         }
 
-        const rolesLength = validate.role.length
+        const rolesLength = validate.role.length;
         if (rolesLength === 0) {
             throw new Error('Not Found Roles');
         }
@@ -195,7 +195,7 @@ class UserManager {
         const docExist = user.documents.some(doc => validateDoc.includes(doc.name));
 
         if (!docExist) {
-            throw new Error('User Docs Incompleted')
+            throw new Error('User Docs Incompleted');
         }
 
         user.premium = true;

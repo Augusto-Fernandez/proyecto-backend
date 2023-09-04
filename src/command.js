@@ -1,7 +1,7 @@
 import { exit } from 'shelljs';
 import { program } from 'commander';
 import dotenv from 'dotenv';
-dotenv.config(); // Need before get config
+dotenv.config();
 
 import mongoose from "mongoose";
 import addUser from "./presentation/commands/addUser.js";

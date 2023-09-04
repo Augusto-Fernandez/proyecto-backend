@@ -13,7 +13,7 @@ const cronHandler = async (req, res, next) => {
             firstName: user.firstName,
             email: user.email,
             last_connection: dateFormat(user.last_connection)
-        }));
+        }))
 
         const cutoffTime = new Date();
         cutoffTime.setHours(cutoffTime.getHours() - 48);
@@ -21,11 +21,11 @@ const cronHandler = async (req, res, next) => {
         const usersToDelete = lastConnections.filter(user => user.last_connection < cutoffTime);
 
         for (const user of usersToDelete) {
-            await userRepository.deleteOne(user.id)
+            await userRepository.deleteOne(user.id);
             const message = new MailService;
             await message.send('deletedUser.hbs',{userName:user.firstName},user.email,'Deleted Account');
         }
-    });
+    })
 
     next();
 }

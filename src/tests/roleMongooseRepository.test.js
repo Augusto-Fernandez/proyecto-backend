@@ -16,7 +16,6 @@ describe("Testing Role Mongoose Repository", () => {
        await db.init(process.env.DB_URI);
     });
     afterAll(async function () {
-        //await db.drop();
         await db.close();
     });
     test('El repositorio debe ser una instancia de RoleMongooseRepository', function () {
@@ -37,7 +36,7 @@ describe("Testing Role Mongoose Repository", () => {
             permissions:[
                 faker.lorem.word()
             ]
-        };
+        }
 
         role = roleRepository.create(payload);
 
@@ -69,7 +68,7 @@ describe("Testing Role Mongoose Repository", () => {
             permissions:[
                 faker.lorem.word()
             ]
-        };
+        }
 
         return roleRepository
             .updateOne(roleId, payload)
@@ -80,7 +79,7 @@ describe("Testing Role Mongoose Repository", () => {
                 expect(result).toHaveProperty('id');
                 expect(result.name).toEqual(payload.name);
                 expect(result.permissions).toStrictEqual(payload.permissions);
-            })
+            });
     }, 60000);
     test('El repositorio debe poder eliminar un role', async function (){
         const foundRole = await role;
@@ -91,6 +90,6 @@ describe("Testing Role Mongoose Repository", () => {
             .then(result => {
                 expect(result).not.toBeNull();
                 expect(result).toBeDefined();
-            })
+            });
     }, 60000);
 });

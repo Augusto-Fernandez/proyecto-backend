@@ -25,6 +25,6 @@ AddUserCommand
         if (user) {
             console.log('User created successfully');
         }
-    });
+    })
 
 export default AddUserCommand;

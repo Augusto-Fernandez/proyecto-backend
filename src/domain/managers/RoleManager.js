@@ -2,15 +2,15 @@ import container from "../../container.js";
 
 class RoleManager{
     constructor(){
-        this.roleRepository = container.resolve('RoleRepository')
+        this.roleRepository = container.resolve('RoleRepository');
     }
 
     async paginate(criteria){
-        const { limit, page } = criteria
+        const { limit, page } = criteria;
         let defaultLimit = await this.roleRepository.docCount();
 
         if(limit !== undefined){
-            defaultLimit = limit
+            defaultLimit = limit;
         }
 
         const dto = {

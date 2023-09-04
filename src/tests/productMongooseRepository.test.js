@@ -4,7 +4,7 @@ dotenv.config();
 import { faker } from '@faker-js/faker';
 import initServer from './app.js';
 
-import ProductMongooseRepository from "../data/repositories/ProductMongooseRepository.js"
+import ProductMongooseRepository from "../data/repositories/ProductMongooseRepository.js";
 
 const { db } = await initServer();
 
@@ -16,7 +16,6 @@ describe("Testing Product Mongoose Repository", () => {
        await db.init(process.env.DB_URI);
     });
     afterAll(async function () {
-        //await db.drop();
         await db.close();
     });
     test('El repositorio debe ser una instancia de ProductMongooseRepository', function () {
@@ -40,8 +39,7 @@ describe("Testing Product Mongoose Repository", () => {
             code: faker.string.alphanumeric(),
             stock: faker.number.int(),
             status: true
-            //enable: true daba error porque está true como default
-        };
+        }
 
         product = productRepository.create(payload)
 
@@ -54,7 +52,6 @@ describe("Testing Product Mongoose Repository", () => {
                 expect(result.code).toEqual(payload.code);
                 expect(result.stock).toEqual(payload.stock);
                 expect(result.status).toEqual(payload.status);
-                //expect(result.id.enable).to.be.equals(payload.enable);
             });
     }, 60000);
     test('El repositorio debe poder encontrar un producto', async function (){
@@ -82,8 +79,7 @@ describe("Testing Product Mongoose Repository", () => {
             code: faker.string.alphanumeric(),
             stock: faker.number.int(),
             status: true
-            // enable: true
-        };
+        }
 
         return productRepository
             .updateOne(productId, update)
@@ -99,12 +95,11 @@ describe("Testing Product Mongoose Repository", () => {
                 expect(result.code).toEqual(update.code);
                 expect(result.stock).toEqual(update.stock);
                 expect(result.status).toEqual(update.status);
-                //expect(result.enable).to.be.equals(update.enable);
             })
     }, 60000);
     test('El repositorio debe poder eliminar un producto', async function (){
         const foundProduct = await product;
-        const productId = foundProduct.id.toString()
+        const productId = foundProduct.id.toString();
 
         return productRepository
             .delete(productId)

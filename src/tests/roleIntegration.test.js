@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import supertest from 'supertest';
-import initServer from './app.js'
+import initServer from './app.js';
 
 describe("Testing Product Endpoints Success", () => {
     let _requester;
@@ -17,7 +17,7 @@ describe("Testing Product Endpoints Success", () => {
         _db = db;
 
         const login = await _requester.post('/api/sessions/login').send({email: 'admin@admin.com', password: '12345678'});
-        _jwt=login.body.sessionLogin
+        _jwt=login.body.sessionLogin;
     });
     afterAll(async function () {
         await _db.close();
@@ -36,7 +36,7 @@ describe("Testing Product Endpoints Success", () => {
             permissions:[
                 "Rol de Prueba"
             ]
-        };
+        }
         const result = await _requester.post('/api/roles/')
                             .set('Authorization', `Bearer ${_jwt}`)
                             .send(payload)
@@ -61,7 +61,7 @@ describe("Testing Product Endpoints Success", () => {
             permissions:[
                 "Update Rol de Prueba"
             ]
-        };
+        }
 
         const result = await _requester.put(`/api/roles/${_role.id}`)
                             .set('Authorization', `Bearer ${_jwt}`)
@@ -95,7 +95,7 @@ describe("Testing Product Endpoints Fail", () => {
         _db = db;
 
         const login = await _requester.post('/api/sessions/login').send({email: 'admin@admin.com', password: '12345678'});
-        _jwt=login.body.sessionLogin
+        _jwt=login.body.sessionLogin;
     });
     afterAll(async function () {
         await _db.close();
@@ -104,7 +104,7 @@ describe("Testing Product Endpoints Fail", () => {
     test('Fallo creacion de rol /api/roles/', async function () {
         const payload = {
             name: "Prueba"
-        };
+        }
 
         const result = await _requester.post('/api/roles')
                             .set('Authorization', `Bearer ${_jwt}`)
@@ -125,7 +125,7 @@ describe("Testing Product Endpoints Fail", () => {
             permissions:[
                 "Update Rol de Prueba"
             ]
-        };
+        }
 
         const result = await _requester.delete(`/api/roles/${faker.string.numeric(24)}`)
                             .set('Authorization', `Bearer ${_jwt}`)

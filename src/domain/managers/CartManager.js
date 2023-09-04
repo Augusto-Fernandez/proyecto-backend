@@ -1,6 +1,6 @@
 import container from "../../container.js";
-import currentDate from "../../utils/currentDate.js"
-import MailService from "../../shared/MailService.js"
+import currentDate from "../../utils/currentDate.js";
+import MailService from "../../shared/MailService.js";
 
 class CartManager {
     constructor() {
@@ -9,11 +9,11 @@ class CartManager {
     }
 
     async create() {
-        return this.cartRepository.create()
+        return this.cartRepository.create();
     }
 
     async getOne(id) {
-        const cart = await this.cartRepository.validateId(id)
+        const cart = await this.cartRepository.validateId(id);
         if (cart === null) {
             throw new Error('Not Found Id');
         }
@@ -70,7 +70,7 @@ class CartManager {
             throw new Error('Not Found Products in Cart');
         }
 
-        return this.cartRepository.deleteAll(id)
+        return this.cartRepository.deleteAll(id);
     }
 
     async updateOne(id, data) {
@@ -87,20 +87,20 @@ class CartManager {
                 throw new Error('Not Found Product Id');
             }
             validatedProducts.push(validateProduct.id);
-        }));
+        }))
 
         
         const idSet = new Set();
 
         for (const id of validatedProducts) {
             if (idSet.has(id)) {
-                throw new Error('Product Already Added')
+                throw new Error('Product Already Added');
             } else {
                 idSet.add(id);
             }
         }
 
-        return this.cartRepository.updateOne(id, data)
+        return this.cartRepository.updateOne(id, data);
     }
 
     async checkout(id, user){
@@ -119,7 +119,7 @@ class CartManager {
             if(ticket.code === code.toString()){
                 code++;
             }
-        }));
+        }))
 
         let onStock = [];
         let outOfStock = [];
@@ -130,20 +130,20 @@ class CartManager {
             if(prod.quantity===0){
                 outOfStock.push(prod);
             }else if(prod.quantity>product.stock && product.stock>0){
-                onStock.push({...prod, quantity: prod.quantity-product.stock})
+                onStock.push({...prod, quantity: prod.quantity-product.stock});
                 outOfStock.push({...prod, quantity: 0});
             }else if(prod.quantity>product.stock && product.stock===0){
                 outOfStock.push({...prod, quantity: 0});
             }else{
                 onStock.push(prod);
             }
-        }));
+        }))
 
         await Promise.all(onStock.map(async (prod) => {
             const product = await this.productRepository.getOne(prod.id);
             totalAmount+=product.price*prod.quantity;
-            await this.productRepository.updateOne(prod.id, {...product, stock: product.stock - prod.quantity})
-        }));
+            await this.productRepository.updateOne(prod.id, {...product, stock: product.stock - prod.quantity});
+        }))
 
         if(onStock.length===0){
             throw new Error('Empty Cart, Out Of Stock');
@@ -168,11 +168,11 @@ class CartManager {
     }
 
     async deleteCart(id){
-        const validate = await this.cartRepository.validateId(id)
+        const validate = await this.cartRepository.validateId(id);
         if (validate === null) {
             throw new Error('Not Found Id');
         }
-        return this.cartRepository.deleteCart(id)
+        return this.cartRepository.deleteCart(id);
     }
 }
 

@@ -3,7 +3,7 @@ import auth from "../middlewares/auth.js";
 import { addToCart, deleteAll, deleteCart, deleteOne, getOne, checkout, save, updateOne } from "../controllers/CartController.js";
 import authorization from "../middlewares/authorization.js";
 import userOnly from "../middlewares/userOnly.js";
-import adminOnly from "../middlewares/adminOnly.js"
+import adminOnly from "../middlewares/adminOnly.js";
 
 const cartRouter = Router();
 

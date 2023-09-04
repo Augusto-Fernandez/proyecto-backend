@@ -10,9 +10,9 @@ export const list = async (req, res, next) => {
         const roles = await manager.paginate({ limit, page });
         res.send({ status: 'success', roles: roles.docs, ...roles, docs: undefined });
     }catch(e){
-        next(e)
+        next(e);
     }
-};
+}
 
 export const getOne = async (req, res, next) => {
     try{
@@ -22,32 +22,32 @@ export const getOne = async (req, res, next) => {
         const role = await manager.getOne(id);
         res.send({ status: 'success', role });
     }catch(e){
-        next(e)
+        next(e);
     }
-};
+}
 
 export const save = async (req, res, next) => {
     try{
         await roleCreateValidation.parseAsync(req.body);
         const manager = new RoleManager();
         const role = await manager.create(req.body);
-        res.send({ status: 'success', role, message: 'Role created.' })
+        res.send({ status: 'success', role, message: 'Role created.' });
     }catch(e){
-        next(e)
+        next(e);
     }
-};
+}
 
 export const update = async (req, res, next) => {
     try{
-        await roleUpdateValidation.parseAsync({ ...req.body, id: req.params })
+        await roleUpdateValidation.parseAsync({ ...req.body, id: req.params });
         const { id } = req.params;
         const manager = new RoleManager();
         const result = await manager.updateOne(id, req.body);
-        res.send({ status: 'success', result, message: 'Role updated.' })
+        res.send({ status: 'success', result, message: 'Role updated.' });
     }catch(e){
-        next(e)
+        next(e);
     }
-};
+}
 
 export const deleteOne = async (req, res, next) => {
     try{
@@ -55,9 +55,9 @@ export const deleteOne = async (req, res, next) => {
         const { id } = req.params;
         const manager = new RoleManager();
         await manager.deleteOne(id);
-        res.send({ status: 'success', message: 'Role deleted.' })
+        res.send({ status: 'success', message: 'Role deleted.' });
     }catch(e){
-        next(e)
+        next(e);
     }
 };
 
@@ -68,8 +68,8 @@ export const idParam = async (req, res, next) => {
         const manager = new RoleManager();
         const role = await manager.getOne(id);
         req.id = role;
-        next()
+        next();
     }catch(e){
-        next(e)
+        next(e);
     }
 }

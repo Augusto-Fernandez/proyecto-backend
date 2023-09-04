@@ -5,17 +5,11 @@ import {forgotPassword, login,logout,signup, current, changePassword, resetPassw
 const sessionRouter = Router();
 
 sessionRouter.post('/login', login);
-
 sessionRouter.post('/logout', auth, logout);
-
 sessionRouter.get('/current', auth, current);
-
 sessionRouter.post('/signup', signup);
-
 sessionRouter.post('/change-password', auth, changePassword);
-
 sessionRouter.post('/forgot-password', forgotPassword);
-
 sessionRouter.post('/reset-password', resetPassword);
 
 export default sessionRouter;
